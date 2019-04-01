@@ -1,0 +1,11 @@
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\bin\Debug\netcoreapp2.2\NetWeaverServer.deps.json
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\bin\Debug\netcoreapp2.2\NetWeaverServer.runtimeconfig.json
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\bin\Debug\netcoreapp2.2\NetWeaverServer.runtimeconfig.dev.json
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\bin\Debug\netcoreapp2.2\NetWeaverServer.dll
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\bin\Debug\netcoreapp2.2\NetWeaverServer.pdb
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\obj\Debug\netcoreapp2.2\NetWeaverServer.csprojAssemblyReference.cache
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\obj\Debug\netcoreapp2.2\NetWeaverServer.csproj.CoreCompileInputs.cache
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\obj\Debug\netcoreapp2.2\NetWeaverServer.AssemblyInfoInputs.cache
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\obj\Debug\netcoreapp2.2\NetWeaverServer.AssemblyInfo.cs
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\obj\Debug\netcoreapp2.2\NetWeaverServer.dll
+D:\SEW\ProgrammingProjects\OwnProjects\NetWeaver\NetWeaverServer\obj\Debug\netcoreapp2.2\NetWeaverServer.pdb
