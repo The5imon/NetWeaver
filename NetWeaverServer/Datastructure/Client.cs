@@ -1,19 +1,32 @@
+using System;
+
 namespace NetWeaverServer.Datastructure
 {
     public class Client
     {
-        public string Hostname { get; }
+        private string MAC { get; }
 
-        public string MACAddress { get; }
+        private string RoomName { get; }
 
-        public string IPAddress { get; }
+        private string HostName { get; }
 
-        public Client(string hostname, string macAddress, string ipAddress)
+        private string IPAddress { get; }
+
+        private bool IsOnline { get; }
+        
+        private string LastSeen { get; }
+
+        public Client(string mac, string roomName, string hostName, string ipAddress)
         {
-            Hostname = hostname;
-            MACAddress = macAddress;
-            ipAddress = ipAddress;
+            MAC = mac;
+            RoomName = roomName;
+            HostName = hostName;
+            IPAddress = ipAddress;
         }
         
+        public override string ToString()
+        {
+            return $"Client: {HostName} MAC: {MAC} IP: {IPAddress} isOnline: {IsOnline} lastSeen: {LastSeen}";
+        }
     }
 }
