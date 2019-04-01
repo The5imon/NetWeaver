@@ -3,7 +3,7 @@
 
 #Release Projects
 !/NetWeaverServer
-!/NetWeaverServer/*
+!/NetWeaverServer/**
 
 /*/bin/**/*
 /*/obj/**/*

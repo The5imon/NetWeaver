@@ -13,19 +13,22 @@ namespace NetWeaverServer.Main
 {
     public class Program
     {
+        //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
+        
         public static void Main(string[] args)
         {
+            
             POCServer();
         }
 
         public static void POCLogging()
         {
-            LoggingOperation eventlog = new LoggingOperation("MCONServer");
+            LoggingOperation eventlog = new LoggingOperation("NetWeaverServer");
             Console.WriteLine(eventlog.GetType());
 
             eventlog.Info(eventlog, "Program has been started");
             Console.ReadKey();
-            EventLog.Delete("MCON");
+            EventLog.Delete("NetWeaver");
         }
 
         public static void POCServer()

@@ -9,7 +9,6 @@ namespace NetWeaverServer.GraphicalUI
     {
         //TODO: Create Interaction Concept; GUI -> ServerInterface, Server; Server -> GUIinterface, GUI
         public event EventHandler<MessageDetails> CopyFileEvent;
-
         public event EventHandler<MessageDetails> ClientReplyEvent;
         
         public void print()
