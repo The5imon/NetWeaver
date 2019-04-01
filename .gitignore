@@ -1,0 +1,12 @@
+#Ignore everything
+*
+
+#Release Projects
+!/NetWeaverServer
+!/NetWeaverServer/*
+
+/*/bin/**/*
+/*/obj/**/*
+
+!NetWeaver.sln
+!.gitignore
