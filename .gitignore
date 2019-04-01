@@ -5,8 +5,13 @@
 !/NetWeaverServer
 !/NetWeaverServer/**
 
+#Ignore Runtime Build
 /*/bin/**/*
 /*/obj/**/*
 
+#Ignore IDE generated data
+/*/.idea/**/*
+
+#Release Project specific data
 !NetWeaver.sln
 !.gitignore
