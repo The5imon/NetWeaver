@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\user\.Rider2018.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\user\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_NetWeaverServer.869453102.00" t="ExcludeRecursive" />
+    <e p="C:\Users\user\RiderProjects\NetWeaver\NetWeaverServer" t="IncludeRecursive">
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="Datastructure" t="Include">
+        <e p="ArgumentDetails.cs" t="Include" />
+        <e p="Client.cs" t="Include" />
+        <e p="DBConnect.cs" t="Include" />
+        <e p="gregor.txt" t="Include" />
+        <e p="max.txt" t="Include" />
+        <e p="Room.cs" t="Include" />
+        <e p="simon.txt" t="Include" />
+      </e>
+      <e p="GraphicalUI" t="Include">
+        <e p="GUI.cs" t="Include" />
+        <e p="GUIServerInterface.cs" t="Include" />
+      </e>
+      <e p="Jobs" t="Include">
+        <e p="CopyFileJob.cs" t="Include" />
+        <e p="Job.cs" t="Include" />
+        <e p="JobManager.cs" t="Include" />
+        <e p="LoggingOperation.cs" t="Include" />
+      </e>
+      <e p="Main" t="Include">
+        <e p="CollectionUtils.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Server.cs" t="Include" />
+      </e>
+      <e p="NetWeaverServer.csproj" t="IncludeRecursive" />
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp2.2" t="Include">
+            <e p="NetWeaverServer.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

@@ -4,10 +4,20 @@ namespace NetWeaverServer.Datastructure
 {
     public class Room
     {
-        public string Roomname { get; set; }
         
-        public List<Client> Clients { get; }
+        private int roomNumber { get; }
+        private string Roomname { get; }
+        
+        private List<Client> Clients { get; }
+        
+        private string subnetmask 
 
+        
+        
+        
+        
+        
+        
         public Room(string roomname)
         {
             Roomname = roomname;
@@ -18,5 +28,14 @@ namespace NetWeaverServer.Datastructure
             Roomname = roomname;
             Clients = clients;
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 }
