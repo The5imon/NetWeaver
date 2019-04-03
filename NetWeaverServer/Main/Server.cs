@@ -15,7 +15,6 @@ namespace NetWeaverServer.Main
         {
             EventInt = eventInt;
             new Thread(this.Run).Start();
-            eventInt.print();
         }
 
         public void Run()
@@ -25,7 +24,6 @@ namespace NetWeaverServer.Main
 
         private void WireUpGUIHandlers()
         {
-            Console.WriteLine(EventInt.GetType());
             EventInt.CopyFileEvent += Gui_CopyFileEvent;
         }
 

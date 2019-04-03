@@ -18,7 +18,7 @@ namespace NetWeaverServer.Jobs
         {
             List<Task> jobs = new List<Task>();
 
-            foreach (string client in Clients)
+            foreach (Client client in Clients)
             {
                 //ACK Display
                 CopyFile cf = new CopyFile(client, Server);
@@ -51,11 +51,11 @@ namespace NetWeaverServer.Jobs
 
     class CopyFile
     {
-        private string Client { get; }
+        private Client Client { get; }
         private GUIServerInterface CommunicationInterface { get; }
         private AutoResetEvent Reply { get; }
 
-        public CopyFile(string client, GUIServerInterface commint)
+        public CopyFile(Client client, GUIServerInterface commint)
         {
             Client = client;
             CommunicationInterface = commint;

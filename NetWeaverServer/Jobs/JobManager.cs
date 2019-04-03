@@ -9,13 +9,14 @@ using NetWeaverServer.Datastructure;
 namespace NetWeaverServer.Jobs
 {
     public class JobManager
-    //TODO: One JobManager (awaits Jobs parallel); Abstract Job class with underlying Jobs (CopyFileJob)
     /**
      * Alle Probleme (Exceptions) die während der Kommunikation auftreten können sollten behandelt werden
      *     - welcher Teil des Programmes sollte welche Exceptions behandeln siehe OSI Layer Model (Transport and Application)
      *     - Welche Fehler können auftreten? (Client disconnected, Timeout, etc ...)
      * ==> Den ganzehn Prozess durchgehen
+     *
      */
+    //TODO: Deptracated
     {
         private List<string> clients;
         private IProgress<ProgressDetails> progress;
@@ -50,7 +51,7 @@ namespace NetWeaverServer.Jobs
                     File.WriteAllText(path + client + ".txt", client);
                 }
             }
-            pd.Clients.Add(client);
+            //pd.Clients.Add(client);
             progress.Report(pd);
         }
     }
