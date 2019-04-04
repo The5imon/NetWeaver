@@ -8,18 +8,7 @@ namespace NetWeaverServer.Jobs
     public class LoggingOperation
     {
         public const string LOG = "NetWeaver";
-        public string Source { get; }
         private string layout = "{0:dd-MM-yy HH:mm:ss} {1,-11} {2:S}";
-
-        public LoggingOperation(string source)
-        {
-            Source = source;
-            if (!EventLog.SourceExists(source))
-            {
-                EventLog.CreateEventSource(source, LOG);
-                Console.WriteLine("Created new EventView Source");
-            }
-        }
 
         public async void Error(object caller, string message)
         {
@@ -43,9 +32,16 @@ namespace NetWeaverServer.Jobs
 
         private async Task WriteLog(object caller, EventLogEntryType type, string message)
         {
+            string fulname = caller.GetType().FullName;
+            string source = fulname.Substring(fulname.LastIndexOf('.'), fulname.Length);
+            if (!EventLog.SourceExists(source))
+            {
+                EventLog.CreateEventSource(source, LOG);
+                Console.WriteLine("Created new EventView Source");
+            }
             using (EventLog eventLog = new EventLog(LOG))
             {
-                eventLog.Source = Source;
+                eventLog.Source = source;
                 await Task.Run(() => eventLog.WriteEntry(message, type));
             }
         }
