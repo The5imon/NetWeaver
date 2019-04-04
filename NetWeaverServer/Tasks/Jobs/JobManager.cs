@@ -35,7 +35,6 @@ namespace NetWeaverServer.Tasks.Jobs
             foreach (Client client in Clients)
             {
                 Random r = new Random();
-                jobs.Add(Task.Run(() => writeFile(@"data\", client, r.Next(1000) + 1000)));
             }
 
             await Task.WhenAll(jobs);
