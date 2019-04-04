@@ -39,9 +39,9 @@ namespace NetWeaverServer.Datastructure
         /// <summary>Initialises the values for the connection to the database</summary>
         private void Initialize()
         {
-            _server = "192.168.162.148";
+            _server = "192.168.230.131";
             _database = "mcondb";
-            _uid = "admin";
+            _uid = "remote";
             _password = "htl3r";
             string connectionString;
             connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
