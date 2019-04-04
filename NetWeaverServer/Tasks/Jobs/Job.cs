@@ -7,11 +7,18 @@ using NetWeaverServer.Main;
 
 using static NetWeaverServer.Main.Program;
 
-namespace NetWeaverServer.Jobs
+namespace NetWeaverServer.Tasks.Jobs
 {
     public abstract class Job
     {
-        //TODO: One JobManager (awaits Jobs parallel); Abstract Job class with underlying Jobs (CopyFileJob)
+        //TODO: IDEA Three Levels of Jobs:
+        /**
+         * Passive: Operation e.g. LoggingOperation
+         * Active Job: Job that accomplishes one Action on one Client by doing smaller Tasks
+         *  --> JobManger that initiates this Job for multiple Clients
+         * Active Tasks: Do one small thing
+         *  --> TaskQueue: Rows many explicit tasks back to back
+         */
         protected List<Client> Clients { get; }
         protected GUIServerInterface Server { get; }
         protected IProgress<ProgressDetails> Progress { get; }
@@ -26,9 +33,5 @@ namespace NetWeaverServer.Jobs
         }
 
         public abstract Task Work();
-
-        /**
-         * TODO: Working Queue where Jobs just do a minimum set of actions and multiple jobs can be queued together
-         */
     }
 }

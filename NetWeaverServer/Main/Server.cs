@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
-using NetWeaverServer.Jobs;
-
+using NetWeaverServer.Tasks.Jobs;
 using static NetWeaverServer.Main.Program;
 
 namespace NetWeaverServer.Main

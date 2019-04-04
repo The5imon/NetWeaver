@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 
-namespace NetWeaverServer.Jobs
+namespace NetWeaverServer.Tasks.Jobs
 {
     public class JobManager
     /**
@@ -16,43 +16,29 @@ namespace NetWeaverServer.Jobs
      * ==> Den ganzehn Prozess durchgehen
      *
      */
-    //TODO: Deptracated
     {
-        private List<string> clients;
-        private IProgress<ProgressDetails> progress;
+        private List<Client> Clients { get; }
+        public IProgress<ProgressDetails> Progress { get; }
+
         private ProgressDetails pd = new ProgressDetails();
 
-        public JobManager(List<string> clients, IProgress<ProgressDetails> progress)
+        public JobManager(List<Client> clients, IProgress<ProgressDetails> progress)
         {
-            this.clients =  new List<string>(clients);
-            this.progress = progress;
+            Clients =  new List<Client>(clients);
+            Progress = progress;
         }
 
-        public async Task Work()
+        public async Task RunOnAllClients()
         {
             List<Task> jobs = new List<Task>();
 
-            foreach (string client in clients)
+            foreach (Client client in Clients)
             {
                 Random r = new Random();
                 jobs.Add(Task.Run(() => writeFile(@"data\", client, r.Next(1000) + 1000)));
             }
 
             await Task.WhenAll(jobs);
-        }
-
-        private void writeFile(string path, string client, int count)
-        //TODO: Extrat this Task into a Job class with a AutoResetEvent
-        {
-            for (int i = 0; i < count; i++)
-            {
-                lock (path) //synchronized area where only 1 process/task can have access
-                {
-                    File.WriteAllText(path + client + ".txt", client);
-                }
-            }
-            //pd.Clients.Add(client);
-            progress.Report(pd);
         }
     }
 }

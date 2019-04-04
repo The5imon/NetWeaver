@@ -4,7 +4,7 @@ using System.Threading;
 using System.Diagnostics;
 using NetWeaverServer.Datastructure;
 
-namespace NetWeaverServer.Jobs
+namespace NetWeaverServer.Tasks.Operations
 {
     public class LoggingOperation
     {

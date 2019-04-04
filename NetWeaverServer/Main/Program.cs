@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using NetWeaverServer.GraphicalUI;
-using NetWeaverServer.Jobs;
+using NetWeaverServer.Tasks.Operations;
 
 namespace NetWeaverServer.Main
 {
