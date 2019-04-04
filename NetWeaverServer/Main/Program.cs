@@ -19,7 +19,6 @@ namespace NetWeaverServer.Main
         private static GUI gui;
         private static Server server;
         
-        
         public static void Main(string[] args)
         {
             POCServer();

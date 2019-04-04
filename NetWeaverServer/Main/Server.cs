@@ -16,7 +16,7 @@ namespace NetWeaverServer.Main
         public Server(GUIServerInterface eventInt)
         {
             EventInt = eventInt;
-            new Thread(this.Run).Start();
+            new Thread(Run).Start();
         }
 
         public void Run()

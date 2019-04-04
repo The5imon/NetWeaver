@@ -20,6 +20,9 @@ namespace NetWeaverServer.Datastructure
     }
 
     public class ProgressDetails
+    /**
+     * Has to be adjusted to the GUIs needs and configuration
+     */
     {
         public int Percentage { get; set; }
 

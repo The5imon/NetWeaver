@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using NetWeaverServer.Datastructure;
 
 namespace NetWeaverServer.Jobs
 {
@@ -31,13 +32,17 @@ namespace NetWeaverServer.Jobs
         }
 
         private async Task WriteLog(object caller, EventLogEntryType type, string message)
+        /**
+         * Can Log Server System and Client Information (dependent on caller)
+         */
         {
-            string fulname = caller.GetType().FullName;
-            string source = fulname.Substring(fulname.LastIndexOf('.'), fulname.Length);
+            string fullname = caller.GetType().FullName;
+            string source = caller.GetType() == typeof(Client) ?
+                ((Client) caller).HostName : fullname.Substring(fullname.LastIndexOf('.'), fullname.Length);
+            
             if (!EventLog.SourceExists(source))
             {
                 EventLog.CreateEventSource(source, LOG);
-                Console.WriteLine("Created new EventView Source");
             }
             using (EventLog eventLog = new EventLog(LOG))
             {
@@ -45,6 +50,5 @@ namespace NetWeaverServer.Jobs
                 await Task.Run(() => eventLog.WriteEntry(message, type));
             }
         }
-
     }
 }
