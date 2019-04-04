@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
-using NetWeaverServer.Jobs;
+using NetWeaverServer.Tasks.Jobs;
+using static NetWeaverServer.Main.Program;
 
 namespace NetWeaverServer.Main
 {
@@ -14,8 +15,7 @@ namespace NetWeaverServer.Main
         public Server(GUIServerInterface eventInt)
         {
             EventInt = eventInt;
-            new Thread(this.Run).Start();
-            eventInt.print();
+            new Thread(Run).Start();
         }
 
         public void Run()
@@ -25,7 +25,6 @@ namespace NetWeaverServer.Main
 
         private void WireUpGUIHandlers()
         {
-            Console.WriteLine(EventInt.GetType());
             EventInt.CopyFileEvent += Gui_CopyFileEvent;
         }
 

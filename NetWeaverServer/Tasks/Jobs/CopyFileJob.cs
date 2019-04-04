@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 
-namespace NetWeaverServer.Jobs
+using static NetWeaverServer.Main.Program;
+
+namespace NetWeaverServer.Tasks.Jobs
 {
     public class CopyFileJob : Job
     {
@@ -18,10 +20,10 @@ namespace NetWeaverServer.Jobs
         {
             List<Task> jobs = new List<Task>();
 
-            foreach (string client in Clients)
+            foreach (Client client in Clients)
             {
                 //ACK Display
-                CopyFile cf = new CopyFile(client, Server);
+                CopyFile cf = new CopyFile(client, Server, Progress);
                 jobs.Add(Task.Run((() => cf.execute())));
                 //Async GUI Experience Display
                 /*
@@ -51,16 +53,18 @@ namespace NetWeaverServer.Jobs
 
     class CopyFile
     {
-        private string Client { get; }
+        private Client Client { get; }
         private GUIServerInterface CommunicationInterface { get; }
-        private AutoResetEvent Reply { get; }
+        private IProgress<ProgressDetails> Progress { get; }
+        
+        private AutoResetEvent Reply = new AutoResetEvent(false);
 
-        public CopyFile(string client, GUIServerInterface commint)
+        public CopyFile(Client client, GUIServerInterface commint, IProgress<ProgressDetails> progress)
         {
             Client = client;
             CommunicationInterface = commint;
             CommunicationInterface.ClientReplyEvent += AwaitReply;
-            Reply = new AutoResetEvent(false);
+            Progress = progress;
         }
 
         private void AwaitReply(object sender, MessageDetails e)

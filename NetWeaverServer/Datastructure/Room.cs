@@ -6,13 +6,9 @@ namespace NetWeaverServer.Datastructure
     {
         private int RoomNumber { get; }
         private string Roomname { get; }
-
         private List<Client> Clients { get; }
-
         private string Netmask { get; set; }
-
         private string Subnetmask { get; set; }
-
 
         public Room(int roomnumber, string roomname)
         {

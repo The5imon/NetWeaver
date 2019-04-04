@@ -10,9 +10,9 @@ namespace NetWeaverServer.Datastructure
     {
         public IProgress<ProgressDetails> Progress { get; }
 
-        public List<string> Clients { get; }
+        public List<Client> Clients { get; }
 
-        public MessageDetails(List<string> clients, IProgress<ProgressDetails> progress)
+        public MessageDetails(List<Client> clients, IProgress<ProgressDetails> progress)
         {
             Clients = clients;
             Progress = progress;
@@ -20,9 +20,12 @@ namespace NetWeaverServer.Datastructure
     }
 
     public class ProgressDetails
+    /**
+     * Has to be adjusted to the GUIs needs and configuration
+     */
     {
         public int Percentage { get; set; }
 
-        public List<string> Clients = new List<string>();
+        public List<Client> Clients = new List<Client>();
     }
 }

@@ -4,17 +4,12 @@ namespace NetWeaverServer.Datastructure
 {
     public class Client
     {
-        private string MAC { get; }
-
-        private string RoomName { get; }
-
-        private string HostName { get; }
-
-        private string IPAddress { get; }
-
-        private bool IsOnline { get; }
-        
-        private string LastSeen { get; }
+        public string MAC { get; }
+        public string RoomName { get; }
+        public string HostName { get; }
+        public string IPAddress { get; }
+        public bool IsOnline { get; }
+        public string LastSeen { get; }
 
         public Client(string mac, string roomName, string hostName, string ipAddress)
         {

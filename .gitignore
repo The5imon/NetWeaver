@@ -4,6 +4,8 @@
 #Release Projects
 !/NetWeaverServer
 !/NetWeaverServer/**
+!/NetWeaverClient
+!/NetWeaverClient/**
 
 #Ignore Runtime Build
 /*/bin/**/*
@@ -14,4 +16,5 @@
 
 #Release Project specific data
 !NetWeaver.sln
+!*.csproj
 !.gitignore

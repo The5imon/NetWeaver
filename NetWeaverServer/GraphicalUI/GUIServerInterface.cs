@@ -11,34 +11,16 @@ namespace NetWeaverServer.GraphicalUI
         public event EventHandler<MessageDetails> CopyFileEvent;
         public event EventHandler<MessageDetails> ClientReplyEvent;
         
-        public void print()
+        public void triggerCopyFileEvent(MessageDetails details)
         {
-            Console.WriteLine("asd");
-        }
-        public void triggerCopyFileEvent(List<string> clients)
-        {
-            Progress<ProgressDetails> progress = new Progress<ProgressDetails>();
-            progress.ProgressChanged += ReportProgress;
-            MessageDetails md = new MessageDetails(clients, progress);
-            CopyFileEvent?.Invoke(this, md);
-            /*
-            Parallel.ForEach(md.clients, (mdClient) =>
-                Console.Write(mdClient));
-                */
+            CopyFileEvent?.Invoke(this, details);
         }
 
         public void triggerClientReplyEvent()
         {
-            ClientReplyEvent?.Invoke(this, new MessageDetails(new List<string>(), new Progress<ProgressDetails>()));
+            ClientReplyEvent?.Invoke(this, new MessageDetails(new List<Client>(), new Progress<ProgressDetails>()));
         }
 
-        private void ReportProgress(object sender, ProgressDetails e)
-        {
-            Console.WriteLine("Reporting List of finished clients");
-            foreach (string client in e.Clients)
-            {
-                Console.WriteLine($"\r\t PC - {client} is finished");
-            }
-        }
+        
     }
 }
