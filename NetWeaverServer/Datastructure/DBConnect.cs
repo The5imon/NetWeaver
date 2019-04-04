@@ -11,12 +11,16 @@ namespace NetWeaverServer.Datastructure
 
         //The MySQL connection
         private MySqlConnection _connection;
+
         //The ipaddress for the server
         private string _server;
+
         //The database name
         private string _database;
+
         //The username for the database login
         private string _uid;
+
         //The password for the user
         private string _password;
 
@@ -40,7 +44,8 @@ namespace NetWeaverServer.Datastructure
             _uid = "admin";
             _password = "htl3r";
             string connectionString;
-            connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" + "PASSWORD=" + _password + ";";
+            connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
+                               "PASSWORD=" + _password + ";";
 
             _connection = new MySqlConnection(connectionString);
             _connection.Open();
@@ -67,9 +72,10 @@ namespace NetWeaverServer.Datastructure
                         break;
 
                     case 1045:
-                        Console.WriteLine("Invalid username/password, please try again");
+                        Console.WriteLine("Invalid Username/password, please try again");
                         break;
                 }
+
                 return false;
             }
         }
@@ -156,6 +162,7 @@ namespace NetWeaverServer.Datastructure
                 {
                     tmp.Add(dataReader.GetString(i));
                 }
+
                 list.Add(tmp);
             }
 
@@ -171,23 +178,25 @@ namespace NetWeaverServer.Datastructure
         //--------------------------------------------------
 
         /// <summary>Every column from every client in the database</summary>
-        public static List<List<string>> GetAllClients() 
-             {
-                return Connection.Select("SELECT * FROM client");
-            }
-        
+        public static List<List<string>> GetAllClients()
+        {
+            return Connection.Select("SELECT * FROM client");
+        }
+
 
         /// <summary>Client name, mac ip, roomnumber and roomname</summary>
         public static List<List<string>> GetAllClientsWithRoom()
         {
-            return Connection.Select("SELECT  hostname, pk_macaddr ,ipaddress,roomdescription,pk_roomNumber FROM client,room WHERE fk_pk_roomnumber = pk_roomNumber");
+            return Connection.Select("SELECT  hostname, pk_macaddr ,ipaddress,roomdescription,pk_roomNumber " +
+                                     "FROM client,room WHERE fk_pk_roomnumber = pk_roomNumber");
         }
 
         /// <summary>Hostname, mac , ip  and roominformation</summary>
         /// <param name='roomNumber'>The number of the room</param>
         public static List<List<string>> GetAllClientsByRoomNumber(int roomNumber)
         {
-            return Connection.Select("select hostname, pk_macaddr, ipaddress, roomdescription, fk_pk_roomnumber from client INNER JOIN room  ON fk_pk_roomnumber =  pk_roomnumber and pk_roomnumber  = '131'");
+            return Connection.Select("select hostname, pk_macaddr, ipaddress, roomdescription, fk_pk_roomnumber " +
+                                     " from client INNER JOIN room  ON fk_pk_roomnumber =  pk_roomnumber and pk_roomnumber  = '131'");
         }
 
         /// <summary>All clients in the DB with mac, hostname and ip</summary>
@@ -215,7 +224,7 @@ namespace NetWeaverServer.Datastructure
         }
 
         /// <summary>All online clients with hostame and ip</summary>
-        public  List<List<string>> GetAllOnlineWithNameAndIp()
+        public List<List<string>> GetAllOnlineWithNameAndIp()
         {
             return Connection.Select("select hostname , ipaddress from client WHERE is_online = true;");
         }
@@ -229,7 +238,9 @@ namespace NetWeaverServer.Datastructure
         /// <summary>Every offline client with hostname and roomname</summary>
         public static List<List<string>> GetAllOfflineWithNameAndRoom()
         {
-            return Connection.Select("select hostname , last_seen ,roomdescription from client,room where fk_pk_roomnumber = pk_roomNumber AND is_online = false;");
+            return Connection.Select(
+                "select hostname , last_seen ,roomdescription from client,room where " +
+                "fk_pk_roomnumber = pk_roomNumber AND is_online = false;");
         }
 
         /// <summary>All rooms in the db</summary>
@@ -241,29 +252,34 @@ namespace NetWeaverServer.Datastructure
         /// <summary>Subnet information for all rooms</summary>
         public static List<List<string>> GetAllSubnetsWithRooms()
         {
-            return Connection.Select("select netmask AS 'Netmask', subnetmask As 'Subnetmask' , roomdescription from room;");
+            return Connection.Select(
+                "select netmask AS 'Netmask', subnetmask As 'Subnetmask' , roomdescription from room;");
         }
 
         /// <summary>Get client hostname, mac, ip by its ip</summary>
         /// /// <param name='ip'>The ip from the computer</param>
         public static List<List<string>> GetPcByIp(string ip)
         {
-            return Connection.Select("select hostname , pk_macaddr , ipaddress from client where ipaddress = '"+ ip +"';");
+            return Connection.Select("select hostname , pk_macaddr , ipaddress from client where ipaddress = '" + ip +
+                                     "';");
         }
 
         /// <summary>Get client hostname, mac, ip by its mac</summary>
         /// <param name='mac'>The mac from the computer</param>
         public static List<List<string>> GetPcByMac(string mac)
         {
-            return Connection.Select("select hostname,pk_macaddr , ipaddress from client where pk_macaddr = '" + mac + "';");
+            return Connection.Select("select hostname,pk_macaddr , ipaddress from client where pk_macaddr = '" + mac +
+                                     "';");
         }
 
         /// <summary>Get the room information by an ip</summary>
         /// /// <param name='ip'>The ip address for the client or room</param>
         public static List<List<string>> GetRoomByIp(string ip)
         {
-            string netip = ip.Split('.')[0] + "." + ip.Split('.')[1] + "." + ip.Split('.')[2] + "." + "0";
-            return Connection.Select("select roomdescription , pk_roomNumber from room where netmask = '" + netip + "';");
+            string netip = ip.Split('.')[0] + "." + ip.Split('.')[1] + "." +
+                           ip.Split('.')[2] + "." + "0";
+            return Connection.Select(
+                "select roomdescription , pk_roomNumber from room where netmask = '" + netip + "';");
         }
 
         /// <summary>Get ever pice of information for this room</summary>
@@ -298,7 +314,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='newRoomNumber'>The new room for the client</param>
         public static void UpdateRoomFromMac(string mac, int newRoomNumber)
         {
-            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE pk_macaddr = '" + mac + "';");
+            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE pk_macaddr = '" +
+                              mac + "';");
         }
 
         /// <summary>Changes the room from the given client</summary>
@@ -306,7 +323,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='newRoomNumber'>The new room for the client</param>
         public static void UpdateRoomFromIP(string ip, int newRoomNumber)
         {
-            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE ipaddress = '" + ip + "';");
+            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE ipaddress = '" + ip +
+                              "';");
         }
 
         /// <summary>Changes the room from the given client</summary>
@@ -314,7 +332,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='newRoomNumber'>The new room for the client</param>
         public static void UpdateRoomFromHostname(string hostname, int newRoomNumber)
         {
-            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE hostname = '" + hostname + "';");
+            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE hostname = '" +
+                              hostname + "';");
         }
 
         /// <summary>Changes the hostname from the given client</summary>
@@ -338,7 +357,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='last_seen'>The new last seen date for the client</param>
         public static void UpdateLastSeenByMac(string mac, string last_seen)
         {
-            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen + "', '%d-%m-%Y')  WHERE pk_macaddr = '" + mac + "';");
+            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen +
+                              "', '%d-%m-%Y')  WHERE pk_macaddr = '" + mac + "';");
         }
 
         /// <summary>Changes the last_seen date from the given client</summary>
@@ -346,7 +366,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='last_seen'>The new last seen date for the client</param>
         public static void UpdateLastSeenByIp(string ip, string last_seen)
         {
-            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen + "', '%d-%m-%Y')  WHERE ipaddress = '" + ip + "';");
+            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen +
+                              "', '%d-%m-%Y')  WHERE ipaddress = '" + ip + "';");
         }
 
         /// <summary>Changes the last_seen date from the given client</summary>
@@ -354,7 +375,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='last_seen'>The new last seen date for the client</param>
         public static void UpdateLastSeenByHostname(string hostname, string last_seen)
         {
-            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen + "', '%d-%m-%Y')  WHERE hostname = '" + hostname + "';");
+            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen +
+                              "', '%d-%m-%Y')  WHERE hostname = '" + hostname + "';");
         }
 
         /// <summary>Changes the is_online date from the given client</summary>
@@ -386,7 +408,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='roomdescr'>The new roomdescription for the room</param>
         public static void ChangeRoomDescr(string roomdescr, int roomNumber)
         {
-            Connection.Update("UPDATE room SET roomdescription = '" + roomdescr + "' WHERE pk_roomNumber = '" + roomNumber + "';");
+            Connection.Update("UPDATE room SET roomdescription = '" + roomdescr + "' WHERE pk_roomNumber = '" +
+                              roomNumber + "';");
         }
 
         /// <summary>Changes the netmask from the given room</summary>
@@ -394,7 +417,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='netmask'>The new netmask for the room</param>
         public static void ChangeNetmask(string netmask, int roomNumber)
         {
-            Connection.Update("UPDATE room SET netmask = '" + netmask + "' WHERE pk_roomNumber = '" + roomNumber + "';");
+            Connection.Update("UPDATE room SET netmask = '" + netmask + "' WHERE pk_roomNumber = '" + roomNumber +
+                              "';");
         }
 
         /// <summary>Changes the subnetmask from the given room</summary>
@@ -402,7 +426,8 @@ namespace NetWeaverServer.Datastructure
         /// <param name='subnetmask'>The new subnetmask for the room</param>
         public static void ChangeSubnetmask(string subnetmask, int roomNumber)
         {
-            Connection.Update("UPDATE room SET subnetmask = '" + subnetmask + "' WHERE pk_roomNumber = '" + roomNumber + "';");
+            Connection.Update("UPDATE room SET subnetmask = '" + subnetmask + "' WHERE pk_roomNumber = '" + roomNumber +
+                              "';");
         }
 
         //--------------------------------------------------
@@ -416,10 +441,14 @@ namespace NetWeaverServer.Datastructure
         /// <param name='fk_pk_roomnumber'>The roomnumber from the client</param>
         /// <param name='is_online'>The online status from the client</param>
         /// <param name='last_seen'>The last seen date from the client</param>
-        public static void InsertClient(string pk_macaddr, string hostname, string ipaddress, int fk_pk_roomnumber , bool is_online ,string last_seen = "")
+        public static void InsertClient(string pk_macaddr, string hostname, string ipaddress, int fk_pk_roomnumber,
+            bool is_online, string last_seen = "")
         {
             var realDate = (String.IsNullOrEmpty(last_seen) ? DateTime.Today.ToString("dd-MM-yyyy") : last_seen);
-            Connection.Insert($"INSERT INTO client (pk_macaddr, hostname ,ipaddress, fk_pk_roomnumber, last_seen, is_online)" + $"VALUES( '{pk_macaddr}', '{hostname}', '{ipaddress}', '{fk_pk_roomnumber}',"+ $"STR_TO_DATE('{realDate}', '%d-%m-%Y')," +$"{is_online});");
+            Connection.Insert(
+                $"INSERT INTO client (pk_macaddr, hostname ,ipaddress, fk_pk_roomnumber, last_seen, is_online)" +
+                $"VALUES( '{pk_macaddr}', '{hostname}', '{ipaddress}', '{fk_pk_roomnumber}'," +
+                $"STR_TO_DATE('{realDate}', '%d-%m-%Y')," + $"{is_online});");
         }
 
         /// <summary>Inserts a Client into the database</summary>
@@ -429,7 +458,9 @@ namespace NetWeaverServer.Datastructure
         /// <param name='subnetmask'>The netmask for the room</param>
         public static void InsertRoom(int pk_roomNumber, string roomdescription, string netmask, string subnetmask)
         {
-            Connection.Insert($"INSERT INTO room (pk_roomNumber, roomdescription ,netmask, subnetmask) VALUES('{pk_roomNumber}', '{roomdescription}', '{netmask}', '{subnetmask}' )");
+            Connection.Insert(
+                $"INSERT INTO room (pk_roomNumber, roomdescription ,netmask, subnetmask)" +
+                " VALUES('{pk_roomNumber}', '{roomdescription}', '{netmask}', '{subnetmask}' )");
         }
 
 
