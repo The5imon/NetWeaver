@@ -48,16 +48,25 @@ namespace NetWeaverServer.Main
         {
             InitializeDb();
             var allClients = GetAllClients();
-            foreach (var result in allClients)
+            var flattened = allClients.SelectMany(list => list);
+            var one = allClients[0];
+            
+            foreach (var uno in one)
             {
-                foreach (var column in result)
+                Console.WriteLine(uno);
+            }
+            
+            /*foreach (var result in allClients)
                 {
-                    Console.Write(column + " ");
-                }
+                     foreach (var column in result)
+                    {
+                        Console.Write(column + " ");
+                    }
+                
 
                 Console.WriteLine(" ");
-            }
-            CloseDb();
+            }*/
+                CloseDb();
         }
     }
 }
