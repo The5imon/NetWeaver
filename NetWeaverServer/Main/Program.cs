@@ -21,7 +21,8 @@ namespace NetWeaverServer.Main
         
         public static void Main(string[] args)
         {
-            POCServer();
+            ProoveOfWurzer();
+            //POCServer();
         }
 
         public static void POCLogging()
@@ -39,6 +40,11 @@ namespace NetWeaverServer.Main
             gui = new GUI(guiServerInterface);
             server = new Server(guiServerInterface);
             Console.WriteLine("Start of Server");
+        }
+
+        public static void ProoveOfWurzer()
+        {
+            
         }
     }
 }
