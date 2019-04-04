@@ -6,8 +6,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
+using static NetWeaverServer.Datastructure.DbConnect;
 
 namespace NetWeaverServer.Main
 {
@@ -44,7 +46,18 @@ namespace NetWeaverServer.Main
 
         public static void ProoveOfWurzer()
         {
-            
+            InitializeDb();
+            var allClients = GetAllClients();
+            foreach (var result in allClients)
+            {
+                foreach (var column in result)
+                {
+                    Console.Write(column + " ");
+                }
+
+                Console.WriteLine(" ");
+            }
+            CloseDb();
         }
     }
 }
