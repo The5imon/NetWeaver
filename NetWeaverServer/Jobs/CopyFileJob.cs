@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 
+using static NetWeaverServer.Main.Program;
+
 namespace NetWeaverServer.Jobs
 {
     public class CopyFileJob : Job

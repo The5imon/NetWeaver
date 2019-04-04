@@ -5,6 +5,8 @@ using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Jobs;
 
+using static NetWeaverServer.Main.Program;
+
 namespace NetWeaverServer.Main
 {
     public class Server
