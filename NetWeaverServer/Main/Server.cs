@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Jobs;
@@ -10,7 +11,7 @@ namespace NetWeaverServer.Main
 {
     public class Server
     {
-        private GUIServerInterface EventInt { get; }
+        private GUIServerInterface EventInt;
 
         public Server(GUIServerInterface eventInt)
         {
@@ -34,8 +35,13 @@ namespace NetWeaverServer.Main
         //    - ohne async wartet der Invoker (Caller) bis das event fertig ist, gibt dabei aber nicht controll zurrück an die CMD
         //Wäre das GUI direkt durchgepätscht könnte man den copy file Task await -en
         {
-            CopyFileJob cfj = new CopyFileJob(md, (GUIServerInterface) sender);
-            await cfj.Work();
+            await StartJob(typeof(CopyFileJob), md, (GUIServerInterface) sender);
+        }
+
+        private async Task StartJob(Type job, MessageDetails md, GUIServerInterface inter)
+        {
+            JobManager manager = new JobManager(job, md, EventInt);
+            await manager.RunOnAllClients();
         }
     }
 }

@@ -14,11 +14,10 @@ namespace NetWeaverServer.Main
     public class Program
     {
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
-        public static LoggingOperation Logger = new LoggingOperation();
         private static GUIServerInterface guiServerInterface = new GUIServerInterface();
         private static GUI gui;
         private static Server server;
-        
+
         public static void Main(string[] args)
         {
             POCServer();

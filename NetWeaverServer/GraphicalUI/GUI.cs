@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 
+using static NetWeaverServer.Tasks.Operations.LoggingOperation;
+
 namespace NetWeaverServer.GraphicalUI
 {
     public class GUI
@@ -47,11 +49,13 @@ namespace NetWeaverServer.GraphicalUI
                         break;
                     case "reply":
                         EventInt.triggerClientReplyEvent(); break;
-                    case "q": return;
+                    case "q":
+                        //Logger.Delete();
+                        return;
                 }
             }
         }
-        
+
         private void ReportProgress(object sender, ProgressDetails e)
         {
             Console.WriteLine("Reporting List of finished clients");

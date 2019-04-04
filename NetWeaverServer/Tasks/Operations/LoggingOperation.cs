@@ -8,7 +8,9 @@ namespace NetWeaverServer.Tasks.Operations
 {
     public class LoggingOperation
     {
-        public const string LOG = "NetWeaver";
+        public static LoggingOperation Logger = new LoggingOperation();
+
+        private const string LOG = "NetWeaver";
         private string layout = "{0:dd-MM-yy HH:mm:ss} {1,-11} {2:S}";
 
         public async void Error(object caller, string message)
@@ -39,7 +41,7 @@ namespace NetWeaverServer.Tasks.Operations
             string fullname = caller.GetType().FullName;
             string source = caller.GetType() == typeof(Client) ?
                 ((Client) caller).HostName : fullname.Substring(fullname.LastIndexOf('.'), fullname.Length);
-            
+
             if (!EventLog.SourceExists(source))
             {
                 EventLog.CreateEventSource(source, LOG);
@@ -49,6 +51,11 @@ namespace NetWeaverServer.Tasks.Operations
                 eventLog.Source = source;
                 await Task.Run(() => eventLog.WriteEntry(message, type));
             }
+        }
+
+        public void Delete()
+        {
+            EventLog.Delete(LOG);
         }
     }
 }
