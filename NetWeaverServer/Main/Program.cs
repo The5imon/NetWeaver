@@ -18,7 +18,7 @@ namespace NetWeaverServer.Main
         public static void Main(string[] args)
         {
             
-            POCServer();
+            //POCServer();
         }
 
         public static void POCLogging()
