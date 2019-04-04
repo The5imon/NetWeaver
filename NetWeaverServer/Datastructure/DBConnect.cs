@@ -72,7 +72,7 @@ namespace NetWeaverServer.Datastructure
                         break;
 
                     case 1045:
-                        Console.WriteLine("Invalid username/password, please try again");
+                        Console.WriteLine("Invalid Username/password, please try again");
                         break;
                 }
 
