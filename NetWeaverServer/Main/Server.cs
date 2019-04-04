@@ -11,7 +11,7 @@ namespace NetWeaverServer.Main
 {
     public class Server
     {
-        private GUIServerInterface EventInt;
+        private GUIServerInterface EventInt { get; }
 
         public Server(GUIServerInterface eventInt)
         {

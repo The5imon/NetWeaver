@@ -49,6 +49,8 @@ namespace NetWeaverServer.GraphicalUI
                         break;
                     case "reply":
                         EventInt.triggerClientReplyEvent(); break;
+                    case "client":
+                        //TODO: Implement ClientOperation
                     case "q":
                         //Logger.Delete();
                         return;

@@ -33,7 +33,6 @@ namespace NetWeaverServer.Tasks.Jobs
         private IProgress<ProgressDetails> Progress { get; }
 
         private ProgressDetails pd = new ProgressDetails();
-
         public JobManager(Type job, MessageDetails messageDetails, GUIServerInterface communication)
         {
             Job = job;
