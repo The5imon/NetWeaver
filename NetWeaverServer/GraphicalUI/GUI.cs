@@ -21,10 +21,11 @@ namespace NetWeaverServer.GraphicalUI
         {
             EventInt = eventInt;
             new Thread(Run).Start();
-            clients.Add(new Client("abcd", "EDV", "SimonsPC", "10.0.0.1"));
-            clients.Add(new Client("qwer", "EDV", "MaxPC", "10.0.0.2"));
-            clients.Add(new Client("yxcv", "EDV", "GregorsPC", "10.0.0.3"));
-            clients.Add(new Client("fghj", "EDV", "WurzersPC", "10.0.0.4"));
+            //TODO: Client hat einen anderen Konstruktor diese aufrufe müssen angepasst werden
+            //clients.Add(new Client("abcd", "EDV", "SimonsPC", "10.0.0.1"));
+            //clients.Add(new Client("qwer", "EDV", "MaxPC", "10.0.0.2"));
+            //clients.Add(new Client("yxcv", "EDV", "GregorsPC", "10.0.0.3"));
+            //clients.Add(new Client("fghj", "EDV", "WurzersPC", "10.0.0.4"));
         }
 
         public void Run()

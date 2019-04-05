@@ -11,6 +11,7 @@ using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
 
 using static NetWeaverServer.Datastructure.DbConnect;
+using static NetWeaverServer.Datastructure.DBDump;
 
 namespace NetWeaverServer.Main
 {
@@ -49,24 +50,11 @@ namespace NetWeaverServer.Main
         {
             InitializeDb();
             var allClients = GetAllClients();
-            var flattened = allClients.SelectMany(list => list);
-            var one = allClients[0];
-            
-            foreach (var uno in one)
+            List<Client> test = getClientList(allClients);
+            foreach (var client in test)
             {
-                Console.WriteLine(uno);
+                Console.WriteLine(client.ToString());
             }
-            
-            /*foreach (var result in allClients)
-                {
-                     foreach (var column in result)
-                    {
-                        Console.Write(column + " ");
-                    }
-                
-
-                Console.WriteLine(" ");
-            }*/
                 CloseDb();
         }
     }
