@@ -9,6 +9,7 @@ namespace NetWeaverServer.Datastructure
 
         public static List<Client> getClientList(List<List<String>> dataList)
         {
+            //TODO:Verbesserung bitte flamed mich nicht
             return parseClientList(Parse(dataList));
         }
         public static List<String> Parse(List<List<String>> dataList)
