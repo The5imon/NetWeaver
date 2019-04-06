@@ -12,20 +12,17 @@ namespace NetWeaverServer.GraphicalUI
 {
     public class GUI
     {
-
         private List<Client> clients = new List<Client>();
-
         private GUIServerInterface EventInt { get; }
 
         public GUI(GUIServerInterface eventInt)
         {
             EventInt = eventInt;
             new Thread(Run).Start();
-            //TODO: Client hat einen anderen Konstruktor diese aufrufe müssen angepasst werden
-            //clients.Add(new Client("abcd", "EDV", "SimonsPC", "10.0.0.1"));
-            //clients.Add(new Client("qwer", "EDV", "MaxPC", "10.0.0.2"));
-            //clients.Add(new Client("yxcv", "EDV", "GregorsPC", "10.0.0.3"));
-            //clients.Add(new Client("fghj", "EDV", "WurzersPC", "10.0.0.4"));
+            clients.Add(new Client("abcd", 1, "SimonsPC", "10.0.0.1", true, ""));
+            clients.Add(new Client("qwer", 1, "MaxPC", "10.0.0.2", true, ""));
+            clients.Add(new Client("yxcv", 1, "GregorsPC", "10.0.0.3", true, ""));
+            clients.Add(new Client("fghj", 1, "WurzersPC", "10.0.0.4", true, ""));
         }
 
         public void Run()
