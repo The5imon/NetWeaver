@@ -32,10 +32,11 @@ namespace NetWeaverServer.GraphicalUI
             while(true)
             {
                 input = Console.ReadLine();
+                string[] args = input.Split(":");
                 Progress<ProgressDetails> progress = new Progress<ProgressDetails>();
                 progress.ProgressChanged += ReportProgress;
                 MessageDetails md = new MessageDetails(clients, progress);
-                switch(input)
+                switch(args[0])
                 {
                     case "copy":
                         /**
@@ -46,9 +47,11 @@ namespace NetWeaverServer.GraphicalUI
                         EventInt.triggerCopyFileEvent(md);
                         break;
                     case "reply":
-                        EventInt.triggerClientReplyEvent(); break;
+                        EventInt.triggerClientReplyEvent();
+                        break;
                     case "client":
-                        //TODO: Implement ClientOperation
+                        EventInt.newClientEvent(new ClientDetails{Client = args[1]});
+                        break;
                     case "q":
                         //Logger.Delete();
                         return;

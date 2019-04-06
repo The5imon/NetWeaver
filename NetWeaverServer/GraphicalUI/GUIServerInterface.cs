@@ -10,7 +10,8 @@ namespace NetWeaverServer.GraphicalUI
         //TODO: Create Interaction Concept; GUI -> ServerInterface, Server; Server -> GUIinterface, GUI
         public event EventHandler<MessageDetails> CopyFileEvent;
         public event EventHandler<MessageDetails> ClientReplyEvent;
-        
+        public event EventHandler<ClientDetails> NewClientEvent;
+
         public void triggerCopyFileEvent(MessageDetails details)
         {
             CopyFileEvent?.Invoke(this, details);
@@ -21,6 +22,9 @@ namespace NetWeaverServer.GraphicalUI
             ClientReplyEvent?.Invoke(this, new MessageDetails(new List<Client>(), new Progress<ProgressDetails>()));
         }
 
-        
+        public void newClientEvent(ClientDetails details)
+        {
+            NewClientEvent?.Invoke(this, details);
+        }
     }
 }

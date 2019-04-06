@@ -28,4 +28,9 @@ namespace NetWeaverServer.Datastructure
 
         public List<Client> Clients = new List<Client>();
     }
+
+    public class ClientDetails : EventArgs
+    {
+        public string Client { get; set; }
+    }
 }

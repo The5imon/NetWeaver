@@ -20,6 +20,7 @@ namespace NetWeaverServer.Main
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         public static LoggingOperation Logger = new LoggingOperation();
         private static GUIServerInterface guiServerInterface = new GUIServerInterface();
+        public static ClientOperation ClientRegister = new ClientOperation(guiServerInterface);
         private static GUI gui;
         private static Server server;
 
