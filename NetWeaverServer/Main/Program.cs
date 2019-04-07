@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
-
 using static NetWeaverServer.Datastructure.DbConnect;
 using static NetWeaverServer.Datastructure.DBDump;
 
 namespace NetWeaverServer.Main
 {
-    public class Program
+    class Program
     {
+       
+        
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         public static LoggingOperation Logger = new LoggingOperation();
         private static GUIServerInterface guiServerInterface = new GUIServerInterface();
