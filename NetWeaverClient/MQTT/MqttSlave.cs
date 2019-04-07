@@ -23,7 +23,7 @@ namespace NetWeaverClient.MQTT
         public async Task StartAsync()
         {
             await ConnectAsync();
-            
+            await PublishAsync("/niggo", "i am at peace");
             
             Console.Read();
         }
@@ -40,14 +40,14 @@ namespace NetWeaverClient.MQTT
                 .WithExactlyOnceQoS();
             
             var options = new MqttClientOptionsBuilder()
-                .WithClientId("test man").WithWillMessage(message.Build())
+                .WithClientId("IamClient1").WithWillMessage(message.Build())
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ipaddress, _port); 
 
             await _client.ConnectAsync(options.Build());
         }
 
-        public async Task PublishAsync(string topic, string payload)
+        private async Task PublishAsync(string topic, string payload)
         {
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(topic).WithPayload(payload)

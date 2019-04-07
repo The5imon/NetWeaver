@@ -4,6 +4,7 @@ using System.Diagnostics;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
+using NetWeaverServer.MQTT;
 using static NetWeaverServer.Datastructure.DbConnect;
 using static NetWeaverServer.Datastructure.DBDump;
 
@@ -11,7 +12,7 @@ namespace NetWeaverServer.Main
 {
     class Program
     {
-       
+        
         
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         public static LoggingOperation Logger = new LoggingOperation();
@@ -22,6 +23,12 @@ namespace NetWeaverServer.Main
 
         public static void Main(string[] args)
         {
+            MqttBroker broker = new MqttBroker(6666);
+            broker.StartAsync();
+            
+            MqttMaster master = new MqttMaster("192.168.0.171", 6666);
+            master.StartAsync();
+            
             //ProoveOfWurzer();
             POCServer();
         }
