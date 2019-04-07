@@ -1,8 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MQTTnet" Version="3.0.0-alpha3" />
+      <PackageReference Include="Topshelf" Version="4.2.0.205-develop" />
+    </ItemGroup>
 
 </Project>
