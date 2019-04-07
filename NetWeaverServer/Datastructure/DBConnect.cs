@@ -35,9 +35,9 @@ namespace NetWeaverServer.Datastructure
         /// <summary>Initialises the values for the connection to the database</summary>
         private void Initialize()
         {
-            _server = "192.168.208.128";
+            _server = "192.168.230.131";
             _database = "mcondb";
-            _uid = "admin";
+            _uid = "remote";
             _password = "htl3r";
             string connectionString;
             connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" + "PASSWORD=" + _password + ";";
@@ -235,7 +235,7 @@ namespace NetWeaverServer.Datastructure
         /// <summary>All rooms in the db</summary>
         public static List<List<string>> GetAllRooms()
         {
-            return Connection.Select("select pk_roomNumber,roomdescription from room;");
+            return Connection.Select("select * from room;");
         }
 
         /// <summary>Subnet information for all rooms</summary>

@@ -12,8 +12,6 @@ namespace NetWeaverServer.Main
 {
     class Program
     {
-        
-        
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         public static LoggingOperation Logger = new LoggingOperation();
         private static GUIServerInterface guiServerInterface = new GUIServerInterface();
@@ -23,14 +21,14 @@ namespace NetWeaverServer.Main
 
         public static void Main(string[] args)
         {
-            MqttBroker broker = new MqttBroker(6666);
-            broker.StartAsync();
-            
-            MqttMaster master = new MqttMaster("192.168.0.171", 6666);
-            master.StartAsync();
-            
-            //ProoveOfWurzer();
-            POCServer();
+            //MqttBroker broker = new MqttBroker(6666);
+            //broker.StartAsync();
+
+            //MqttMaster master = new MqttMaster("192.168.0.171", 6666);
+            //master.StartAsync();
+
+            ProoveOfWurzer();
+            //POCServer();
         }
 
         public static void POCLogging()
@@ -53,13 +51,17 @@ namespace NetWeaverServer.Main
         public static void ProoveOfWurzer()
         {
             InitializeDb();
-            var allClients = GetAllClients();
-            List<Client> test = getClientList(allClients);
-            foreach (var client in test)
+            //var allClients = GetAllClients();
+            //List<Client> test = getClientList(allClients);
+            var rooms = GetAllRooms();
+            List<Room> test = getRoomList(rooms);
+            
+            foreach (var room in test)
             {
-                Console.WriteLine(client.ToString());
+                Console.WriteLine(room.ToString());
             }
-                CloseDb();
+
+            CloseDb();
         }
     }
 }

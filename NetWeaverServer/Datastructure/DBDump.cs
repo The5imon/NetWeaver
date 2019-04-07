@@ -11,6 +11,12 @@ namespace NetWeaverServer.Datastructure
             //TODO:Verbesserung bitte flamed mich nicht
             return parseClientList(Parse(dataList));
         }
+        
+        public static List<Room> getRoomList(List<List<String>> dataList)
+        {
+            //TODO:Verbesserung bitte flamed mich nicht
+            return parseRoomList(Parse(dataList));
+        }
 
         public static List<String> Parse(List<List<String>> dataList)
         {
@@ -34,6 +40,18 @@ namespace NetWeaverServer.Datastructure
             }
 
             return clients;
+        }
+        
+        public static List<Room> parseRoomList(List<String> dataString)
+        {
+            List<Room> rooms = new List<Room>();
+
+            foreach (var clientData in dataString)
+            {
+                rooms.Add(createRoom(clientData));
+            }
+
+            return rooms;
         }
 
         public static Client createClient(String clientData)
