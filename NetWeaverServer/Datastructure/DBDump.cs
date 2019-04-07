@@ -5,7 +5,7 @@ using System.Globalization;
 namespace NetWeaverServer.Datastructure
 {
     public class DBDump
-    {
+    { //TODO: fertigstellung, testen, featureset erweitern,bugfixing
         public static List<Client> getClientList(List<List<String>> dataList)
         {
             //TODO:Verbesserung bitte flamed mich nicht

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace NetWeaverServer.Datastructure
 {
     public class Room
-    {
+    { //TODO: erweitern,Bugfixing,featureset erweitern, testen
         private int RoomNumber { get; }
         private string Roomname { get; }
         private List<Client> Clients { get; }

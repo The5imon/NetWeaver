@@ -6,6 +6,7 @@ namespace NetWeaverServer.Datastructure
 {
     class DbConnect
     {
+        //TODO:Vereinfachung, automatisches Backup?, json oder csv
         //The connection
         public static DbConnect Connection;
 
