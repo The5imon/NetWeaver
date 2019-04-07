@@ -16,11 +16,10 @@ namespace NetWeaverServer.Datastructure
             Roomname = roomname;
         }
 
-        public Room(int roomNumber, string roomname, List<Client> clients, string netmask, string subnetmask)
+        public Room(int roomNumber, string roomname, string netmask, string subnetmask)
         {
             RoomNumber = roomNumber;
             Roomname = roomname;
-            Clients = clients;
             Netmask = netmask;
             Subnetmask = subnetmask;
         }

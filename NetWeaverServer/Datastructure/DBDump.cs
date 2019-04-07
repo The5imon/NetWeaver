@@ -47,5 +47,16 @@ namespace NetWeaverServer.Datastructure
 
             return new Client(mac, roomNumber, hostName, ipAddress, isOnline, lastSeen);
         }
+
+        public static Room createRoom(String roomData)
+        {
+
+            int RoomNumber = Int32.Parse(roomData.Split('~')[0]);
+            string Roomname = roomData.Split('~')[1];
+            string Netmask = roomData.Split('~')[2];
+            string Subnetmask = roomData.Split('~')[3];
+
+            return new Room( RoomNumber, Roomname, Netmask, Subnetmask);
+        }
     }
 }
