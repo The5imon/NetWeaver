@@ -26,8 +26,8 @@ namespace NetWeaverServer.Main
 
         public static void Main(string[] args)
         {
-            //ProoveOfWurzer();
-            POCServer();
+            ProoveOfWurzer();
+            //POCServer();
         }
 
         public static void POCLogging()

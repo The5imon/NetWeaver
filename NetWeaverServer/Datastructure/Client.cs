@@ -20,6 +20,16 @@ namespace NetWeaverServer.Datastructure
             IsOnline = isOnline;
             LastSeen = lastSeen;
         }
+        
+        public Client(string mac, int roomNumber, string hostName, string ipAddress)
+        {
+            MAC = mac;
+            RoomNumber = roomNumber;
+            HostName = hostName;
+            IPAddress = ipAddress;
+            IsOnline = true;
+            LastSeen = DateTime.Today.ToString("dd-MM-yyyy");
+        }
 
         public override string ToString()
         {
