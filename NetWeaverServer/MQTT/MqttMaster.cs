@@ -5,14 +5,14 @@ using MQTTnet.Client;
 
 namespace NetWeaverServer.MQTT
 {
-    public class MasterClient
+    public class MqttMaster
     {
         private readonly int _port;
         private readonly string _ip;
         private readonly IMqttClient _client;
         public event EventHandler MessageReceivedEvent;
 
-        public MasterClient(string ip, int port)
+        public MqttMaster(string ip, int port)
         {
             this._ip = ip;
             this._port = port;

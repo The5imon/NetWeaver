@@ -6,7 +6,7 @@ using MQTTnet.Protocol;
 
 namespace NetWeaverServer.MQTT
 {
-    internal class MqttBroker
+    public class MqttBroker
     {
         private readonly int _port;
         private readonly IMqttServer _server;
