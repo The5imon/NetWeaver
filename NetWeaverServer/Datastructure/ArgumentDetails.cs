@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NetWeaverServer.Datastructure
-{
+{	
     public class MessageDetails : EventArgs
     {
         public IProgress<ProgressDetails> Progress { get; }
