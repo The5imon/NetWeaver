@@ -9,7 +9,6 @@ namespace NetWeaverServer.Datastructure
     public class MessageDetails : EventArgs
     {
         public IProgress<ProgressDetails> Progress { get; }
-
         public List<Client> Clients { get; }
 
         public MessageDetails(List<Client> clients, IProgress<ProgressDetails> progress)

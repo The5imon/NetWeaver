@@ -10,13 +10,13 @@ using NetWeaverServer.GraphicalUI;
 namespace NetWeaverServer.Tasks.Jobs
 {
     public class JobManager
-    //TODO: IDEA Three Levels of Jobs:
+    //TODO: IDEA Three Levels of Jobs
     /**
      * Passive: Operation e.g. LoggingOperation
-     * Active Job: Job that accomplishes one Action on one Client by doing smaller Tasks
+     * Active Job: Job that accomplishes one Action on one Client by executing smaller Commands
      *  --> JobManger that initiates this Job for multiple Clients
-     * Active Tasks: Do one small thing
-     *  --> TaskQueue: Rows many explicit tasks back to back
+     * Active Commands: Do one small thing
+     *  --> CommandQueue: Rows nad executes many explicit Commands back to back
      */
     //TODO: Exception Handeling
     /**
@@ -25,6 +25,11 @@ namespace NetWeaverServer.Tasks.Jobs
      *     - Welche Fehler können auftreten? (Client disconnected, Timeout, etc ...)
      * ==> Den ganzen Prozess durchgehen
      *
+     */
+    //TODO: Reporting Progress
+    /**
+     * Manager Reports overall statistics
+     *     --> Extra ReportProgress for each Job; they report each individually
      */
     {
         private Type Job { get; }
