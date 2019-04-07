@@ -6,12 +6,12 @@ namespace NetWeaverServer.Datastructure
 {
     public class DBDump
     {
-
         public static List<Client> getClientList(List<List<String>> dataList)
         {
             //TODO:Verbesserung bitte flamed mich nicht
             return parseClientList(Parse(dataList));
         }
+
         public static List<String> Parse(List<List<String>> dataList)
         {
             List<String> values = new List<string>();
@@ -43,21 +43,9 @@ namespace NetWeaverServer.Datastructure
             string hostName = clientData.Split('~')[2];
             int roomNumber = Int32.Parse(clientData.Split('~')[3]);
             string lastSeen = clientData.Split('~')[4];
-            bool isOnline = parseBoolean(clientData.Split('~')[5]);
+            bool isOnline = bool.Parse(clientData.Split('~')[5]);
 
             return new Client(mac, roomNumber, hostName, ipAddress, isOnline, lastSeen);
-        }
-
-        private static bool parseBoolean(String value)
-        {
-            if (value.Equals("True"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }
