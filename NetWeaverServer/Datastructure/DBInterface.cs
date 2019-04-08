@@ -66,7 +66,7 @@ namespace NetWeaverServer.Datastructure
             string lastSeen = clientData.Split('~')[4];
             bool isOnline = bool.Parse(clientData.Split('~')[5]);
 
-            if (!this.roomNumbers.Contains(roomNumber))
+            if (!roomNumbers.Contains(roomNumber))
             {
                 Rooms.Add(new Room(roomNumber));
             }
