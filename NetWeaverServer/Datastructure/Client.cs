@@ -21,6 +21,15 @@ namespace NetWeaverServer.Datastructure
             LastSeen = lastSeen;
         }
         
+        public Client(string mac,int roomnumber, string hostName, string ip, bool isOnline, string lastSeen)
+        {
+            MAC = mac;
+            RoomNumber = roomnumber;
+            HostName = hostName;
+            IPAddress = ip;
+            IsOnline = isOnline;
+            LastSeen = lastSeen;
+        }
         public Client(string mac, string hostName, string ip)
         {
             MAC = mac;

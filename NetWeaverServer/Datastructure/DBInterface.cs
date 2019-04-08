@@ -8,6 +8,7 @@ namespace NetWeaverServer.Datastructure
         private DbConnect DataBase;
         public List<Client> Clients = new List<Client>();
         public List<Room> Rooms = new List<Room>();
+        private List<int> roomNumbers;
         
 
         public DBInterface(DbConnect DB)
@@ -32,7 +33,7 @@ namespace NetWeaverServer.Datastructure
             return values;
         }
 
-        public static List<Client> parseClientList(List<String> dataString)
+        public  List<Client> parseClientList(List<String> dataString)
         {
             List<Client> clients = new List<Client>();
 
@@ -44,7 +45,7 @@ namespace NetWeaverServer.Datastructure
             return clients;
         }
 
-        public static List<Room> parseRoomList(List<String> dataString)
+        public  List<Room> parseRoomList(List<String> dataString)
         {
             List<Room> rooms = new List<Room>();
 
@@ -65,21 +66,14 @@ namespace NetWeaverServer.Datastructure
             string lastSeen = clientData.Split('~')[4];
             bool isOnline = bool.Parse(clientData.Split('~')[5]);
 
-            foreach (var room in this.Rooms)
+            if (!this.roomNumbers.Contains(roomNumber))
             {
-                if (expr)
-                {
-                    
-                }
+                Rooms.Add(new Room(roomNumber));
             }
-            
-                
-            
-
-            return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
+                return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
         }
 
-        public static Room createRoom(String roomData)
+        public  Room createRoom(String roomData)
         {
             int RoomNumber = Int32.Parse(roomData.Split('~')[0]);
             string Roomname = roomData.Split('~')[1];
