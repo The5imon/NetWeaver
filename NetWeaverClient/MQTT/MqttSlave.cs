@@ -23,7 +23,7 @@ namespace NetWeaverClient.MQTT
         public async Task StartAsync()
         {
             await ConnectAsync();
-            await PublishAsync("/niggo", "i am at peace");
+            await PublishAsync("/conn", "i am at peace");
             
             Console.Read();
         }
