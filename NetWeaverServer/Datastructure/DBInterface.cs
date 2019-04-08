@@ -5,18 +5,20 @@ namespace NetWeaverServer.Datastructure
 {
     public class DBInterface
     {
-        public DbConnect DataBase;
+        private DbConnect DataBase;
+        public List<Client> Clients = new List<Client>();
+        public List<Room> Rooms = new List<Room>();
+
         public DBInterface(DbConnect DB)
         {
             DataBase = DB;
         }
-        
-        public static List<Client> getClientList(List<List<String>> dataList)
-        {
-            //TODO:Verbesserung bitte flamed mich nicht
-            return parseClientList(Parse(dataList));
+
+        public  List<Client> getClientList()
+        {  
+            return parseClientList(Parse(DataBase.GetAllClients()));
         }
-        
+
         public static List<String> Parse(List<List<String>> dataList)
         {
             List<String> values = new List<string>();
@@ -28,7 +30,7 @@ namespace NetWeaverServer.Datastructure
 
             return values;
         }
-        
+
         public static List<Client> parseClientList(List<String> dataString)
         {
             List<Client> clients = new List<Client>();
@@ -40,7 +42,7 @@ namespace NetWeaverServer.Datastructure
 
             return clients;
         }
-        
+
         public static List<Room> parseRoomList(List<String> dataString)
         {
             List<Room> rooms = new List<Room>();
@@ -67,13 +69,12 @@ namespace NetWeaverServer.Datastructure
 
         public static Room createRoom(String roomData)
         {
-
             int RoomNumber = Int32.Parse(roomData.Split('~')[0]);
             string Roomname = roomData.Split('~')[1];
             string Netmask = roomData.Split('~')[2];
             string Subnetmask = roomData.Split('~')[3];
 
-            return new Room( RoomNumber, Roomname, Netmask, Subnetmask);
+            return new Room(RoomNumber, Roomname, Netmask, Subnetmask);
         }
     }
 }

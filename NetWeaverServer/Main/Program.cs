@@ -50,6 +50,9 @@ namespace NetWeaverServer.Main
         public static void ProoveOfWurzer()
         {
             InitializeDb();
+            DBInterface DBI = new DBInterface(new DbConnect());
+            
+            
             //var allClients = GetAllClients();
             //List<Client> test = getClientList(allClients);
             //var rooms = GetAllRooms();
