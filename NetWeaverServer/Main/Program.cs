@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
@@ -13,22 +15,34 @@ namespace NetWeaverServer.Main
     class Program
     {
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
-        public static LoggingOperation Logger = new LoggingOperation();
+        //Resources
         private static GUIServerInterface guiServerInterface = new GUIServerInterface();
+        private static DbConnect dbconnection;
+        private static DBDump dbinterface;
+        private static MqttBroker mqttbroker;
+        private static MqttMaster mqttmaster;
+        
+        //Operations
+        public static LoggingOperation Logger = new LoggingOperation();
         public static ClientOperation ClientRegister = new ClientOperation(guiServerInterface);
+        
+        //Main Components
         private static GUI gui;
         private static Server server;
 
         public static void Main(string[] args)
         {
-            //MqttBroker broker = new MqttBroker(6666);
-            //broker.StartAsync();
+            //ProoveOfWurzer();
+            StartServer();
+        }
 
-            //MqttMaster master = new MqttMaster("192.168.0.171", 6666);
-            //master.StartAsync();
+        public static void POCMqtt()
+        {
+            MqttBroker broker = new MqttBroker(6666);
+            Task.Run(() => broker.StartAsync());
 
-            ProoveOfWurzer();
-            //POCServer();
+            MqttMaster master = new MqttMaster("127.0.0.1", 6666);
+            Task.Run(() =>master.StartAsync());
         }
 
         public static void POCLogging()
@@ -41,10 +55,15 @@ namespace NetWeaverServer.Main
             EventLog.Delete("NetWeaver");
         }
 
-        public static void POCServer()
+        public static void StartServer()
         {
-            gui = new GUI(guiServerInterface);
-            server = new Server(guiServerInterface);
+            mqttbroker = new MqttBroker(6666);
+            Task.Run(()=>mqttbroker.StartAsync());
+            mqttmaster = new MqttMaster("127.0.0.1", 6666);
+            Task.Run(() => mqttmaster.StartAsync());
+            
+            gui = new GUI(guiServerInterface); // + Database connection
+            server = new Server(guiServerInterface, mqttmaster); // + Database access
             Console.WriteLine("Start of Server");
         }
 

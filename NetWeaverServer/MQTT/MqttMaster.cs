@@ -10,7 +10,7 @@ namespace NetWeaverServer.MQTT
         private readonly int _port;
         private readonly string _ip;
         private readonly IMqttClient _client;
-        public event EventHandler MessageReceivedEvent;
+        public event EventHandler<MqttApplicationMessageReceivedEventArgs> MessageReceivedEvent;
 
         public MqttMaster(string ip, int port)
         {
@@ -25,9 +25,6 @@ namespace NetWeaverServer.MQTT
             await SubscribeAsync("/#");
 
             _client.ApplicationMessageReceived += OnMessageReceived;
-            
-            
-            Console.Read();
         }
 
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
@@ -35,7 +32,7 @@ namespace NetWeaverServer.MQTT
             Console.WriteLine(e.ClientId + ": " + e.ApplicationMessage.ConvertPayloadToString());
             MessageReceivedEvent?.Invoke(this, e);
         }
-
+        
         public async Task StopAsync()
         {
             await _client.DisconnectAsync();

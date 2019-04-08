@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using MQTTnet;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
+using NetWeaverServer.MQTT;
 
 namespace NetWeaverServer.Tasks.Jobs
 {
@@ -34,16 +36,16 @@ namespace NetWeaverServer.Tasks.Jobs
     {
         private Type Job { get; }
         private List<Client> Clients { get; }
-        private GUIServerInterface Channel { get; }
+        private MqttMaster Channel { get; }
         private IProgress<ProgressDetails> Progress { get; }
 
         private ProgressDetails pd = new ProgressDetails();
-        public JobManager(Type job, MessageDetails messageDetails, GUIServerInterface communication)
+        public JobManager(Type job, MessageDetails messageDetails, MqttMaster channel)
         {
             Job = job;
             Clients =  new List<Client>(messageDetails.Clients);
             Progress = messageDetails.Progress;
-            Channel = communication;
+            Channel = channel;
         }
 
         public async Task RunOnAllClients()
@@ -53,7 +55,7 @@ namespace NetWeaverServer.Tasks.Jobs
             foreach (Client client in Clients)
             {
                 Job j = (Job) Activator.CreateInstance(Job, client, Channel, Progress);
-                tasks.Add(Task.Run(() => j.Work()));
+                tasks.Add(j.Work());
             }
 
             await Task.WhenAll(tasks);
