@@ -73,6 +73,10 @@ namespace NetWeaverServer.Datastructure
                 return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
         }
 
+        public void updateClient(List<Client> clients)
+        {
+            DataBase.updateClient(clients);
+        }
         public  Room createRoom(String roomData)
         {
             int RoomNumber = Int32.Parse(roomData.Split('~')[0]);
