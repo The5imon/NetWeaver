@@ -66,18 +66,14 @@ namespace NetWeaverServer.Datastructure
             string lastSeen = clientData.Split('~')[4];
             bool isOnline = bool.Parse(clientData.Split('~')[5]);
 
-            foreach (var room in this.Rooms)
+            if (!this.roomNumbers.Contains(roomNumber))
             {
-              
+                Rooms.Add(new Room(roomNumber));
             }
-            
-                
-            
-
-            return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
+                return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
         }
 
-        public static Room createRoom(String roomData)
+        public  Room createRoom(String roomData)
         {
             int RoomNumber = Int32.Parse(roomData.Split('~')[0]);
             string Roomname = roomData.Split('~')[1];
