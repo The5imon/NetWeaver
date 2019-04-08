@@ -12,17 +12,14 @@ namespace NetWeaverServer.GraphicalUI
 {
     public class GUI
     {
-        private List<Client> clients = new List<Client>();
-        private GUIServerInterface EventInt { get; }
-
-        public GUI(GUIServerInterface eventInt)
+        public List<Client> clients = new List<Client>();
+        private EventInterface EventInt { get; }
+        
+        public GUI(EventInterface eventInt)
         {
             EventInt = eventInt;
             new Thread(Run).Start();
-            clients.Add(new Client("abcd", 1, "SimonsPC", "10.0.0.1", true, ""));
-            clients.Add(new Client("qwer", 1, "MaxPC", "10.0.0.2", true, ""));
-            clients.Add(new Client("yxcv", 1, "GregorsPC", "10.0.0.3", true, ""));
-            clients.Add(new Client("fghj", 1, "WurzersPC", "10.0.0.4", true, ""));
+            clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
         }
 
         public void Run()
@@ -39,23 +36,23 @@ namespace NetWeaverServer.GraphicalUI
                 switch(args[0])
                 {
                     case "copy":
-                        /**
-                         * Event Trigger kann als direkter Zugriff durch den Server ersetzt werden
-                         *     - weniger Abspaltung (Event Trigger/ Async Handler ==> Komplette Abspaltung)
-                         *     - bzw. maybe unschön
-                         */
-                        EventInt.triggerCopyFileEvent(md);
+                        EventInt.getExecuteScriptEvent().Invoke(this, md);
                         break;
-                    case "reply":
-                        EventInt.triggerClientReplyEvent();
-                        break;
-                    case "client":
-                        EventInt.newClientEvent(new ClientDetails{Client = args[1]});
+                    case "list":
+                        PrintClients();
                         break;
                     case "q":
                         //Logger.Delete();
                         return;
                 }
+            }
+        }
+
+        private void PrintClients()
+        {
+            foreach (Client client in clients)
+            {
+                Console.WriteLine(client);
             }
         }
 

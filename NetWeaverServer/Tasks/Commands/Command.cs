@@ -8,7 +8,7 @@ namespace NetWeaverServer.Tasks.Commands
     //TODO: Maybe implement in the Future
     public class Command
     {
-        private GUIServerInterface CommunicationInterface { get; }
+        private EventInterface CommunicationInterface { get; }
 
         private AutoResetEvent Reply = new AutoResetEvent(false);
 

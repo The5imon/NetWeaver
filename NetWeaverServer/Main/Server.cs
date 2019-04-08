@@ -12,37 +12,27 @@ namespace NetWeaverServer.Main
 {
     public class Server
     {
-        private GUIServerInterface EventInt { get; }
+        private EventInterface EventInt { get; }
         private MqttMaster Channel { get; }
 
-        public Server(GUIServerInterface eventInt, MqttMaster channel)
+        public Server(EventInterface eventInt, MqttMaster channel)
         {
             EventInt = eventInt;
             Channel = channel;
-            new Thread(Run).Start();
+            WireUpHandlers();
         }
 
-        public void Run()
+        private void WireUpHandlers()
         {
-            WireUpGUIHandlers();
-        }
-
-        private void WireUpGUIHandlers()
-        {
-            EventInt.CopyFileEvent += Gui_CopyFileEvent;
+            EventInt.ExecuteScriptEvent += HandleExecuteScriptEvent;
         }
 
         //TODO: Rework Event and Handler design
-        private async void Gui_CopyFileEvent(object sender, MessageDetails md)
-        //EventInterface zwischen GUI und Server
-        //    - mit async kann der Invoker (Caller) weitermachen, was kein Problem weil, weil ich zurrückreporten kann
-        //    - ohne async wartet der Invoker (Caller) bis das event fertig ist, gibt dabei aber nicht controll zurrück an die CMD
-        //Wäre das GUI direkt durchgepätscht könnte man den copy file Task await -en
+        private async void HandleExecuteScriptEvent(object sender, MessageDetails md)
         {
             await StartJob(typeof(CopyFileJob), md);
         }
         
-         //TODO: Nicht konform
         private async Task StartJob(Type job, MessageDetails md)
         {
             JobManager manager = new JobManager(job, md, Channel);
