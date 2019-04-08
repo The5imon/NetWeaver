@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace NetWeaverServer.Datastructure
 {
-    public class DBDump
-    { //TODO: fertigstellung, testen, featureset erweitern,bugfixing
+    public class DBInterface
+    {
+        public DbConnect DataBase;
+        public DBInterface(DbConnect DB)
+        {
+            DataBase = DB;
+        }
+        
         public static List<Client> getClientList(List<List<String>> dataList)
         {
             //TODO:Verbesserung bitte flamed mich nicht
             return parseClientList(Parse(dataList));
         }
         
-        public static List<Room> getRoomList(List<List<String>> dataList)
-        {
-            //TODO:Verbesserung bitte flamed mich nicht
-            return parseRoomList(Parse(dataList));
-        }
-
         public static List<String> Parse(List<List<String>> dataList)
         {
             List<String> values = new List<string>();
@@ -29,7 +28,7 @@ namespace NetWeaverServer.Datastructure
 
             return values;
         }
-
+        
         public static List<Client> parseClientList(List<String> dataString)
         {
             List<Client> clients = new List<Client>();

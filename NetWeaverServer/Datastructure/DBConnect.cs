@@ -4,9 +4,10 @@ using MySql.Data.MySqlClient;
 
 namespace NetWeaverServer.Datastructure
 {
-    class DbConnect
+    public class DbConnect
     {
         //TODO:Vereinfachung, automatisches Backup?, json oder csv
+        //TODO:Neiche inserts und deletes schreiben
         //The connection
         public static DbConnect Connection;
 

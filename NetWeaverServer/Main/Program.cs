@@ -6,7 +6,6 @@ using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
 using NetWeaverServer.MQTT;
 using static NetWeaverServer.Datastructure.DbConnect;
-using static NetWeaverServer.Datastructure.DBDump;
 
 namespace NetWeaverServer.Main
 {
@@ -53,13 +52,13 @@ namespace NetWeaverServer.Main
             InitializeDb();
             //var allClients = GetAllClients();
             //List<Client> test = getClientList(allClients);
-            var rooms = GetAllRooms();
-            List<Room> test = getRoomList(rooms);
+            //var rooms = GetAllRooms();
+            //List<Room> test = getRoomList(rooms);
             
-            foreach (var room in test)
-            {
-                Console.WriteLine(room.ToString());
-            }
+           // foreach (var room in test)
+          //  {
+               // Console.WriteLine(room.ToString());
+           // }
 
             CloseDb();
         }
