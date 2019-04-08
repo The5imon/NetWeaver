@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
+using NetWeaverServer.MQTT;
 using NetWeaverServer.Tasks.Jobs;
 using static NetWeaverServer.Main.Program;
 
@@ -11,36 +12,30 @@ namespace NetWeaverServer.Main
 {
     public class Server
     {
-        private GUIServerInterface EventInt { get; }
+        private EventInterface EventInt { get; }
+        private MqttMaster Channel { get; }
 
-        public Server(GUIServerInterface eventInt)
+        public Server(EventInterface eventInt, MqttMaster channel)
         {
             EventInt = eventInt;
-            new Thread(Run).Start();
+            Channel = channel;
+            WireUpHandlers();
         }
 
-        public void Run()
+        private void WireUpHandlers()
         {
-            WireUpGUIHandlers();
+            EventInt.ExecuteScriptEvent += HandleExecuteScriptEvent;
         }
 
-        private void WireUpGUIHandlers()
+        //TODO: Rework Event and Handler design
+        private async void HandleExecuteScriptEvent(object sender, MessageDetails md)
         {
-            EventInt.CopyFileEvent += Gui_CopyFileEvent;
+            await StartJob(typeof(CopyFileJob), md);
         }
-
-        private async void Gui_CopyFileEvent(object sender, MessageDetails md)
-        //EventInterface zwischen GUI und Server
-        //    - mit async kann der Invoker (Caller) weitermachen, was kein Problem weil, weil ich zurrückreporten kann
-        //    - ohne async wartet der Invoker (Caller) bis das event fertig ist, gibt dabei aber nicht controll zurrück an die CMD
-        //Wäre das GUI direkt durchgepätscht könnte man den copy file Task await -en
+        
+        private async Task StartJob(Type job, MessageDetails md)
         {
-            await StartJob(typeof(CopyFileJob), md, (GUIServerInterface) sender);
-        }
-
-        private async Task StartJob(Type job, MessageDetails md, GUIServerInterface inter)
-        {
-            JobManager manager = new JobManager(job, md, EventInt);
+            JobManager manager = new JobManager(job, md, Channel);
             await manager.RunOnAllClients();
         }
     }

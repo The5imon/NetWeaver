@@ -4,9 +4,10 @@ using MySql.Data.MySqlClient;
 
 namespace NetWeaverServer.Datastructure
 {
-    class DbConnect
+    public class DbConnect
     {
         //TODO:Vereinfachung, automatisches Backup?, json oder csv
+        //TODO:Neiche inserts und deletes schreiben
         //The connection
         public static DbConnect Connection;
 
@@ -172,11 +173,16 @@ namespace NetWeaverServer.Datastructure
         //--------------------------------------------------
 
         /// <summary>Every column from every client in the database</summary>
-        public static List<List<string>> GetAllClients() 
+        public  List<List<string>> GetAllClients() 
              {
                 return Connection.Select("SELECT * FROM client");
             }
         
+        /// <summary>All rooms in the db</summary>
+        public static List<List<string>> GetAllRooms()
+        {
+            return Connection.Select("select * from room;");
+        }
 
         /// <summary>Client name, mac ip, roomnumber and roomname</summary>
         public static List<List<string>> GetAllClientsWithRoom()
@@ -233,11 +239,7 @@ namespace NetWeaverServer.Datastructure
             return Connection.Select("select hostname , last_seen ,roomdescription from client,room where fk_pk_roomnumber = pk_roomNumber AND is_online = false;");
         }
 
-        /// <summary>All rooms in the db</summary>
-        public static List<List<string>> GetAllRooms()
-        {
-            return Connection.Select("select * from room;");
-        }
+        
 
         /// <summary>Subnet information for all rooms</summary>
         public static List<List<string>> GetAllSubnetsWithRooms()
@@ -278,138 +280,18 @@ namespace NetWeaverServer.Datastructure
         //UPDATEMETHODS
         //--------------------------------------------------
 
-        /// <summary>Changes the ip from the given client</summary>
-        /// <param name='hostname'>The hostname from the client</param>
-        /// <param name='newIp'>The new ip for the client</param>
-        public static void UpdateIpFromClientHostname(string hostname, string newIp)
-        {
-            Connection.Update("UPDATE client SET ipaddress = '" + newIp + "' WHERE hostname = '" + hostname + "';");
-        }
 
-        /// <summary>Changes the ip from the given client</summary>
-        /// <param name='mac'>The mac from the client</param>
-        /// <param name='newIP'>The new ip for the client</param>
-        public static void UpdateIpFromClientMac(string mac, string newIP)
-        {
-            Connection.Update("UPDATE client SET ipaddress = '" + newIP + "' WHERE pk_macaddr = '" + mac + "';");
-        }
 
-        /// <summary>Changes the room from the given client</summary>
-        /// <param name='mac'>The mac from the client</param>
-        /// <param name='newRoomNumber'>The new room for the client</param>
-        public static void UpdateRoomFromMac(string mac, int newRoomNumber)
-        {
-            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE pk_macaddr = '" + mac + "';");
-        }
-
-        /// <summary>Changes the room from the given client</summary>
-        /// <param name='ip'>The ip from the client</param>
-        /// <param name='newRoomNumber'>The new room for the client</param>
-        public static void UpdateRoomFromIP(string ip, int newRoomNumber)
-        {
-            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE ipaddress = '" + ip + "';");
-        }
-
-        /// <summary>Changes the room from the given client</summary>
-        /// <param name='hostname'>The hostname from the client</param>
-        /// <param name='newRoomNumber'>The new room for the client</param>
-        public static void UpdateRoomFromHostname(string hostname, int newRoomNumber)
-        {
-            Connection.Update("UPDATE client SET fk_pk_roomnumber = '" + newRoomNumber + "' WHERE hostname = '" + hostname + "';");
-        }
-
-        /// <summary>Changes the hostname from the given client</summary>
-        /// <param name='ip'>The ip from the client</param>
-        /// <param name='newHostname'>The new hostname for the client</param>
-        public static void UpdateHostnameByIp(string ip, string newHostname)
-        {
-            Connection.Update("UPDATE client SET hostname = '" + newHostname + "' WHERE ipaddress = '" + ip + "';");
-        }
-
-        /// <summary>Changes the hostname from the given client</summary>
-        /// <param name='mac'>The mac from the client</param>
-        /// <param name='newHostname'>The new hostname for the client</param>
-        public static void UpdateHostnameByMac(string mac, string newHostname)
-        {
-            Connection.Update("UPDATE client SET hostname = '" + newHostname + "' WHERE pk_macaddr = '" + mac + "';");
-        }
-
-        /// <summary>Changes the last_seen date from the given client</summary>
-        /// <param name='mac'>The mac from the client</param>
-        /// <param name='last_seen'>The new last seen date for the client</param>
-        public static void UpdateLastSeenByMac(string mac, string last_seen)
-        {
-            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen + "', '%d-%m-%Y')  WHERE pk_macaddr = '" + mac + "';");
-        }
-
-        /// <summary>Changes the last_seen date from the given client</summary>
-        /// <param name='ip'>The ip from the client</param>
-        /// <param name='last_seen'>The new last seen date for the client</param>
-        public static void UpdateLastSeenByIp(string ip, string last_seen)
-        {
-            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen + "', '%d-%m-%Y')  WHERE ipaddress = '" + ip + "';");
-        }
-
-        /// <summary>Changes the last_seen date from the given client</summary>
-        /// <param name='hostname'>The hostname from the client</param>
-        /// <param name='last_seen'>The new last seen date for the client</param>
-        public static void UpdateLastSeenByHostname(string hostname, string last_seen)
-        {
-            Connection.Update("UPDATE client SET last_seen = STR_TO_DATE('" + last_seen + "', '%d-%m-%Y')  WHERE hostname = '" + hostname + "';");
-        }
-
-        /// <summary>Changes the is_online date from the given client</summary>
-        /// <param name='mac'>The mac from the client</param>
-        /// <param name='isOnline'>The new is_online state for the client</param>
-        public static void UpdateIsOnlineByMac(bool isOnline, string mac)
-        {
-            Connection.Update("UPDATE client SET is_online = " + isOnline + " WHERE pk_macaddr = '" + mac + "';");
-        }
-
-        /// <summary>Changes the is_online date from the given client</summary>
-        /// <param name='hostname'>The hostname from the client</param>
-        /// <param name='isOnline'>The new is_online state for the client</param>
-        public static void UpdateIsOnlineByHostname(bool isOnline, string hostname)
-        {
-            Connection.Update("UPDATE client SET is_online = " + isOnline + " WHERE hostname = '" + hostname + "';");
-        }
-
-        /// <summary>Changes the is_online date from the given client</summary>
-        /// <param name='ip'>The ip from the client</param>
-        /// <param name='isOnline'>The new is_online state for the client</param>
-        public static void UpdateIsOnlineByIp(bool isOnline, string ip)
-        {
-            Connection.Update("UPDATE client SET is_online = " + isOnline + " WHERE ipaddress = '" + ip + "';");
-        }
-
-        /// <summary>Changes the roomdescription from the given room</summary>
-        /// <param name='roomNumber'>The RoomNumber from the room</param>
-        /// <param name='roomdescr'>The new roomdescription for the room</param>
-        public static void ChangeRoomDescr(string roomdescr, int roomNumber)
-        {
-            Connection.Update("UPDATE room SET roomdescription = '" + roomdescr + "' WHERE pk_roomNumber = '" + roomNumber + "';");
-        }
-
-        /// <summary>Changes the netmask from the given room</summary>
-        /// <param name='roomNumber'>The RoomNumber from the room</param>
-        /// <param name='netmask'>The new netmask for the room</param>
-        public static void ChangeNetmask(string netmask, int roomNumber)
-        {
-            Connection.Update("UPDATE room SET netmask = '" + netmask + "' WHERE pk_roomNumber = '" + roomNumber + "';");
-        }
-
-        /// <summary>Changes the subnetmask from the given room</summary>
-        /// <param name='roomNumber'>The RoomNumber from the room</param>
-        /// <param name='subnetmask'>The new subnetmask for the room</param>
-        public static void ChangeSubnetmask(string subnetmask, int roomNumber)
-        {
-            Connection.Update("UPDATE room SET subnetmask = '" + subnetmask + "' WHERE pk_roomNumber = '" + roomNumber + "';");
+        public void updateClient(List<Client> clients)
+        { //TODO: Umwandeln
+            Connection.Update("SET foreign_key_checks = 0; UPDATE client SET hostname = 'Hill',ipaddress = "+
+                              "'192.168.4.44',fk_pk_roomnumber = '69',last_seen = STR_TO_DATE('12-11-2017', '%d-%m-%Y'),is_online = True WHERE pk_macaddr = '88-ca-d3-ec-2e-5c'; SET foreign_key_checks = 1;");    
         }
 
         //--------------------------------------------------
         //INSERTMETHODS
         //--------------------------------------------------
-
+        //TODO: Testen, was passiert wenn ich doppelt inserte
         /// <summary>Inserts a Client into the database</summary>
         /// <param name='pk_macaddr'>The mac from the client</param>
         /// <param name='hostname'>The hostname from the client</param>
@@ -437,27 +319,12 @@ namespace NetWeaverServer.Datastructure
         //--------------------------------------------------
         //DELETEMETHODS
         //--------------------------------------------------
-
-
-        /// <summary>Deletes the given client</summary>
-        /// <param name='ip'>The ip from the client</param>
-        public static void DeleteClientByIP(string ip)
-        {
-            Connection.Delete("DELETE FROM client WHERE ipaddress = '" + ip + "';");
-        }
-
+        //TODO: Für Client Objects neu machen
         /// <summary>Deletes the given client</summary>
         /// <param name='mac'>The mac from the client</param>
         public static void DeleteClientByMac(string mac)
         {
             Connection.Delete("DELETE FROM client WHERE pk_macaddr = '" + mac + "';");
-        }
-
-        /// <summary>Deletes the given client</summary>
-        /// <param name='hostname'>The hostname from the client</param>
-        public static void DeleteClientByHostname(string hostname)
-        {
-            Connection.Delete("DELETE FROM client WHERE hostname = '" + hostname + "';");
         }
 
         /// <summary>Deletes the given room</summary>

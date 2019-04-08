@@ -23,8 +23,9 @@ namespace NetWeaverServer.MQTT
         {
             await ConnectAsync();
             await SubscribeAsync("/#");
-            
-            _client.ApplicationMessageReceived += OnMessageReceived;            
+
+
+            _client.ApplicationMessageReceived += OnMessageReceived;
         }
 
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
@@ -33,7 +34,7 @@ namespace NetWeaverServer.MQTT
             // ClientId ist die vom Master...?
             MessageReceivedEvent?.Invoke(this, e);
         }
-
+        
         public async Task StopAsync()
         {
             await _client.DisconnectAsync();

@@ -1,21 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace NetWeaverServer.Datastructure
 {
-    public class DBDump
-    { //TODO: fertigstellung, testen, featureset erweitern,bugfixing
-        public static List<Client> getClientList(List<List<String>> dataList)
-        {
-            //TODO:Verbesserung bitte flamed mich nicht
-            return parseClientList(Parse(dataList));
-        }
+    public class DBInterface
+    {
+        private DbConnect DataBase;
+        public List<Client> Clients = new List<Client>();
+        public List<Room> Rooms = new List<Room>();
+        private List<int> roomNumbers;
         
-        public static List<Room> getRoomList(List<List<String>> dataList)
+
+        public DBInterface(DbConnect DB)
         {
-            //TODO:Verbesserung bitte flamed mich nicht
-            return parseRoomList(Parse(dataList));
+            DataBase = DB;
+        }
+
+        public  List<Client> getClientList()
+        {  
+            return parseClientList(Parse(DataBase.GetAllClients()));
         }
 
         public static List<String> Parse(List<List<String>> dataList)
@@ -30,7 +33,7 @@ namespace NetWeaverServer.Datastructure
             return values;
         }
 
-        public static List<Client> parseClientList(List<String> dataString)
+        public  List<Client> parseClientList(List<String> dataString)
         {
             List<Client> clients = new List<Client>();
 
@@ -41,8 +44,8 @@ namespace NetWeaverServer.Datastructure
 
             return clients;
         }
-        
-        public static List<Room> parseRoomList(List<String> dataString)
+
+        public  List<Room> parseRoomList(List<String> dataString)
         {
             List<Room> rooms = new List<Room>();
 
@@ -54,7 +57,7 @@ namespace NetWeaverServer.Datastructure
             return rooms;
         }
 
-        public static Client createClient(String clientData)
+        public Client createClient(String clientData)
         {
             string mac = clientData.Split('~')[0];
             string ipAddress = clientData.Split('~')[1];
@@ -63,18 +66,25 @@ namespace NetWeaverServer.Datastructure
             string lastSeen = clientData.Split('~')[4];
             bool isOnline = bool.Parse(clientData.Split('~')[5]);
 
-            return new Client(mac, roomNumber, hostName, ipAddress, isOnline, lastSeen);
+            if (!this.roomNumbers.Contains(roomNumber))
+            {
+                Rooms.Add(new Room(roomNumber));
+            }
+                return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
         }
 
-        public static Room createRoom(String roomData)
+        public void updateClient(List<Client> clients)
         {
-
+            DataBase.updateClient(clients);
+        }
+        public  Room createRoom(String roomData)
+        {
             int RoomNumber = Int32.Parse(roomData.Split('~')[0]);
             string Roomname = roomData.Split('~')[1];
             string Netmask = roomData.Split('~')[2];
             string Subnetmask = roomData.Split('~')[3];
 
-            return new Room( RoomNumber, Roomname, Netmask, Subnetmask);
+            return new Room(RoomNumber, Roomname, Netmask, Subnetmask);
         }
     }
 }
