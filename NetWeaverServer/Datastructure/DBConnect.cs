@@ -4,9 +4,10 @@ using MySql.Data.MySqlClient;
 
 namespace NetWeaverServer.Datastructure
 {
-    class DbConnect
+    public class DbConnect
     {
         //TODO:Vereinfachung, automatisches Backup?, json oder csv
+        //TODO:Neiche inserts und deletes schreiben
         //The connection
         public static DbConnect Connection;
 
@@ -172,11 +173,16 @@ namespace NetWeaverServer.Datastructure
         //--------------------------------------------------
 
         /// <summary>Every column from every client in the database</summary>
-        public static List<List<string>> GetAllClients() 
+        public  List<List<string>> GetAllClients() 
              {
                 return Connection.Select("SELECT * FROM client");
             }
         
+        /// <summary>All rooms in the db</summary>
+        public static List<List<string>> GetAllRooms()
+        {
+            return Connection.Select("select * from room;");
+        }
 
         /// <summary>Client name, mac ip, roomnumber and roomname</summary>
         public static List<List<string>> GetAllClientsWithRoom()
@@ -233,11 +239,7 @@ namespace NetWeaverServer.Datastructure
             return Connection.Select("select hostname , last_seen ,roomdescription from client,room where fk_pk_roomnumber = pk_roomNumber AND is_online = false;");
         }
 
-        /// <summary>All rooms in the db</summary>
-        public static List<List<string>> GetAllRooms()
-        {
-            return Connection.Select("select * from room;");
-        }
+        
 
         /// <summary>Subnet information for all rooms</summary>
         public static List<List<string>> GetAllSubnetsWithRooms()

@@ -29,7 +29,6 @@ namespace NetWeaverServer.MQTT
 
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            Console.WriteLine(e.ClientId + ": " + e.ApplicationMessage.ConvertPayloadToString());
             MessageReceivedEvent?.Invoke(this, e);
         }
         

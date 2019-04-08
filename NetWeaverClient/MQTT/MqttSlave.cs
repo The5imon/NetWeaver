@@ -13,6 +13,7 @@ namespace NetWeaverClient.MQTT
         private readonly int _port;
         private readonly string _ipaddress;
         private readonly IMqttClient _client;
+        public readonly ClientInformation Information = new ClientInformation();
         public MqttSlave(string ipaddress, int port)
         {
             this._ipaddress = ipaddress;
@@ -23,7 +24,7 @@ namespace NetWeaverClient.MQTT
         public async Task StartAsync()
         {
             await ConnectAsync();
-            await PublishAsync("/niggo", "i am at peace");
+            await PublishAsync("/conn", "i am at peace");
             
             Console.Read();
         }
