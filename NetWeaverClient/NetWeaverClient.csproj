@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MQTTnet" Version="3.0.0-alpha3" />
+      <PackageReference Include="MQTTnet" Version="2.8.5" />
       <PackageReference Include="Topshelf" Version="4.2.0.205-develop" />
     </ItemGroup>
 

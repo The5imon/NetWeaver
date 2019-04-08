@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MQTTnet;
-using MQTTnet.Adapter;
 using MQTTnet.Client;
-using MQTTnet.Client.Options;
-using MQTTnet.Implementations;
 
 namespace NetWeaverClient.MQTT
 {
@@ -13,7 +10,7 @@ namespace NetWeaverClient.MQTT
         private readonly int _port;
         private readonly string _ipaddress;
         private readonly IMqttClient _client;
-        public readonly ClientInformation Information = new ClientInformation();
+        private readonly ClientInformation _information = new ClientInformation();
         public MqttSlave(string ipaddress, int port)
         {
             this._ipaddress = ipaddress;
@@ -24,9 +21,21 @@ namespace NetWeaverClient.MQTT
         public async Task StartAsync()
         {
             await ConnectAsync();
-            await PublishAsync("/conn", "i am at peace");
+            await SubscribeAsync("/cmd/" + _information.Name);
+            await PublishAsync("/conn", this._information.Info);
             
-            Console.Read();
+            _client.ApplicationMessageReceived += OnMessageReceived;
+            
+//            while (true)
+//            {
+//                string c = Console.ReadLine();
+//                await _client.PublishAsync("/reply/" + _information.Name, c);
+//            }
+        }
+
+        private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
+        {
+            Console.WriteLine(e.ClientId + ": " + e.ApplicationMessage.ConvertPayloadToString());
         }
 
         public async Task StopAsync()
@@ -37,14 +46,16 @@ namespace NetWeaverClient.MQTT
         private async Task ConnectAsync()
         {
             var message = new MqttApplicationMessageBuilder()
-                .WithTopic("/disconn").WithPayload(Environment.MachineName)
+                .WithTopic("/disconn").WithPayload(_information.Name)
                 .WithExactlyOnceQoS();
             
+            
             var options = new MqttClientOptionsBuilder()
-                .WithClientId("IamClient1").WithWillMessage(message.Build())
+                .WithClientId(Environment.MachineName).WithWillMessage(message.Build())
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ipaddress, _port); 
-
+            
+            
             await _client.ConnectAsync(options.Build());
         }
 
@@ -57,9 +68,14 @@ namespace NetWeaverClient.MQTT
             await _client.PublishAsync(message.Build());
         }
 
-        public async Task SubscribeAsync(string topic)
+        private async Task SubscribeAsync(string topic)
         {
             await _client.SubscribeAsync(topic);
+        }
+        
+        public async Task UnsubscribeAsync(string topic)
+        {
+            await _client.UnsubscribeAsync(topic);
         }
     }
 }

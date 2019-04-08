@@ -10,7 +10,7 @@ namespace NetWeaverServer.MQTT
         private readonly int _port;
         private readonly string _ip;
         private readonly IMqttClient _client;
-        public event EventHandler MessageReceivedEvent;
+        public event EventHandler<MqttApplicationMessageReceivedEventArgs> MessageReceivedEvent;
 
         public MqttMaster(string ip, int port)
         {
@@ -23,15 +23,14 @@ namespace NetWeaverServer.MQTT
         {
             await ConnectAsync();
             await SubscribeAsync("/#");
-
-            _client.ApplicationMessageReceived += OnMessageReceived;
             
-            
-            Console.Read();
+            _client.ApplicationMessageReceived += OnMessageReceived;            
         }
 
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
+            Console.WriteLine(e.ApplicationMessage.Topic + ": " + e.ApplicationMessage.ConvertPayloadToString());
+            // ClientId ist die vom Master...?
             MessageReceivedEvent?.Invoke(this, e);
         }
 
@@ -43,10 +42,10 @@ namespace NetWeaverServer.MQTT
         private async Task ConnectAsync()
         {
             var options = new MqttClientOptionsBuilder()
-                .WithClientId(Environment.MachineName)
+                .WithClientId("MASTER")
                 .WithCredentials("netweaver", "woswofürdaspasswort")
-                .WithCleanSession().WithTcpServer(_ip, _port);
-
+                .WithCleanSession().WithTcpServer(_ip, _port); 
+            
             await _client.ConnectAsync(options.Build());
         }
 

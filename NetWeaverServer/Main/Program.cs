@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
@@ -21,13 +22,14 @@ namespace NetWeaverServer.Main
 
         public static void Main(string[] args)
         {
-            //MqttBroker broker = new MqttBroker(6666);
-            //broker.StartAsync();
+            MqttBroker broker = new MqttBroker(6666);
+            MqttMaster master = new MqttMaster("127.0.0.1", 6666);
+            
+            Task.Run(() => broker.StartAsync());
+            Task.Run(() => master.StartAsync());
 
-            //MqttMaster master = new MqttMaster("192.168.0.171", 6666);
-            //master.StartAsync();
-
-            ProoveOfWurzer();
+            Console.Read();
+            //ProoveOfWurzer();
             //POCServer();
         }
 

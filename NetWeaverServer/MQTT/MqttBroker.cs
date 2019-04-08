@@ -32,16 +32,6 @@ namespace NetWeaverServer.MQTT
             });
             
             await _server.StartAsync(options.Build());
-            _server.ClientConnected += OnClientConnected;
-            
-            
-            Console.Read();
-        }
-
-        private void OnClientConnected(object sender, MqttClientConnectedEventArgs e)
-        {
-            Console.WriteLine(e.ClientId);
-            _server.PublishAsync("/conn", e.ClientId);
         }
     }
 }

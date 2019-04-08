@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.NetworkInformation;
 
 namespace NetWeaverClient.MQTT
 {
@@ -7,16 +9,16 @@ namespace NetWeaverClient.MQTT
     {
         private readonly string _mac;
         private readonly string _ip;
-        private readonly string _name;
         private readonly string _adapter;
-        public string Info => $"{_mac}&{_ip}&{_name}";   
+        public readonly string Name;
+        public string Info => $"{Name}&{_mac}&{_ip}";   
 
         public ClientInformation()
         {
+            this._adapter = GetAdapterName();
             this._mac = GetMacAddress();
             this._ip = GetIpAddress();
-            this._name = Environment.MachineName;
-            this._adapter = GetAdapterName();
+            this.Name = Environment.MachineName;
         }
 
         private string GetAdapterName()
@@ -33,27 +35,48 @@ namespace NetWeaverClient.MQTT
 
             Process process = new Process {StartInfo = startInfo};
             process.Start();
-            
+
             string line;
-            while((line = process.StandardOutput.ReadLine()) != null)
+            while ((line = process.StandardOutput.ReadLine()) != null) 
             {
-                if (!line.Contains("InterfaceAlias")) continue;
-                name = line.Split(':')[1].Trim();
+                if (!line.Contains("WLAN")) continue;
+                name += line.Split(' ')[0];
                 process.Kill();
                 break;
             }
-
+            
             return name;
         }
 
         private string GetIpAddress()
         {
-            return "IP";
+            string ip = string.Empty;
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.Name.Equals(_adapter))
+                {
+                    ip = nic.GetIPProperties().UnicastAddresses.FirstOrDefault(
+                            ipa => ipa.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        ?.Address
+                        .ToString();
+                }
+            }
+            Console.WriteLine(ip);
+            return ip;
         }
 
         private string GetMacAddress()
         {
-            return "MAC";
+            string mac = string.Empty;
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.Name.Equals(_adapter))
+                {
+                    mac = nic.GetPhysicalAddress().ToString();
+                }
+            }
+            Console.WriteLine(mac);
+            return mac;
         }
     }
 }
