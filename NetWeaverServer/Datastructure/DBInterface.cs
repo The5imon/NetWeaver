@@ -8,6 +8,7 @@ namespace NetWeaverServer.Datastructure
         private DbConnect DataBase;
         public List<Client> Clients = new List<Client>();
         public List<Room> Rooms = new List<Room>();
+        
 
         public DBInterface(DbConnect DB)
         {
@@ -55,7 +56,7 @@ namespace NetWeaverServer.Datastructure
             return rooms;
         }
 
-        public static Client createClient(String clientData)
+        public Client createClient(String clientData)
         {
             string mac = clientData.Split('~')[0];
             string ipAddress = clientData.Split('~')[1];
@@ -64,7 +65,18 @@ namespace NetWeaverServer.Datastructure
             string lastSeen = clientData.Split('~')[4];
             bool isOnline = bool.Parse(clientData.Split('~')[5]);
 
-            return new Client(mac, roomNumber, hostName, ipAddress, isOnline, lastSeen);
+            foreach (var room in this.Rooms)
+            {
+                if (expr)
+                {
+                    
+                }
+            }
+            
+                
+            
+
+            return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
         }
 
         public static Room createRoom(String roomData)

@@ -15,6 +15,12 @@ namespace NetWeaverServer.Datastructure
             RoomNumber = roomnumber;
             Roomname = roomname;
         }
+        
+        public Room(int roomnumber)
+        {
+            RoomNumber = roomnumber;
+            Roomname = "Room " + roomnumber;
+        }
 
         public Room(int roomNumber, string roomname, string netmask, string subnetmask)
         {
