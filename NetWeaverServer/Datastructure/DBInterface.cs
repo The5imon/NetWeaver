@@ -8,6 +8,7 @@ namespace NetWeaverServer.Datastructure
         private DbConnect DataBase;
         public List<Client> Clients = new List<Client>();
         public List<Room> Rooms = new List<Room>();
+        private List<int> roomNumbers;
         
 
         public DBInterface(DbConnect DB)
@@ -32,7 +33,7 @@ namespace NetWeaverServer.Datastructure
             return values;
         }
 
-        public static List<Client> parseClientList(List<String> dataString)
+        public  List<Client> parseClientList(List<String> dataString)
         {
             List<Client> clients = new List<Client>();
 
@@ -44,7 +45,7 @@ namespace NetWeaverServer.Datastructure
             return clients;
         }
 
-        public static List<Room> parseRoomList(List<String> dataString)
+        public  List<Room> parseRoomList(List<String> dataString)
         {
             List<Room> rooms = new List<Room>();
 
@@ -67,10 +68,7 @@ namespace NetWeaverServer.Datastructure
 
             foreach (var room in this.Rooms)
             {
-                if (expr)
-                {
-                    
-                }
+              
             }
             
                 
