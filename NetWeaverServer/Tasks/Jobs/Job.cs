@@ -16,6 +16,7 @@ namespace NetWeaverServer.Tasks.Jobs
     {
         public Client Client { get; }
         protected MqttMaster Channel { get; }
+        protected string Topic { get; }
         
         protected AutoResetEvent Reply = new AutoResetEvent(false);
         protected IProgress<ProgressDetails> Progress { get; }
@@ -26,6 +27,8 @@ namespace NetWeaverServer.Tasks.Jobs
             Client = client;
             Progress = progress;
             Channel = channel;
+
+            Topic = "/cmd/" + Client.HostName;
             Channel.MessageReceivedEvent += AwaitReply;
         }
 
