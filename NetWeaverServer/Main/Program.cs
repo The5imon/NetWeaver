@@ -13,6 +13,7 @@ namespace NetWeaverServer.Main
     class Program
     {
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
+        //TODO: Gustl fragen wie man am besten unmanaged resourcen handeln kann (aka. DB, MQTT, EventView)
         //Resources
         private static EventInterface _eventInterface = new EventInterface();
         private static DbConnect dbconnection;
@@ -21,11 +22,11 @@ namespace NetWeaverServer.Main
         
         //Operations
         public static LoggingOperation Logger = new LoggingOperation();
-        public static ClientOperation ClientRegister;
+        public static ClientOperation Registration;
         
         //Main Components
-        private static GUI gui;
-        private static Server server;
+        private static GUI GUI;
+        private static Server Server;
 
         public static void Main(string[] args)
         {
@@ -39,8 +40,6 @@ namespace NetWeaverServer.Main
             //ProoveOfWurzer();
             //POCServer();
         }
-
-      
 
         public static void POCLogging()
         {
@@ -59,10 +58,10 @@ namespace NetWeaverServer.Main
             mqttmaster = new MqttMaster("127.0.0.1", 6666);
             Task.Run(() => mqttmaster.StartAsync());
             
-            gui = new GUI(_eventInterface); // + Database connection
-            server = new Server(_eventInterface, mqttmaster); // + Database access
+            GUI = new GUI(_eventInterface); // + Database connection
+            Server = new Server(_eventInterface, mqttmaster); // + Database access
             
-            ClientRegister = new ClientOperation(mqttmaster, gui);
+            Registration = new ClientOperation(mqttmaster, GUI);
             Console.WriteLine("Start of Server");
         }
 
