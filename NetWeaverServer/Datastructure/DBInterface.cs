@@ -8,7 +8,7 @@ namespace NetWeaverServer.Datastructure
         private DbConnect DataBase;
         public List<Client> Clients = new List<Client>();
         public List<Room> Rooms = new List<Room>();
-        private List<int> roomNumbers;
+        private List<int> roomNumbers = new List<int>();
 
 
         public DBInterface(DbConnect DB)
@@ -20,7 +20,7 @@ namespace NetWeaverServer.Datastructure
         {
             DataBase.OpenConnection();
             var clientData = DataBase.GetAllClients();
-            DataBase.CloseDb();
+            DataBase.CloseConnection();
             return parseClientList(Parse(clientData));
         }
 
@@ -30,7 +30,7 @@ namespace NetWeaverServer.Datastructure
 
             DataBase.OpenConnection();
             var roomData = DataBase.GetAllRooms();
-            DataBase.CloseDb();
+            DataBase.CloseConnection();
             return parseRoomList(Parse(roomData));
         }
 
@@ -106,7 +106,7 @@ namespace NetWeaverServer.Datastructure
                 DataBase.updateClient(client);
             }
 
-            DataBase.CloseDb();
+            DataBase.CloseConnection();
         }
         
         public void updateRoom(List<Room> rooms)
@@ -117,7 +117,7 @@ namespace NetWeaverServer.Datastructure
                 DataBase.updateRoom(room);
             }
 
-            DataBase.CloseDb();
+            DataBase.CloseConnection();
         }
     }
 }

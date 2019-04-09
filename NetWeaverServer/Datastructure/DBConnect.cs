@@ -7,9 +7,6 @@ namespace NetWeaverServer.Datastructure
     public class DbConnect
     {
         //TODO:Vereinfachung, automatisches Backup?, json oder csv
-        //TODO:Neiche inserts und deletes schreiben
-        //The connection
-        public static DbConnect Connection;
 
         //The MySQL connection
         private MySqlConnection _connection;
@@ -32,12 +29,6 @@ namespace NetWeaverServer.Datastructure
             Initialize();
         }
 
-        /// <summary>Initialises the Connection</summary>
-        public void InitializeDb()
-        {
-            Connection = new DbConnect();
-        }
-
         /// <summary>Initialises the values for the connection to the database</summary>
         private void Initialize()
         {
@@ -50,7 +41,6 @@ namespace NetWeaverServer.Datastructure
                                "PASSWORD=" + _password + ";";
 
             _connection = new MySqlConnection(connectionString); //TODO: Testen
-            OpenConnection(); //_connection.Open(); wenns ned geht das hier verwenden
         }
 
 
@@ -82,15 +72,8 @@ namespace NetWeaverServer.Datastructure
             }
         }
 
-        /// <summary>Closes the database connection and nullifies it</summary>
-        public void CloseDb()
-        {
-            Connection.CloseConnection();
-            Connection = null;
-        }
-
-        /// <summary>Closes the databease connection</summary>
-        private void CloseConnection()
+        /// <summary>Closes the database connection</summary>
+        public void CloseConnection()
         {
             try
             {
@@ -159,6 +142,7 @@ namespace NetWeaverServer.Datastructure
             //Read the data and store them in the list
             while (dataReader.Read())
             {
+               
                 List<string> tmp = new List<string>();
                 for (int i = 0; i < dataReader.FieldCount; i++)
                 {
@@ -182,13 +166,14 @@ namespace NetWeaverServer.Datastructure
         /// <summary>Every column from every client in the database</summary>
         public List<List<string>> GetAllClients()
         {
-            return Connection.Select("SELECT * FROM client");
+            var data = Select("SELECT * FROM client");
+            return data;
         }
 
         /// <summary>All rooms in the db</summary>
         public List<List<string>> GetAllRooms()
         {
-            return Connection.Select("select * from room;");
+            return Select("select * from room;");
         }
 
         //--------------------------------------------------
@@ -200,16 +185,16 @@ namespace NetWeaverServer.Datastructure
         {
             //TODO: testen
 
-            Connection.Update(
+            Update(
                 $"SET foreign_key_checks = 0; UPDATE client SET hostname = '{client.HostName}',ipaddress = '{client.IPAddress}'" +
                 $",fk_pk_roomnumber = '{client.RoomNumber}',last_seen = STR_TO_DATE('{client.LastSeen}', '%d-%m-%Y'),is_online = {client.IsOnline} WHERE pk_macaddr = '{client.MAC}'; SET foreign_key_checks = 1;");
         }
-        
+
         public void updateRoom(Room room)
         {
             //TODO: testen
 
-            Connection.Update(
+            Update(
                 $"SET foreign_key_checks = 0; UPDATE room SET roomdescription = '{room.Roomname}',netmask = '{room.Netmask}'" +
                 $",subnetmask = '{room.Subnetmask}' WHERE pk_roomNumber = '{room.RoomNumber}'; SET foreign_key_checks = 1;");
         }
@@ -220,7 +205,7 @@ namespace NetWeaverServer.Datastructure
         //TODO: Testen, was passiert wenn ich doppelt inserte
         public void InsertClient(Client client)
         {
-            Connection.Insert(
+            Insert(
                 "INSERT INTO client (pk_macaddr, hostname ,ipaddress, fk_pk_roomnumber, last_seen, is_online)" +
                 $"VALUES( '{client.MAC}', '{client.HostName}', '{client.IPAddress}', '{client.RoomNumber}'," +
                 $"STR_TO_DATE('{client.LastSeen}', '%d-%m-%Y')," + $"{client.IsOnline});");
@@ -228,8 +213,8 @@ namespace NetWeaverServer.Datastructure
 
         public void InsertRoom(Room room)
         {
-            Connection.Insert(
-                $"INSERT INTO room (pk_roomNumber, roomdescription ,netmask, subnetmask) "+"" +
+            Insert(
+                $"INSERT INTO room (pk_roomNumber, roomdescription ,netmask, subnetmask) " + "" +
                 $"VALUES('{room.RoomNumber}', '{room.Roomname}', '{room.Netmask}', '{room.Subnetmask}' )");
         }
 
@@ -242,14 +227,14 @@ namespace NetWeaverServer.Datastructure
         /// <param name='mac'>The mac from the client</param>
         public void DeleteClientByMac(Client client)
         {
-            Connection.Delete($"DELETE FROM client WHERE pk_macaddr = '{client.MAC}';");
+            Delete($"DELETE FROM client WHERE pk_macaddr = '{client.MAC}';");
         }
 
         /// <summary>Deletes the given room</summary>
         /// <param name='roomNumber'>The roomnumber from the room</param>
         public void DeleteRoom(Room room)
         {
-            Connection.Delete($"DELETE FROM room WHERE pk_roomNumber = '{room.RoomNumber}';");
+            Delete($"DELETE FROM room WHERE pk_roomNumber = '{room.RoomNumber}';");
         }
     }
 }
