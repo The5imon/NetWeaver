@@ -5,10 +5,9 @@ namespace NetWeaverServer.Datastructure
     public class Room
     { //TODO: erweitern,Bugfixing,featureset erweitern, testen
         public int RoomNumber { get; }
-        private string Roomname { get; }
-        private List<Client> Clients { get; }
-        private string Netmask { get; set; }
-        private string Subnetmask { get; set; }
+        public string Roomname { get; }
+        public string Netmask { get; }
+        public string Subnetmask { get; }
 
         public Room(int roomnumber, string roomname)
         {

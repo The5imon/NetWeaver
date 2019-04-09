@@ -68,7 +68,7 @@ namespace NetWeaverServer.Main
 
         public static void ProoveOfWurzer()
         {
-            InitializeDb();
+            
             DBInterface DBI = new DBInterface(new DbConnect());
             
             
@@ -82,7 +82,7 @@ namespace NetWeaverServer.Main
                // Console.WriteLine(room.ToString());
            // }
 
-            CloseDb();
+         
         }
     }
 }

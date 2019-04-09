@@ -33,7 +33,7 @@ namespace NetWeaverServer.Datastructure
         }
 
         /// <summary>Initialises the Connection</summary>
-        public static void InitializeDb()
+        public void InitializeDb()
         {
             Connection = new DbConnect();
         }
@@ -49,13 +49,13 @@ namespace NetWeaverServer.Datastructure
             connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
                                "PASSWORD=" + _password + ";";
 
-            _connection = new MySqlConnection(connectionString);
-            _connection.Open();
+            _connection = new MySqlConnection(connectionString); //TODO: Testen
+            OpenConnection(); //_connection.Open(); wenns ned geht das hier verwenden
         }
 
 
         /// <summary>Opens a connection to the given database</summary>
-        private bool OpenConnection()
+        public bool OpenConnection()
         {
             try
             {
@@ -83,7 +83,7 @@ namespace NetWeaverServer.Datastructure
         }
 
         /// <summary>Closes the database connection and nullifies it</summary>
-        public static void CloseDb()
+        public void CloseDb()
         {
             Connection.CloseConnection();
             Connection = null;
@@ -186,7 +186,7 @@ namespace NetWeaverServer.Datastructure
         }
 
         /// <summary>All rooms in the db</summary>
-        public static List<List<string>> GetAllRooms()
+        public List<List<string>> GetAllRooms()
         {
             return Connection.Select("select * from room;");
         }
@@ -196,35 +196,41 @@ namespace NetWeaverServer.Datastructure
         //--------------------------------------------------
 
 
-        public void updateClient(List<Client> clients)
+        public void updateClient(Client client)
         {
             //TODO: testen
-            foreach (var client in clients)
-            {
-                Connection.Update(
-                    $"SET foreign_key_checks = 0; UPDATE client SET hostname = '{client.HostName}',ipaddress = '{client.IPAddress}'" +
-                    $",fk_pk_roomnumber = '{client.RoomNumber}',last_seen = STR_TO_DATE('{client.LastSeen}', '%d-%m-%Y'),is_online = {client.IsOnline} WHERE pk_macaddr = '{client.MAC}'; SET foreign_key_checks = 1;");
-            }
+
+            Connection.Update(
+                $"SET foreign_key_checks = 0; UPDATE client SET hostname = '{client.HostName}',ipaddress = '{client.IPAddress}'" +
+                $",fk_pk_roomnumber = '{client.RoomNumber}',last_seen = STR_TO_DATE('{client.LastSeen}', '%d-%m-%Y'),is_online = {client.IsOnline} WHERE pk_macaddr = '{client.MAC}'; SET foreign_key_checks = 1;");
+        }
+        
+        public void updateRoom(Room room)
+        {
+            //TODO: testen
+
+            Connection.Update(
+                $"SET foreign_key_checks = 0; UPDATE room SET roomdescription = '{room.Roomname}',netmask = '{room.Netmask}'" +
+                $",subnetmask = '{room.Subnetmask}' WHERE pk_roomNumber = '{room.RoomNumber}'; SET foreign_key_checks = 1;");
         }
 
         //--------------------------------------------------
         //INSERTMETHODS
         //--------------------------------------------------
         //TODO: Testen, was passiert wenn ich doppelt inserte
-        public static void InsertClient(string pk_macaddr, string hostname, string ipaddress, int fk_pk_roomnumber,
-            bool is_online, string last_seen = "")
+        public void InsertClient(Client client)
         {
-            var realDate = (String.IsNullOrEmpty(last_seen) ? DateTime.Today.ToString("dd-MM-yyyy") : last_seen);
             Connection.Insert(
                 "INSERT INTO client (pk_macaddr, hostname ,ipaddress, fk_pk_roomnumber, last_seen, is_online)" +
-                $"VALUES( '{pk_macaddr}', '{hostname}', '{ipaddress}', '{fk_pk_roomnumber}'," +
-                $"STR_TO_DATE('{realDate}', '%d-%m-%Y')," + $"{is_online});");
+                $"VALUES( '{client.MAC}', '{client.HostName}', '{client.IPAddress}', '{client.RoomNumber}'," +
+                $"STR_TO_DATE('{client.LastSeen}', '%d-%m-%Y')," + $"{client.IsOnline});");
         }
 
-        public static void InsertRoom(int pk_roomNumber, string roomdescription, string netmask, string subnetmask)
+        public void InsertRoom(Room room)
         {
             Connection.Insert(
-                $"INSERT INTO room (pk_roomNumber, roomdescription ,netmask, subnetmask) VALUES('{pk_roomNumber}', '{roomdescription}', '{netmask}', '{subnetmask}' )");
+                $"INSERT INTO room (pk_roomNumber, roomdescription ,netmask, subnetmask) "+"" +
+                $"VALUES('{room.RoomNumber}', '{room.Roomname}', '{room.Netmask}', '{room.Subnetmask}' )");
         }
 
 
@@ -236,14 +242,14 @@ namespace NetWeaverServer.Datastructure
         /// <param name='mac'>The mac from the client</param>
         public void DeleteClientByMac(Client client)
         {
-            Connection.Delete("DELETE FROM client WHERE pk_macaddr = '" + client.MAC + "';");
+            Connection.Delete($"DELETE FROM client WHERE pk_macaddr = '{client.MAC}';");
         }
 
         /// <summary>Deletes the given room</summary>
         /// <param name='roomNumber'>The roomnumber from the room</param>
         public void DeleteRoom(Room room)
         {
-            Connection.Delete("DELETE FROM room WHERE pk_roomNumber = '" + room.RoomNumber + "';");
+            Connection.Delete($"DELETE FROM room WHERE pk_roomNumber = '{room.RoomNumber}';");
         }
     }
 }
