@@ -69,8 +69,8 @@ namespace NetWeaverServer.Main
         public static void ProoveOfWurzer()
         {
             DbConnect con = new DbConnect();
-            DBInterface DBI = new DBInterface(con);
-            var clients = DBI.getClientList();
+            DBInterface dbi = new DBInterface(con);
+            var clients = dbi.getClientList();
 
             foreach (var client in clients)
             {

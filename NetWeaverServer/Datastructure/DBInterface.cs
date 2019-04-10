@@ -119,5 +119,20 @@ namespace NetWeaverServer.Datastructure
 
             DataBase.CloseConnection();
         }
+
+        public void insertClient(List<Client> clients)
+        {
+            foreach (var client in clients)
+            {
+                DataBase.InsertClient(client);
+            }
+        }
+        public void insertRoom(List<Room> rooms)
+        {
+            foreach (var room in rooms)
+            {
+                DataBase.InsertRoom(room);
+            }
+        }
     }
 }

@@ -23,6 +23,9 @@ namespace NetWeaverServer.Datastructure
         //The password for the user
         private string _password;
 
+        //The port for the connection
+        private string _port;
+
         /// <summary>The Constructor calls the initialize method</summary>
         public DbConnect()
         {
@@ -32,14 +35,13 @@ namespace NetWeaverServer.Datastructure
         /// <summary>Initialises the values for the connection to the database</summary>
         private void Initialize()
         {
-            _server = "192.168.230.131";
+            _server = "localhost";
             _database = "mcondb";
-            _uid = "remote";
+            _uid = "root";
             _password = "htl3r";
+            _port = "3333";
             string connectionString;
-            connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
-                               "PASSWORD=" + _password + ";";
-
+            connectionString = $"SERVER={_server};Port={_port};Database={_database};Uid={_uid};Pwd={_password};";
             _connection = new MySqlConnection(connectionString); //TODO: Testen
         }
 
@@ -225,7 +227,7 @@ namespace NetWeaverServer.Datastructure
         //TODO: Für Client Objects neu machen
         /// <summary>Deletes the given client</summary>
         /// <param name='mac'>The mac from the client</param>
-        public void DeleteClientByMac(Client client)
+        public void DeleteClient(Client client)
         {
             Delete($"DELETE FROM client WHERE pk_macaddr = '{client.MAC}';");
         }
