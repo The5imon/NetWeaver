@@ -108,7 +108,7 @@ namespace NetWeaverServer.Datastructure
 
             DataBase.CloseConnection();
         }
-        
+
         public void updateRoom(List<Room> rooms)
         {
             DataBase.OpenConnection();
@@ -127,11 +127,28 @@ namespace NetWeaverServer.Datastructure
                 DataBase.InsertClient(client);
             }
         }
+
         public void insertRoom(List<Room> rooms)
         {
             foreach (var room in rooms)
             {
                 DataBase.InsertRoom(room);
+            }
+        }
+
+        public void deleteClient(List<Client> clients)
+        {
+            foreach (var client in clients)
+            {
+              DataBase.DeleteClient(client);
+            }
+        }
+        
+        public void deleteRoom(List<Room> rooms)
+        {
+            foreach (var room in rooms)
+            {
+                DataBase.DeleteRoom(room);
             }
         }
     }
