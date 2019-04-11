@@ -10,11 +10,20 @@ namespace NetWeaverServer.Datastructure
         public List<Room> Rooms = new List<Room>();
         private List<int> roomNumbers = new List<int>();
 
+        //TODO: Konzentriere dich lieber auf logische Hintergründe der Datenbank
+        /**
+         * Denk einfach dis ich vielleicht nur die getClients und addClients methoden benutzen werde
+         *     - wenn ich client mit selber MAC adden will --> Updaten
+         *     - erstelle Rooms aus den subnets der Clients
+         *         (ich werde nie selber so einen Room erstellen; es ist schön die Option zu haben aber arbeite eher selbe mit deinen Tools)
+         */
 
         public DBInterface(DbConnect DB)
         {
             DataBase = DB;
         }
+        
+        //TODO: Nenn es lieber nicht getClientList sonder getAllRooms/getAllCLients oder so was (für alles)
 
         public List<Client> getClientList()
         {
@@ -42,7 +51,7 @@ namespace NetWeaverServer.Datastructure
 
             DataBase.CloseConnection();
         }
-
+        //TODO: Einen Room werde ich nie Updaten
         public void updateRoom(List<Room> rooms)
         {
             DataBase.OpenConnection();
@@ -53,7 +62,7 @@ namespace NetWeaverServer.Datastructure
 
             DataBase.CloseConnection();
         }
-
+        //AddClient
         public void insertClient(List<Client> clients)
         {
             DataBase.OpenConnection();
@@ -64,7 +73,7 @@ namespace NetWeaverServer.Datastructure
 
             DataBase.CloseConnection();
         }
-
+        
         public void insertRoom(List<Room> rooms)
         {
             DataBase.OpenConnection();
