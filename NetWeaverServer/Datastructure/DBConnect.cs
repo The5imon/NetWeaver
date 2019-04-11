@@ -27,26 +27,25 @@ namespace NetWeaverServer.Datastructure
         private string _port;
 
         /// <summary>The Constructor calls the initialize method</summary>
-        public DbConnect()
+        public DbConnect(string server, string database, string uid, string password, string port)
         {
-            Initialize();
+            Initialize(server, database, uid, password, port);
         }
 
         /// <summary>Initialises the values for the connection to the database</summary>
-        private void Initialize()
+        private void Initialize(string server, string database, string uid, string password, string port)
         {
-            _server = "localhost";
-            _database = "mcondb";
-            _uid = "root";
-            _password = "htl3r";
-            _port = "3333";
+            _server = server;
+            _database = database;
+            _uid = uid;
+            _password = password;
+            _port = port;
             string connectionString;
             connectionString = $"SERVER={_server};Port={_port};Database={_database};Uid={_uid};Pwd={_password};";
             _connection = new MySqlConnection(connectionString); //TODO: Testen
         }
 
 
-        /// <summary>Opens a connection to the given database</summary>
         public bool OpenConnection()
         {
             try
@@ -144,7 +143,6 @@ namespace NetWeaverServer.Datastructure
             //Read the data and store them in the list
             while (dataReader.Read())
             {
-               
                 List<string> tmp = new List<string>();
                 for (int i = 0; i < dataReader.FieldCount; i++)
                 {

@@ -26,12 +26,76 @@ namespace NetWeaverServer.Datastructure
 
         public List<Room> getRoomList()
         {
-            List<Room> rooms = new List<Room>();
-
             DataBase.OpenConnection();
             var roomData = DataBase.GetAllRooms();
             DataBase.CloseConnection();
             return parseRoomList(Parse(roomData));
+        }
+
+        public void updateClient(List<Client> clients)
+        {
+            DataBase.OpenConnection();
+            foreach (var client in clients)
+            {
+                DataBase.updateClient(client);
+            }
+
+            DataBase.CloseConnection();
+        }
+
+        public void updateRoom(List<Room> rooms)
+        {
+            DataBase.OpenConnection();
+            foreach (var room in rooms)
+            {
+                DataBase.updateRoom(room);
+            }
+
+            DataBase.CloseConnection();
+        }
+
+        public void insertClient(List<Client> clients)
+        {
+            DataBase.OpenConnection();
+            foreach (var client in clients)
+            {
+                DataBase.InsertClient(client);
+            }
+
+            DataBase.CloseConnection();
+        }
+
+        public void insertRoom(List<Room> rooms)
+        {
+            DataBase.OpenConnection();
+            foreach (var room in rooms)
+            {
+                DataBase.InsertRoom(room);
+            }
+
+            DataBase.CloseConnection();
+        }
+
+        public void deleteClient(List<Client> clients)
+        {
+            DataBase.OpenConnection();
+            foreach (var client in clients)
+            {
+                DataBase.DeleteClient(client);
+            }
+
+            DataBase.CloseConnection();
+        }
+
+        public void deleteRoom(List<Room> rooms)
+        {
+            DataBase.OpenConnection();
+            foreach (var room in rooms)
+            {
+                DataBase.DeleteRoom(room);
+            }
+
+            DataBase.CloseConnection();
         }
 
         public static List<String> Parse(List<List<String>> dataList)
@@ -96,60 +160,6 @@ namespace NetWeaverServer.Datastructure
             string Subnetmask = roomData.Split('~')[3];
 
             return new Room(RoomNumber, Roomname, Netmask, Subnetmask);
-        }
-
-        public void updateClient(List<Client> clients)
-        {
-            DataBase.OpenConnection();
-            foreach (var client in clients)
-            {
-                DataBase.updateClient(client);
-            }
-
-            DataBase.CloseConnection();
-        }
-
-        public void updateRoom(List<Room> rooms)
-        {
-            DataBase.OpenConnection();
-            foreach (var room in rooms)
-            {
-                DataBase.updateRoom(room);
-            }
-
-            DataBase.CloseConnection();
-        }
-
-        public void insertClient(List<Client> clients)
-        {
-            foreach (var client in clients)
-            {
-                DataBase.InsertClient(client);
-            }
-        }
-
-        public void insertRoom(List<Room> rooms)
-        {
-            foreach (var room in rooms)
-            {
-                DataBase.InsertRoom(room);
-            }
-        }
-
-        public void deleteClient(List<Client> clients)
-        {
-            foreach (var client in clients)
-            {
-              DataBase.DeleteClient(client);
-            }
-        }
-        
-        public void deleteRoom(List<Room> rooms)
-        {
-            foreach (var room in rooms)
-            {
-                DataBase.DeleteRoom(room);
-            }
         }
     }
 }
