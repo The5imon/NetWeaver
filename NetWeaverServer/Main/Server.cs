@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
+using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.MQTT;
 using NetWeaverServer.Tasks.Jobs;
@@ -27,15 +28,14 @@ namespace NetWeaverServer.Main
             EventInt.ExecuteScriptEvent += HandleExecuteScriptEvent;
         }
 
-        //TODO: Rework Event and Handler design
-        private async void HandleExecuteScriptEvent(object sender, MessageDetails md)
+        private async void HandleExecuteScriptEvent(object sender, TaskDetails task)
         {
-            await StartJob(typeof(CopyFileJob), md);
+            await StartJob(typeof(CopyFileJob), task);
         }
         
-        private async Task StartJob(Type job, MessageDetails md)
+        private async Task StartJob(Type job, TaskDetails task)
         {
-            JobManager manager = new JobManager(job, md, Channel);
+            JobManager manager = new JobManager(job, task, Channel);
             await manager.RunOnAllClients();
         }
     }

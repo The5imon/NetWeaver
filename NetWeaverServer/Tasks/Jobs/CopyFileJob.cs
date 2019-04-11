@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using NetWeaverServer.Datastructure;
+using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.MQTT;
 using static NetWeaverServer.Tasks.Operations.LoggingOperation;
@@ -13,7 +14,7 @@ namespace NetWeaverServer.Tasks.Jobs
 {
     public class CopyFileJob : Job
     {
-        public CopyFileJob(Client client, MqttMaster channel, IProgress<ProgressDetails> progress)
+        public CopyFileJob(Client client, MqttMaster channel, IProgress<JobProgress> progress)
             : base(client, channel, progress) { }
 
         public override async Task Work()

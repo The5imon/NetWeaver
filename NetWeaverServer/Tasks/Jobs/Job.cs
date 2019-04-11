@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
 using NetWeaverServer.Datastructure;
+using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Main;
 using NetWeaverServer.MQTT;
@@ -19,13 +20,14 @@ namespace NetWeaverServer.Tasks.Jobs
         protected string Topic { get; }
         
         protected AutoResetEvent Reply = new AutoResetEvent(false);
-        protected IProgress<ProgressDetails> Progress { get; }
-        protected ProgressDetails Details = new ProgressDetails();
+        
+        //Used to Reply to the (Task) JobManager
+        protected IProgress<JobProgress> JobProgress { get; }
 
-        protected Job(Client client, MqttMaster channel, IProgress<ProgressDetails> progress)
+        protected Job(Client client, MqttMaster channel, IProgress<JobProgress> taskProgress)
         {
             Client = client;
-            Progress = progress;
+            JobProgress = taskProgress;
             Channel = channel;
 
             Topic = "/cmd/" + Client.HostName;

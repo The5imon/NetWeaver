@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using NetWeaverServer.Datastructure;
+using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.MQTT;
 
@@ -13,7 +14,7 @@ namespace NetWeaverServer.Tasks.Commands
 
         private AutoResetEvent Reply = new AutoResetEvent(false);
 
-        public Command(EventHandler<ProgressDetails> message)
+        public Command(EventHandler<JobProgress> message)
         {
 
         }

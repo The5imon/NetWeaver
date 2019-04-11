@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using NetWeaverServer.Datastructure;
+using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.MQTT;
 
@@ -37,14 +38,18 @@ namespace NetWeaverServer.Tasks.Jobs
         private Type Job { get; }
         private List<Client> Clients { get; }
         private MqttMaster Channel { get; }
-        private IProgress<ProgressDetails> Progress { get; }
+        
+        //Report to GUI
+        private IProgress<TaskProgress> TaskProgress { get; }
 
-        private ProgressDetails pd = new ProgressDetails();
-        public JobManager(Type job, MessageDetails messageDetails, MqttMaster channel)
+        //Collect Job Reports
+        private TaskProgress Progress = new TaskProgress();
+
+        public JobManager(Type job, TaskDetails details, MqttMaster channel)
         {
             Job = job;
-            Clients =  new List<Client>(messageDetails.Clients);
-            Progress = messageDetails.Progress;
+            Clients =  new List<Client>(details.Clients);
+            TaskProgress = details.TaskProgress;
             Channel = channel;
         }
 
@@ -54,11 +59,22 @@ namespace NetWeaverServer.Tasks.Jobs
 
             foreach (Client client in Clients)
             {
-                Job j = (Job) Activator.CreateInstance(Job, client, Channel, Progress);
+                //Create a Interface where each Job can return his Progress
+                Progress<JobProgress> jobProgress = new Progress<JobProgress>();
+                jobProgress.ProgressChanged += HandleJobProgressReport;
+                
+                //Create new Instance of the specified Job for each Client
+                Job j = (Job) Activator.CreateInstance(Job, client, Channel, jobProgress);
                 tasks.Add(j.Work());
             }
 
             await Task.WhenAll(tasks);
+        }
+
+        private void HandleJobProgressReport(object sender, JobProgress e)
+        {
+            Progress.AddJobProgress(e);
+            TaskProgress.Report(Progress);
         }
     }
 }

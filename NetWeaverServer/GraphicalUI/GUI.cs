@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
-
+using NetWeaverServer.Datastructure.Arguments;
 using static NetWeaverServer.Tasks.Operations.LoggingOperation;
 
 namespace NetWeaverServer.GraphicalUI
@@ -30,13 +30,13 @@ namespace NetWeaverServer.GraphicalUI
             {
                 input = Console.ReadLine();
                 string[] args = input.Split(":");
-                Progress<ProgressDetails> progress = new Progress<ProgressDetails>();
+                Progress<TaskProgress> progress = new Progress<TaskProgress>();
                 progress.ProgressChanged += ReportProgress;
-                MessageDetails md = new MessageDetails(clients, progress);
+                TaskDetails taskDetails = new TaskDetails(clients, progress);
                 switch(args[0])
                 {
                     case "copy":
-                        EventInt.getExecuteScriptEvent().Invoke(this, md);
+                        EventInt.getExecuteScriptEvent().Invoke(this, taskDetails);
                         break;
                     case "list":
                         PrintClients();
@@ -56,13 +56,10 @@ namespace NetWeaverServer.GraphicalUI
             }
         }
 
-        private void ReportProgress(object sender, ProgressDetails e)
+        private void ReportProgress(object sender, TaskProgress e)
         {
             Console.WriteLine("Reporting List of finished clients");
-            foreach (Client client in e.Clients)
-            {
-                Console.WriteLine($"\r\t PC - [{client}] is finished");
-            }
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MQTTnet;
 using NetWeaverServer.Datastructure;
+using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.Tasks.Jobs;
 
 namespace NetWeaverServer.GraphicalUI
@@ -14,16 +15,16 @@ namespace NetWeaverServer.GraphicalUI
          * new MessageDetails(new List<Client>(), new Progress<ProgressDetails>()));
          */
         //GUI Events
-        public event EventHandler<MessageDetails> ExecuteScriptEvent;
+        public event EventHandler<TaskDetails> ExecuteScriptEvent;
         
         //Server Events
-        public event EventHandler<MessageDetails> UpdatedContentEvent;
+        public event EventHandler<TaskDetails> UpdatedContentEvent;
 
-        public EventHandler<MessageDetails> getExecuteScriptEvent() {
+        public EventHandler<TaskDetails> getExecuteScriptEvent() {
             return ExecuteScriptEvent;
         }
 
-        public EventHandler<MessageDetails> getUpdatedContentEvent()
+        public EventHandler<TaskDetails> getUpdatedContentEvent()
         {
             return UpdatedContentEvent;
         } 

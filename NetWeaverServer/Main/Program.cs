@@ -13,6 +13,13 @@ namespace NetWeaverServer.Main
 {
     class Program
     {
+        /**
+         *                  - - - - Legende - - - - -
+         * Task    = User Interaction; handles one Job on many Clients [= JobManager]
+         * Job     = (Queue of Commands) Does one Job on ONE Client
+         * Command = Executes one small bit of Work (Client or Server)
+         */
+        
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         //TODO: Gustl fragen wie man am besten unmanaged resourcen handeln kann (aka. DB, MQTT, EventView)
         //Resources
