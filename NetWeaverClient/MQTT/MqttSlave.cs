@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using NetWeaverClient.MQTT;
 using MQTTnet;
 using MQTTnet.Client;
 
@@ -23,6 +25,7 @@ namespace NetWeaverClient.MQTT
             await ConnectAsync();
             await SubscribeAsync("/cmd/" + _information.Name);
             await PublishAsync("/conn", this._information.Info);
+            DeviceDiscovery discovery = new DeviceDiscovery();
             
             _client.ApplicationMessageReceived += OnMessageReceived;
             
@@ -51,7 +54,7 @@ namespace NetWeaverClient.MQTT
             
             
             var options = new MqttClientOptionsBuilder()
-                .WithClientId(Environment.MachineName).WithWillMessage(message.Build())
+                .WithClientId(_information.Name).WithWillMessage(message.Build())
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ipaddress, _port); 
             
@@ -71,11 +74,6 @@ namespace NetWeaverClient.MQTT
         private async Task SubscribeAsync(string topic)
         {
             await _client.SubscribeAsync(topic);
-        }
-        
-        public async Task UnsubscribeAsync(string topic)
-        {
-            await _client.UnsubscribeAsync(topic);
         }
     }
 }

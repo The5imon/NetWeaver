@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 
 namespace NetWeaverClient.MQTT
 {
@@ -10,7 +12,7 @@ namespace NetWeaverClient.MQTT
         private readonly string _mac;
         private readonly string _ip;
         private readonly string _adapter;
-        public readonly string Name;
+        public string Name {get; }
         public string Info => $"{Name}&{_mac}&{_ip}";   
 
         public ClientInformation()
@@ -39,7 +41,7 @@ namespace NetWeaverClient.MQTT
             string line;
             while ((line = process.StandardOutput.ReadLine()) != null) 
             {
-                if (!line.Contains("WLAN")) continue;
+                if (!line.Contains("WLAN")) continue; //Enter correct definition of adapter.
                 name += line.Split(' ')[0];
                 process.Kill();
                 break;
@@ -61,7 +63,7 @@ namespace NetWeaverClient.MQTT
                         .ToString();
                 }
             }
-            Console.WriteLine(ip);
+
             return ip;
         }
 
@@ -75,7 +77,7 @@ namespace NetWeaverClient.MQTT
                     mac = nic.GetPhysicalAddress().ToString();
                 }
             }
-            Console.WriteLine(mac);
+            
             return mac;
         }
     }

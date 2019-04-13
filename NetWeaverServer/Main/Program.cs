@@ -38,14 +38,14 @@ namespace NetWeaverServer.Main
 
         public static void Main(string[] args)
         {
-            //MqttBroker broker = new MqttBroker(6666);
-            //MqttMaster master = new MqttMaster("127.0.0.1", 6666);
+            MqttBroker broker = new MqttBroker(6666);
+            MqttMaster master = new MqttMaster("127.0.0.1", 6666);
             
-            //Task.Run(() => broker.StartAsync());
-            //Task.Run(() => master.StartAsync());
+            Task.Run(() => broker.StartAsync());
+            Task.Run(() => master.StartAsync());
 
-            //Console.Read();
-            ProoveOfWurzer();
+            Console.Read();
+            //ProoveOfWurzer();
             //POCServer();
         }
 

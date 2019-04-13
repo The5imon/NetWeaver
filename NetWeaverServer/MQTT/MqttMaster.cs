@@ -43,7 +43,7 @@ namespace NetWeaverServer.MQTT
         private async Task ConnectAsync()
         {
             var options = new MqttClientOptionsBuilder()
-                .WithClientId("MASTER")
+                .WithClientId("master")
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ip, _port); 
             
@@ -58,15 +58,10 @@ namespace NetWeaverServer.MQTT
             
             await _client.PublishAsync(message.Build());
         }
-
+        
         private async Task SubscribeAsync(string topic)
         {
             await _client.SubscribeAsync(topic);
-        }
-        
-        public async Task UnsubscribeAsync(string topic)
-        {
-            await _client.UnsubscribeAsync(topic);
         }
     }
 }
