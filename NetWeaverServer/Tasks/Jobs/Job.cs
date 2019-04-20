@@ -20,6 +20,9 @@ namespace NetWeaverServer.Tasks.Jobs
         /// </summary>
         public Client Client { get; }
 
+        /// <summary>
+        /// Communicate with the Client
+        /// </summary>
         protected MqttMaster Channel { get; }
         protected string Topic { get; }
         //To tell the Job when to wait/work

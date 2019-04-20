@@ -36,6 +36,9 @@ namespace NetWeaverServer.Tasks.Jobs
         private Type Job { get; }
         private List<Client> Clients { get; }
 
+        /// <summary>
+        /// Communicate with the Client
+        /// </summary>
         private MqttMaster Channel { get; }
 
         /// <summary>
@@ -66,6 +69,8 @@ namespace NetWeaverServer.Tasks.Jobs
                 JobProgress jobProgress = new JobProgress(client);
                 jobProgress.ProgressChanged += HandleJobProgressReport;
                 Progress.JobProgress.Add(jobProgress);
+
+                //TODO: Could and should limit channel to just /cmd/client for correct command use
 
                 //Create new Instance of the specified Job for each Client
                 Job j = (Job) Activator.CreateInstance(Job, client, Channel, jobProgress);

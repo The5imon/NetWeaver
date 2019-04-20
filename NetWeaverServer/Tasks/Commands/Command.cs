@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
@@ -8,15 +9,8 @@ using NetWeaverServer.MQTT;
 namespace NetWeaverServer.Tasks.Commands
 {
     //TODO: Use Commands to actually do things --> Use Commands on Client to actually do things!!!
-    public class Command
+    public interface ICommand
     {
-        private MqttMaster Channel { get; }
-
-        private AutoResetEvent Reply = new AutoResetEvent(false);
-
-        public Command(EventHandler<JobProgress> message)
-        {
-
-        }
+        Task Execute();
     }
 }
