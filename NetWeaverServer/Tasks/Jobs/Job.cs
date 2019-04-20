@@ -18,16 +18,16 @@ namespace NetWeaverServer.Tasks.Jobs
         public Client Client { get; }
         protected MqttMaster Channel { get; }
         protected string Topic { get; }
-        
-        protected AutoResetEvent Reply = new AutoResetEvent(false);
-        
-        //Used to Reply to the (Task) JobManager
-        protected IProgress<JobProgress> JobProgress { get; }
 
-        protected Job(Client client, MqttMaster channel, IProgress<JobProgress> taskProgress)
+        protected AutoResetEvent Reply = new AutoResetEvent(false);
+
+        //Used to Reply to the (Task) JobManager
+        protected JobProgress Progress { get; }
+
+        protected Job(Client client, MqttMaster channel, JobProgress progress)
         {
             Client = client;
-            JobProgress = taskProgress;
+            Progress = progress;
             Channel = channel;
 
             Topic = "/cmd/" + Client.HostName;

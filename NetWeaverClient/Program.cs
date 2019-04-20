@@ -13,7 +13,7 @@ namespace NetWeaverClient
             {
                 x.Service<MqttSlave>(s =>
                 {
-                    s.ConstructUsing(client => new MqttSlave("127.0.0.1", 6666));
+                    s.ConstructUsing(client => new MqttSlave("10.0.0.15", 6666));
                     s.WhenStarted(client => Task.Run(client.StartAsync));
                     s.WhenStopped(client => Task.Run(client.StopAsync));
                 });
@@ -25,7 +25,7 @@ namespace NetWeaverClient
             });
 
             int exitCodeValue = (int)Convert.ChangeType(exitCode, exitCode.GetTypeCode());
-            Environment.ExitCode = exitCodeValue;    
+            Environment.ExitCode = exitCodeValue;
         }
     }
 }

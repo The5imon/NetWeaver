@@ -14,35 +14,42 @@ namespace NetWeaverServer.Tasks.Jobs
 {
     public class CopyFileJob : Job
     {
-        public CopyFileJob(Client client, MqttMaster channel, IProgress<JobProgress> progress)
-            : base(client, channel, progress) { }
+        public CopyFileJob(Client client, MqttMaster channel, JobProgress progress)
+            : base(client, channel, progress)
+        {
+            Progress.SetCommandCount(4);
+        }
 
         public override async Task Work()
         {
             Console.WriteLine("Telling {0} to open NetShare", Client);
             await Channel.PublishAsync(Topic, "Open Netshare");
             Reply.WaitOne();
+            Progress.CommandDone();
             Console.WriteLine("ACK: {0} opened the NetShare", Client);
 
             Console.WriteLine("Copying File to Netshare");
             await Channel.PublishAsync(Topic, "Copying File");
             Reply.WaitOne();
+            Progress.CommandDone();
             Console.WriteLine("ACK: {0} received the File", Client);
 
             Console.WriteLine("Telling {0} to close the NetShare", Client);
             await Channel.PublishAsync(Topic, "Close Netshare");
             Reply.WaitOne();
+            Progress.CommandDone();
             Console.WriteLine("ACK: {0} closed the NetShare", Client);
 
             Console.WriteLine("Telling {0} to Execute the File", Client);
             await Channel.PublishAsync(Topic, "Execute File");
             Reply.WaitOne();
+            Progress.CommandDone();
             Console.WriteLine("ACK: {0} executed the File", Client);
         }
 
         protected override void AwaitReply(object sender, MqttApplicationMessageReceivedEventArgs args)
         {
-            if (args.ApplicationMessage.Topic.Equals("/reply/" + Client.HostName) 
+            if (args.ApplicationMessage.Topic.Equals("/reply/" + Client.HostName)
                 && args.ApplicationMessage.ConvertPayloadToString().Equals("ACK"))
             {
                 Reply.Set();

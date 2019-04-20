@@ -38,7 +38,7 @@ namespace NetWeaverServer.Tasks.Jobs
         private Type Job { get; }
         private List<Client> Clients { get; }
         private MqttMaster Channel { get; }
-        
+
         //Report to GUI
         private IProgress<TaskProgress> TaskProgress { get; }
 
@@ -60,20 +60,20 @@ namespace NetWeaverServer.Tasks.Jobs
             foreach (Client client in Clients)
             {
                 //Create a Interface where each Job can return his Progress
-                Progress<JobProgress> jobProgress = new Progress<JobProgress>();
+                JobProgress jobProgress = new JobProgress(client);
                 jobProgress.ProgressChanged += HandleJobProgressReport;
-                
+                Progress.JobProgress.Add(jobProgress);
+
                 //Create new Instance of the specified Job for each Client
                 Job j = (Job) Activator.CreateInstance(Job, client, Channel, jobProgress);
                 tasks.Add(j.Work());
             }
-
+            TaskProgress.Report(Progress);
             await Task.WhenAll(tasks);
         }
 
-        private void HandleJobProgressReport(object sender, JobProgress e)
+        private void HandleJobProgressReport(object sender, EventArgs e)
         {
-            Progress.AddJobProgress(e);
             TaskProgress.Report(Progress);
         }
     }

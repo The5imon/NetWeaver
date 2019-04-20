@@ -19,7 +19,7 @@ namespace NetWeaverServer.Main
          * Job     = (Queue of Commands) Does one Job on ONE Client
          * Command = Executes one small bit of Work (Client or Server)
          */
-        
+
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         //TODO: Gustl fragen wie man am besten unmanaged resourcen handeln kann (aka. DB, MQTT, EventView)
         //Resources
@@ -27,26 +27,28 @@ namespace NetWeaverServer.Main
         private static DbConnect dbconnection;
         private static MqttBroker mqttbroker;
         private static MqttMaster mqttmaster;
-        
+
         //Operations
         public static LoggingOperation Logger = new LoggingOperation();
         public static ClientOperation Registration;
-        
+
         //Main Components
         private static GUI GUI;
         private static Server Server;
 
         public static void Main(string[] args)
         {
+            /*
             MqttBroker broker = new MqttBroker(6666);
             MqttMaster master = new MqttMaster("127.0.0.1", 6666);
-            
+
             Task.Run(() => broker.StartAsync());
             Task.Run(() => master.StartAsync());
 
             Console.Read();
             //ProoveOfWurzer();
-            //POCServer();
+            //POCServer();*/
+            StartServer();
         }
 
         public static void POCLogging()
@@ -65,10 +67,10 @@ namespace NetWeaverServer.Main
             Task.Run(() => mqttbroker.StartAsync());
             mqttmaster = new MqttMaster("127.0.0.1", 6666);
             Task.Run(() => mqttmaster.StartAsync());
-            
+
             GUI = new GUI(_eventInterface); // + Database connection
             Server = new Server(_eventInterface, mqttmaster); // + Database access
-            
+
             Registration = new ClientOperation(mqttmaster, GUI);
             Console.WriteLine("Start of Server");
         }

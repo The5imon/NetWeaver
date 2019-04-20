@@ -25,15 +25,15 @@ namespace NetWeaverClient.MQTT
             await ConnectAsync();
             await SubscribeAsync("/cmd/" + _information.Name);
             await PublishAsync("/conn", this._information.Info);
-            DeviceDiscovery discovery = new DeviceDiscovery();
+            //DeviceDiscovery discovery = new DeviceDiscovery();
             
             _client.ApplicationMessageReceived += OnMessageReceived;
             
-//            while (true)
-//            {
-//                string c = Console.ReadLine();
-//                await _client.PublishAsync("/reply/" + _information.Name, c);
-//            }
+            while (true)
+            {
+                string c = Console.ReadLine();
+                await _client.PublishAsync("/reply/" + _information.Name, c);
+            }
         }
 
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)

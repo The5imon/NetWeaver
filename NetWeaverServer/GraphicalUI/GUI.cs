@@ -14,7 +14,7 @@ namespace NetWeaverServer.GraphicalUI
     {
         public List<Client> clients = new List<Client>();
         private EventInterface EventInt { get; }
-        
+
         public GUI(EventInterface eventInt)
         {
             EventInt = eventInt;
@@ -58,8 +58,11 @@ namespace NetWeaverServer.GraphicalUI
 
         private void ReportProgress(object sender, TaskProgress e)
         {
-            Console.WriteLine("Reporting List of finished clients");
-            
+            Console.WriteLine("Reported Progress: ");
+            foreach (JobProgress progress in e.JobProgress)
+            {
+                Console.WriteLine(progress);
+            }
         }
     }
 }
