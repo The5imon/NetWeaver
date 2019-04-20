@@ -13,7 +13,7 @@ using NetWeaverServer.MQTT;
 namespace NetWeaverServer.Tasks.Jobs
 {
     public class JobManager
-    //TODO: IDEA Three Levels of Jobs
+    //TODO: IDEA Three Levels of Jobs (Need Commands)
     /**
      * Passive: Operation e.g. LoggingOperation
      * Active Job: Job that accomplishes one Action on one Client by executing smaller Commands
@@ -29,19 +29,19 @@ namespace NetWeaverServer.Tasks.Jobs
      * ==> Den ganzen Prozess durchgehen
      *
      */
-    //TODO: Reporting Progress
-    /**
-     * Manager Reports overall statistics
-     *     --> Extra ReportProgress for each Job; they report each individually
-     */
     {
+        /// <summary>
+        /// Type of Job that the Clients should work on
+        /// </summary>
         private Type Job { get; }
         private List<Client> Clients { get; }
+
         private MqttMaster Channel { get; }
 
-        //Report to GUI
+        /// <summary>
+        /// Means to Communicate/Report back to the GUI
+        /// </summary>
         private IProgress<TaskProgress> TaskProgress { get; }
-
         //Collect Job Reports
         private TaskProgress Progress = new TaskProgress();
 
@@ -53,13 +53,16 @@ namespace NetWeaverServer.Tasks.Jobs
             Channel = channel;
         }
 
+        /// <summary>
+        /// Runs a Job on all Clients in Paralell
+        /// </summary>
         public async Task RunOnAllClients()
         {
             List<Task> tasks = new List<Task>();
 
             foreach (Client client in Clients)
             {
-                //Create a Interface where each Job can return his Progress
+                //Create a Interface where each Job has a presence in the GUI and can return his Progress
                 JobProgress jobProgress = new JobProgress(client);
                 jobProgress.ProgressChanged += HandleJobProgressReport;
                 Progress.JobProgress.Add(jobProgress);
