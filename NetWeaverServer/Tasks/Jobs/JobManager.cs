@@ -39,7 +39,7 @@ namespace NetWeaverServer.Tasks.Jobs
         /// <summary>
         /// Communicate with the Client
         /// </summary>
-        private MqttMaster Channel { get; }
+        private MqttMaster Mqtt { get; }
 
         /// <summary>
         /// Means to Communicate/Report back to the GUI
@@ -48,12 +48,12 @@ namespace NetWeaverServer.Tasks.Jobs
         //Collect Job Reports
         private TaskProgress Progress = new TaskProgress();
 
-        public JobManager(Type job, TaskDetails details, MqttMaster channel)
+        public JobManager(Type job, TaskDetails details, MqttMaster mqtt)
         {
             Job = job;
             Clients =  new List<Client>(details.Clients);
             TaskProgress = details.TaskProgress;
-            Channel = channel;
+            Mqtt = mqtt;
         }
 
         /// <summary>
@@ -70,10 +70,12 @@ namespace NetWeaverServer.Tasks.Jobs
                 jobProgress.ProgressChanged += HandleJobProgressReport;
                 Progress.JobProgress.Add(jobProgress);
 
+                //Create ClientChannel for Client with MqttMaster
+                ClientChannel clientChannel = new ClientChannel(client, Mqtt);
                 //TODO: Could and should limit channel to just /cmd/client for correct command use
 
                 //Create new Instance of the specified Job for each Client
-                Job j = (Job) Activator.CreateInstance(Job, client, Channel, jobProgress);
+                Job j = (Job) Activator.CreateInstance(Job, client, clientChannel, jobProgress);
                 tasks.Add(j.Work());
             }
             TaskProgress.Report(Progress);

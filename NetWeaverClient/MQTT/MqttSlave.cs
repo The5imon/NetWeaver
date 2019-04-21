@@ -26,9 +26,9 @@ namespace NetWeaverClient.MQTT
             await SubscribeAsync("/cmd/" + _information.Name);
             await PublishAsync("/conn", this._information.Info);
             //DeviceDiscovery discovery = new DeviceDiscovery();
-            
+
             _client.ApplicationMessageReceived += OnMessageReceived;
-            
+
             while (true)
             {
                 string c = Console.ReadLine();
@@ -51,14 +51,14 @@ namespace NetWeaverClient.MQTT
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic("/disconn").WithPayload(_information.Name)
                 .WithExactlyOnceQoS();
-            
-            
+
+
             var options = new MqttClientOptionsBuilder()
                 .WithClientId(_information.Name).WithWillMessage(message.Build())
                 .WithCredentials("netweaver", "woswofürdaspasswort")
-                .WithCleanSession().WithTcpServer(_ipaddress, _port); 
-            
-            
+                .WithCleanSession().WithTcpServer(_ipaddress, _port);
+
+
             await _client.ConnectAsync(options.Build());
         }
 
@@ -67,7 +67,7 @@ namespace NetWeaverClient.MQTT
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(topic).WithPayload(payload)
                 .WithExactlyOnceQoS();
-        
+
             await _client.PublishAsync(message.Build());
         }
 
