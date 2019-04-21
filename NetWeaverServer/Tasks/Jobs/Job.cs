@@ -23,8 +23,7 @@ namespace NetWeaverServer.Tasks.Jobs
         /// <summary>
         /// Communicate with the Client
         /// </summary>
-        protected MqttMaster Channel { get; }
-        protected string Topic { get; }
+        protected ClientChannel Channel { get; }
         //To tell the Job when to wait/work
         protected AutoResetEvent Reply = new AutoResetEvent(false);
 
@@ -33,14 +32,13 @@ namespace NetWeaverServer.Tasks.Jobs
         /// </summary>
         protected JobProgress Progress { get; }
 
-        protected Job(Client client, MqttMaster channel, JobProgress progress)
+        protected Job(Client client, ClientChannel channel, JobProgress progress)
         {
             Client = client;
             Progress = progress;
             Channel = channel;
 
-            Topic = "/cmd/" + Client.HostName;
-            Channel.MessageReceivedEvent += AwaitReply;
+            Channel.ClientAckEvent += AwaitReply;
         }
 
         /// <summary>
@@ -48,6 +46,9 @@ namespace NetWeaverServer.Tasks.Jobs
         /// </summary>
         public abstract Task Work();
 
-        protected abstract void AwaitReply(object sender, MqttApplicationMessageReceivedEventArgs args);
+        private void AwaitReply(object sender, EventArgs args)
+        {
+            Reply.Set();
+        }
     }
 }

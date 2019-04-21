@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -12,14 +13,14 @@ namespace NetWeaverServer.Tasks.Commands
         public ICommand[] Commands { get; }
 
         private AutoResetEvent Reply = new AutoResetEvent(false);
-        private MqttMaster Channel { get; }
+        private ClientChannel Channel { get; }
 
-        public CommandQueue(MqttMaster channel, params ICommand[] commands)
+        public CommandQueue(ClientChannel channel, params ICommand[] commands)
         {
             Channel = channel;
             Commands = commands;
 
-            Channel.MessageReceivedEvent += AwaitReply;
+            Channel.ClientAckEvent += AwaitReply;
         }
 
         public async Task Run()
@@ -31,7 +32,7 @@ namespace NetWeaverServer.Tasks.Commands
             }
         }
 
-        private void AwaitReply(object sender, MqttApplicationMessageReceivedEventArgs e)
+        private void AwaitReply(object sender, EventArgs e)
         {
             Reply.Set();
         }
