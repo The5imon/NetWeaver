@@ -14,7 +14,7 @@ namespace NetWeaverServer.Tasks.Jobs
 {
     public class CopyFileJob : Job
     {
-        public CopyFileJob(Client client, ClientChannel channel, JobProgress progress)
+        public CopyFileJob(Client client, MqttMaster channel, JobProgress progress)
             : base(client, channel, progress)
         {
             Progress.SetCommandCount(4);

@@ -32,11 +32,11 @@ namespace NetWeaverServer.Tasks.Jobs
         /// </summary>
         protected JobProgress Progress { get; }
 
-        protected Job(Client client, ClientChannel channel, JobProgress progress)
+        protected Job(Client client, MqttMaster channel, JobProgress progress)
         {
             Client = client;
             Progress = progress;
-            Channel = channel;
+            Channel = new ClientChannel(client, channel);
 
             Channel.ClientAckEvent += AwaitReply;
         }

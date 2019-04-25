@@ -70,12 +70,8 @@ namespace NetWeaverServer.Tasks.Jobs
                 jobProgress.ProgressChanged += HandleJobProgressReport;
                 Progress.JobProgress.Add(jobProgress);
 
-                //Create ClientChannel for Client with MqttMaster
-                ClientChannel clientChannel = new ClientChannel(client, Mqtt);
-                //TODO: Could and should limit channel to just /cmd/client for correct command use
-
                 //Create new Instance of the specified Job for each Client
-                Job j = (Job) Activator.CreateInstance(Job, client, clientChannel, jobProgress);
+                Job j = (Job) Activator.CreateInstance(Job, client, Mqtt, jobProgress);
                 tasks.Add(j.Work());
             }
             TaskProgress.Report(Progress);

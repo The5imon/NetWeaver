@@ -29,7 +29,7 @@ namespace NetWeaverServer.Main
         private static MqttMaster mqttmaster;
 
         //Operations
-        public static LoggingOperation Logger = new LoggingOperation();
+        //public static LoggingOperation Logger = new LoggingOperation();
         public static ClientOperation Registration;
 
         //Main Components
