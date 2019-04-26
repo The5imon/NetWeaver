@@ -30,7 +30,7 @@ namespace NetWeaverServer.Main
 
         private async void HandleExecuteScriptEvent(object sender, TaskDetails task)
         {
-            await StartJob(typeof(CopyFileJob), task);
+            await StartJob(typeof(ExecuteScriptJob), task);
         }
         
         private async Task StartJob(Type job, TaskDetails task)

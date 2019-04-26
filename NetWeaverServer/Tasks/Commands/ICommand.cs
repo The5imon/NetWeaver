@@ -11,6 +11,6 @@ namespace NetWeaverServer.Tasks.Commands
     //TODO: Use Commands to actually do things --> Use Commands on Client to actually do things!!!
     public interface ICommand
     {
-        Task Execute();
+        Task Execute(ClientChannel channel);
     }
 }

@@ -10,6 +10,9 @@ namespace NetWeaverServer.Tasks.Commands
 {
     public class CommandQueue
     {
+        /// <summary>
+        /// DEPRECATED
+        /// </summary>
         public ICommand[] Commands { get; }
 
         private AutoResetEvent Reply = new AutoResetEvent(false);
@@ -27,7 +30,7 @@ namespace NetWeaverServer.Tasks.Commands
         {
             foreach (ICommand cmd in Commands)
             {
-                await cmd.Execute();
+                await cmd.Execute(Channel);
                 Reply.WaitOne();
             }
         }

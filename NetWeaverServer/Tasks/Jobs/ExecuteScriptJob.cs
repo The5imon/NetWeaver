@@ -5,39 +5,37 @@ using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.MQTT;
+using NetWeaverServer.Tasks.Commands;
 
 namespace NetWeaverServer.Tasks.Jobs
 {
     public class ExecuteScriptJob : Job
     {
-        private readonly List<Job> Jobs;
+        private ICommand[] Commands =
+        {
+            new ClientExecute("open netsh"),
+            new ClientExecute("copy file"), //Executed Locally
+            new ClientExecute("see file?"),
+            new ClientExecute("copy file to /scripts"),
+            new ClientExecute("close netsh"),
+            new ClientExecute("execute file") 
+        };
         
         public ExecuteScriptJob(Client client, MqttMaster channel, JobProgress progress)
             : base(client, channel, progress)
         {
-            //CmdCount = 2;
-            Jobs = new List<Job>{ new CopyFileJob(client, channel, progress)};
+            progress.SetCommandCount(Commands.Length);
         }
 
         public override async Task Work()
         {
-            foreach (Job job in Jobs)
+            foreach (ICommand cmd in Commands)
             {
-                await job.Work();
+                Console.WriteLine("Telling {0} to {1}", Client.HostName, cmd);
+                await cmd.Execute(Channel);
+                Reply.WaitOne();
+                Progress.NextCommandDone();
             }
-            
-            Console.WriteLine("Telling {0} to Execute the File", Client);
-            await Channel.Transmit("Execute File");
-            Reply.WaitOne();
-            Progress.NextCommandDone();
-            Console.WriteLine("ACK: {0} executed the File", Client);
-            
-            Console.WriteLine("Telling {0} to Execute the Gregor", Client);
-            await Channel.Transmit("Execute Gregor");
-            Reply.WaitOne();
-            Progress.NextCommandDone();
-            Console.WriteLine("ACK: {0} executed the Gregor", Client);
-            
         }
     }
 }
