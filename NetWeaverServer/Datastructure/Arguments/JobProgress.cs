@@ -20,7 +20,7 @@ namespace NetWeaverServer.Datastructure.Arguments
             Increment = 1 / (double) commands;
         }
 
-        public void CommandDone()
+        public void NextCommandDone()
         {
             Percentage += Increment;
             if (Percentage >= 1)
