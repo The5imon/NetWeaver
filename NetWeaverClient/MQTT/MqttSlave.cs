@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using NetWeaverClient.MQTT;
 using MQTTnet;
 using MQTTnet.Client;
+using PcapDotNet.Core;
 
 namespace NetWeaverClient.MQTT
 {
@@ -12,7 +14,7 @@ namespace NetWeaverClient.MQTT
         private readonly int _port;
         private readonly string _ipaddress;
         private readonly IMqttClient _client;
-        private readonly ClientInformation _information = new ClientInformation();
+        private readonly ClientInformation intInfo = new ClientInformation();
         public MqttSlave(string ipaddress, int port)
         {
             this._ipaddress = ipaddress;
@@ -22,17 +24,20 @@ namespace NetWeaverClient.MQTT
 
         public async Task StartAsync()
         {
-            await ConnectAsync();
-            await SubscribeAsync("/cmd/" + _information.Name);
-            await PublishAsync("/conn", this._information.Info);
-            //DeviceDiscovery discovery = new DeviceDiscovery();
+            DeviceDiscovery extInfo = new DeviceDiscovery();
+            
+            //await ConnectAsync();
+            //await SubscribeAsync("/cmd/" + _information.Name);
+            //await PublishAsync("/conn", _information.Info);
+
+            //await PublishAsync("/conn", ExtInfo._adapter);
 
             _client.ApplicationMessageReceived += OnMessageReceived;
-
+            
             while (true)
             {
                 string c = Console.ReadLine();
-                await _client.PublishAsync("/reply/" + _information.Name, c);
+                await _client.PublishAsync("/reply/" + intInfo.Name, c);
             }
         }
 
@@ -49,12 +54,12 @@ namespace NetWeaverClient.MQTT
         private async Task ConnectAsync()
         {
             var message = new MqttApplicationMessageBuilder()
-                .WithTopic("/disconn").WithPayload(_information.Name)
+                .WithTopic("/disconn").WithPayload(intInfo.Name)
                 .WithExactlyOnceQoS();
 
 
             var options = new MqttClientOptionsBuilder()
-                .WithClientId(_information.Name).WithWillMessage(message.Build())
+                .WithClientId(intInfo.Name).WithWillMessage(message.Build())
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ipaddress, _port);
 

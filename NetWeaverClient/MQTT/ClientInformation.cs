@@ -12,8 +12,8 @@ namespace NetWeaverClient.MQTT
         private readonly string _mac;
         private readonly string _ip;
         private readonly string _adapter;
-        public string Name {get; }
-        public string Info => $"{Name}&{_mac}&{_ip}";   
+        public string Name { get; }
+        public string Info => $"{Name}&{_mac}&{_ip}";
 
         public ClientInformation()
         {
