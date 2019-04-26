@@ -15,7 +15,7 @@ namespace NetWeaverServer.Tasks.Commands
         
         public async Task Execute(ClientChannel channel)
         {
-            await channel.Transmit(Command);
+            await channel.PublishAsync(Command);
         }
 
         public override string ToString()

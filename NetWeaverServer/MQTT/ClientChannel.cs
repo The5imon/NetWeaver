@@ -16,10 +16,10 @@ namespace NetWeaverServer.MQTT
         {
             Client = client;
             Channel = channel;
-            Channel.MessageReceivedEvent += OnMessageReceive;
+            Channel.MessageReceivedEvent += OnMessageReceived;
         }
 
-        private void OnMessageReceive(object sender, MqttApplicationMessageReceivedEventArgs args)
+        private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs args)
         {
             if (args.ApplicationMessage.Topic.Equals($"/reply/{Client.HostName}")
                 && args.ApplicationMessage.ConvertPayloadToString().Equals("ACK"))
@@ -28,10 +28,9 @@ namespace NetWeaverServer.MQTT
             }
         }
 
-        public async Task Transmit(string message)
+        public async Task PublishAsync(string message)
         {
             await Channel.PublishAsync($"/cmd/{Client.HostName}", message);
         }
-
     }
 }

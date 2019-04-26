@@ -23,25 +23,25 @@ namespace NetWeaverServer.Tasks.Jobs
         public override async Task Work()
         {
             Console.WriteLine("Telling {0} to open NetShare", Client);
-            await Channel.Transmit("Open Netshare");
+            await Channel.PublishAsync("Open Netshare");
             Reply.WaitOne();
             Progress.NextCommandDone();
             Console.WriteLine("ACK: {0} opened the NetShare", Client);
 
             Console.WriteLine("Copying File to Netshare");
-            await Channel.Transmit("Copying File");
+            await Channel.PublishAsync("Copying File");
             Reply.WaitOne();
             Progress.NextCommandDone();
             Console.WriteLine("ACK: {0} received the File", Client);
 
             Console.WriteLine("Telling {0} to close the NetShare", Client);
-            await Channel.Transmit("Close Netshare");
+            await Channel.PublishAsync("Close Netshare");
             Reply.WaitOne();
             Progress.NextCommandDone();
             Console.WriteLine("ACK: {0} closed the NetShare", Client);
 
             Console.WriteLine("Telling {0} to Execute the File", Client);
-            await Channel.Transmit("Execute File");
+            await Channel.PublishAsync("Execute File");
             Reply.WaitOne();
             Progress.NextCommandDone();
             Console.WriteLine("ACK: {0} executed the File", Client);
