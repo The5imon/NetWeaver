@@ -25,6 +25,7 @@ namespace NetWeaverServer.Tasks.Operations
             {
                 Console.WriteLine("New Client connected");
                 string[] args = e.ApplicationMessage.ConvertPayloadToString().Split('&');
+                //Database entry + trigger update event
                 GUI.clients.Add(new Client(args[1], args[0], args[2]));
             }
         }

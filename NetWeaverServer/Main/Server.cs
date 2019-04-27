@@ -13,6 +13,11 @@ namespace NetWeaverServer.Main
 {
     public class Server
     {
+        //TODO: Migrate to complete Commands
+        /*
+         *  - Jobmanager/TaskManager executes commands on a list of Clients
+         *  - Execute CommandSets on Clients
+         */
         private EventInterface EventInt { get; }
         private MqttMaster Channel { get; }
 
@@ -32,7 +37,7 @@ namespace NetWeaverServer.Main
         {
             await StartJob(typeof(ExecuteScriptJob), task);
         }
-        
+
         private async Task StartJob(Type job, TaskDetails task)
         {
             JobManager manager = new JobManager(job, task, Channel);
