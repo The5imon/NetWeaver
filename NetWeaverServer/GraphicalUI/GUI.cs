@@ -29,7 +29,7 @@ namespace NetWeaverServer.GraphicalUI
             while(true)
             {
                 input = Console.ReadLine();
-                string[] args = input.Split(":");
+                string[] args = input.Split(':');
                 Progress<TaskProgress> progress = new Progress<TaskProgress>();
                 progress.ProgressChanged += ReportProgress;
                 TaskDetails taskDetails = new TaskDetails(clients, progress);

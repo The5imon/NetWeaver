@@ -20,7 +20,7 @@ namespace NetWeaverServer.Datastructure
             IsOnline = isOnline;
             LastSeen = lastSeen;
         }
-        
+
         public Client(string mac,int roomnumber, string hostName, string ip, bool isOnline, string lastSeen)
         {
             MAC = mac;
@@ -49,9 +49,9 @@ namespace NetWeaverServer.Datastructure
 
         private int roomNumber(String ip)
         {
-          return Int32.Parse(ip.Split(".")[2]);
+          return Int32.Parse(ip.Split('.')[2]);
         }
-        
-        
+
+
     }
 }

@@ -10,7 +10,7 @@ namespace NetWeaverServer.Tasks.Operations
     {
         private static string connectionTopic = "/conn";
         private MqttMaster Channel { get; }
-        
+
         private GUI GUI { get; }
         public ClientOperation(MqttMaster communication, GUI gui)
         {
@@ -24,7 +24,7 @@ namespace NetWeaverServer.Tasks.Operations
             if (e.ApplicationMessage.Topic.Equals(connectionTopic))
             {
                 Console.WriteLine("New Client connected");
-                string[] args = e.ApplicationMessage.ConvertPayloadToString().Split("&");
+                string[] args = e.ApplicationMessage.ConvertPayloadToString().Split('&');
                 GUI.clients.Add(new Client(args[1], args[0], args[2]));
             }
         }
