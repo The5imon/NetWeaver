@@ -9,6 +9,7 @@ using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Main;
 using NetWeaverServer.MQTT;
+using NetWeaverServer.Tasks.Commands;
 using static NetWeaverServer.Tasks.Operations.LoggingOperation;
 
 namespace NetWeaverServer.Tasks.Jobs

@@ -18,6 +18,8 @@ namespace NetWeaverServer.Main
          *  - Jobmanager/TaskManager executes commands on a list of Clients
          *  - Execute CommandSets on Clients
          */
+        //TODO: Code a new DeploymentTaskManager
+        //TODO: Figure out a better way to generalize Jobs/Commands
         private EventInterface EventInt { get; }
         private MqttMaster Channel { get; }
 

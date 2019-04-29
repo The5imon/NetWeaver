@@ -38,7 +38,7 @@ namespace NetWeaverServer.Main
 
         public static void Main(string[] args)
         {
-            
+
             MqttBroker broker = new MqttBroker(6666);
             MqttMaster master = new MqttMaster("127.0.0.1", 6666);
 

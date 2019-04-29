@@ -18,9 +18,9 @@ namespace NetWeaverServer.Tasks.Jobs
             new ClientExecute("see file?"),
             new ClientExecute("copy file to /scripts"),
             new ClientExecute("close netsh"),
-            new ClientExecute("execute file") 
+            new ClientExecute("execute file")
         };
-        
+
         public ExecuteScriptJob(Client client, MqttMaster channel, JobProgress progress)
             : base(client, channel, progress)
         {
