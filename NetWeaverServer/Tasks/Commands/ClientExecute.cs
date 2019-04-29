@@ -5,6 +5,7 @@ using NetWeaverServer.MQTT;
 namespace NetWeaverServer.Tasks.Commands
 {
     public class ClientExecute : ICommand
+    //TODO: Enum for all the ClientCommands
     {
         public string Command { get; }
 

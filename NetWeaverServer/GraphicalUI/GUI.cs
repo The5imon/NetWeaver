@@ -32,7 +32,7 @@ namespace NetWeaverServer.GraphicalUI
                 string[] args = input.Split(':');
                 Progress<TaskProgress> progress = new Progress<TaskProgress>();
                 progress.ProgressChanged += ReportProgress;
-                TaskDetails taskDetails = new TaskDetails(clients, progress);
+                TaskDetails taskDetails = new TaskDetails(clients, progress, args[1]);
                 switch(args[0])
                 {
                     case "copy":

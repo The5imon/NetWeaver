@@ -20,6 +20,7 @@ namespace NetWeaverServer.Tasks.Jobs
         /// The Client on which Work has to be done
         /// </summary>
         public Client Client { get; }
+        private string Args { get; }
 
         /// <summary>
         /// Communicate with the Client
@@ -33,9 +34,10 @@ namespace NetWeaverServer.Tasks.Jobs
         /// </summary>
         protected JobProgress Progress { get; }
 
-        protected Job(Client client, MqttMaster channel, JobProgress progress)
+        protected Job(Client client, MqttMaster channel, JobProgress progress, string args)
         {
             Client = client;
+            Args = args;
             Progress = progress;
             Channel = new ClientChannel(client, channel);
 

@@ -36,6 +36,8 @@ namespace NetWeaverServer.Tasks.Jobs
         private Type Job { get; }
         private List<Client> Clients { get; }
 
+        private string Args { get; }
+
         /// <summary>
         /// Communicate with the Client
         /// </summary>
@@ -53,6 +55,7 @@ namespace NetWeaverServer.Tasks.Jobs
             Job = job;
             Clients =  new List<Client>(details.Clients);
             TaskProgress = details.TaskProgress;
+            Args = details.Args;
             Mqtt = mqtt;
         }
 
@@ -71,7 +74,7 @@ namespace NetWeaverServer.Tasks.Jobs
                 Progress.JobProgress.Add(jobProgress);
 
                 //Create new Instance of the specified Job for each Client
-                Job j = (Job) Activator.CreateInstance(Job, client, Mqtt, jobProgress);
+                Job j = (Job) Activator.CreateInstance(Job, client, Mqtt, jobProgress, Args);
                 tasks.Add(j.Work());
             }
             TaskProgress.Report(Progress);
