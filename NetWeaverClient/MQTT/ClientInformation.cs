@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace NetWeaverClient.MQTT
 {
@@ -15,7 +16,7 @@ namespace NetWeaverClient.MQTT
         public string Name { get; }
         public string Info => $"{Name}&{_mac}&{_ip}";
 
-        public ClientInformation()
+        public ClientInformation()    
         {
             this._adapter = GetAdapterName();
             this._mac = GetMacAddress();
@@ -42,7 +43,8 @@ namespace NetWeaverClient.MQTT
             while ((line = process.StandardOutput.ReadLine()) != null) 
             {
                 if (!line.Contains("WLAN")) continue; //Enter correct definition of adapter.
-                name += line.Split(' ')[0];
+                Console.WriteLine(line);
+                name += Regex.Split(line, "  +")[0];
                 process.Kill();
                 break;
             }
