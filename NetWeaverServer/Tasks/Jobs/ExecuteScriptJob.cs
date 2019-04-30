@@ -11,19 +11,18 @@ namespace NetWeaverServer.Tasks.Jobs
 {
     public class ExecuteScriptJob : Job
     {
-        private static List<ICommand> Commands = new List<ICommand>(CopyFileJob.Commands)
+        public ExecuteScriptJob(ClientChannel channel, JobProgress progress, string script)
+            : base(channel, progress, script)
         {
-            new ClientExecute("execscript")
-        };
-
-        public ExecuteScriptJob(Client client, MqttMaster channel, JobProgress progress, string script)
-            : base(client, channel, progress, script)
-        {
-            progress.SetCommandCount(Commands.Count);
+            Commands.Add(new ClientExecute("execscript"));
+            Progress.SetCommandCount(Commands.Count);
         }
 
         public override async Task Work()
         {
+            Job j = new CopyFileJob(Channel, Progress, Args);
+            await j.Work();
+            
             foreach (ICommand cmd in Commands)
             {
                 Console.WriteLine("Telling {0} to {1}", Client.HostName, cmd);

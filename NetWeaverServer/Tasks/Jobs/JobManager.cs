@@ -74,7 +74,7 @@ namespace NetWeaverServer.Tasks.Jobs
                 Progress.JobProgress.Add(jobProgress);
 
                 //Create new Instance of the specified Job for each Client
-                Job j = (Job) Activator.CreateInstance(Job, client, Mqtt, jobProgress, Args);
+                Job j = (Job) Activator.CreateInstance(Job, new ClientChannel(client, Mqtt), jobProgress, Args);
                 tasks.Add(j.Work());
             }
             TaskProgress.Report(Progress);

@@ -14,19 +14,18 @@ using static NetWeaverServer.Tasks.Operations.LoggingOperation;
 namespace NetWeaverServer.Tasks.Jobs
 {
     public class CopyFileJob : Job
-    {
-        internal static List<ICommand> Commands = new List<ICommand>
+    {   
+        public CopyFileJob(ClientChannel channel, JobProgress progress, string file)
+            : base(channel, progress, file)
         {
-            new ClientExecute("openshare"),
-            new ClientExecute("copyfile"),    //Execute Locally
-            new ClientExecute("seefile"),
-            new ClientExecute("closeshare"),
-        };
-        
-        public CopyFileJob(Client client, MqttMaster channel, JobProgress progress, string file)
-            : base(client, channel, progress, file)
-        {
-            Progress.SetCommandCount(4);
+            Commands.AddRange(new ICommand[]
+            {
+                new ClientExecute("openshare"),
+                new CopyFile(Args),    //TODO: Own Copy does not need ACK
+                new ClientExecute("seefile"),
+                new ClientExecute("closeshare"),
+            });
+            Progress.SetCommandCount(Commands.Count);
         }
 
         public override async Task Work()

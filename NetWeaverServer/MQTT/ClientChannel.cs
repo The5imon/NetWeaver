@@ -19,6 +19,11 @@ namespace NetWeaverServer.MQTT
             Channel.MessageReceivedEvent += OnMessageReceived;
         }
 
+        public EventHandler GetClientAckEvent()
+        {
+            return ClientAckEvent;
+        }
+
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs args)
         {
             if (args.ApplicationMessage.Topic.Equals($"/reply/{Client.HostName}")
