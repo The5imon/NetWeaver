@@ -9,7 +9,7 @@ namespace NetWeaverServer.Datastructure.Arguments
         public event EventHandler ProgressChanged;
         public double Percentage { get; private set; } = 0;
         public bool Done { get; private set; } = false;
-        private double Increment { get; set; }
+        private int CommandCount { get; set; }
         public JobProgress(Client client)
         {
             Client = client;
@@ -17,12 +17,12 @@ namespace NetWeaverServer.Datastructure.Arguments
 
         public void SetCommandCount(int commands)
         {
-            Increment = 1 / (double) commands;
+            CommandCount += commands;
         }
 
         public void NextCommandDone()
         {
-            Percentage += Increment;
+            Percentage += 1d / CommandCount;
             if (Percentage >= 1)
             {
                 Done = true;

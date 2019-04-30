@@ -8,43 +8,35 @@ using NetWeaverServer.Datastructure;
 using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.MQTT;
+using NetWeaverServer.Tasks.Commands;
 using static NetWeaverServer.Tasks.Operations.LoggingOperation;
 
 namespace NetWeaverServer.Tasks.Jobs
 {
     public class CopyFileJob : Job
-    {
-        public CopyFileJob(Client client, MqttMaster channel, JobProgress progress)
-            : base(client, channel, progress)
+    {   
+        public CopyFileJob(ClientChannel channel, JobProgress progress, string file)
+            : base(channel, progress, file)
         {
-            Progress.SetCommandCount(4);
+            Commands.AddRange(new ICommand[]
+            {
+                new ClientExecute("openshare"),
+                new CopyFile(Args),    //TODO: Own Copy does not need ACK
+                new ClientExecute("seefile"),
+                new ClientExecute("closeshare"),
+            });
+            Progress.SetCommandCount(Commands.Count);
         }
 
         public override async Task Work()
         {
-            Console.WriteLine("Telling {0} to open NetShare", Client);
-            await Channel.PublishAsync("Open Netshare");
-            Reply.WaitOne();
-            Progress.NextCommandDone();
-            Console.WriteLine("ACK: {0} opened the NetShare", Client);
-
-            Console.WriteLine("Copying File to Netshare");
-            await Channel.PublishAsync("Copying File");
-            Reply.WaitOne();
-            Progress.NextCommandDone();
-            Console.WriteLine("ACK: {0} received the File", Client);
-
-            Console.WriteLine("Telling {0} to close the NetShare", Client);
-            await Channel.PublishAsync("Close Netshare");
-            Reply.WaitOne();
-            Progress.NextCommandDone();
-            Console.WriteLine("ACK: {0} closed the NetShare", Client);
-
-            Console.WriteLine("Telling {0} to Execute the File", Client);
-            await Channel.PublishAsync("Execute File");
-            Reply.WaitOne();
-            Progress.NextCommandDone();
-            Console.WriteLine("ACK: {0} executed the File", Client);
+            foreach (ICommand cmd in Commands)
+            {
+                Console.WriteLine("Telling {0} to {1}", Client.HostName, cmd);
+                await cmd.Execute(Channel);
+                Reply.WaitOne();
+                Progress.NextCommandDone();
+            }
         }
     }
 }

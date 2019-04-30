@@ -7,12 +7,15 @@ namespace NetWeaverServer.Datastructure.Arguments
     {
         public List<Client> Clients { get; }
 
+        public string Args { get; }
+        
         public IProgress<TaskProgress> TaskProgress;
 
-        public TaskDetails(List<Client> clients, IProgress<TaskProgress> progress)
+        public TaskDetails(List<Client> clients, IProgress<TaskProgress> progress, string args)
         {
             Clients = new List<Client>(clients);
             TaskProgress = progress;
+            Args = args;
         }
     }
 }
