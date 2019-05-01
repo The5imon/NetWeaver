@@ -2,60 +2,77 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
+using System.Security.Policy;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.SqlServer.Server;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using PcapDotNet.Base;
+using PcapDotNet.Packets.Ethernet;
 
 namespace NetWeaverClient.MQTT
 {
     public class DeviceDiscovery
     {
-        private readonly string _adapter;
-        private readonly string _address;
-
         public DeviceDiscovery()
         {
-            this._adapter = GetDeviceName();
-            this._address = GetAddressforDevice();
+            StartSniffing();
         }
 
-        private string GetDeviceName()
+        private void StartSniffing()
         {
-            string deviceName = string.Empty;
             IList<LivePacketDevice> allDevices = LivePacketDevice.AllLocalMachine;
-
-            foreach (var device in allDevices)
+            int deviceIndex = 0;
+            
+            for (int i = 0; i < allDevices.Count; i++)
             {
-                if (device.Description.Contains("Microsoft"))
-                {
-                    deviceName += device.Description;
-                    break;
-                }
+                if (!allDevices[i].Description.Equals("Microsoft")) continue;
+                deviceIndex = i;
+                break;
             }
 
-            return deviceName;
-        }
-
-        private string GetAddressforDevice()
-        {
-            string address = string.Empty;
-            IList<LivePacketDevice> allDevices = LivePacketDevice.AllLocalMachine;
-
-            foreach (var device in allDevices)
+            PacketDevice selectedDevice = allDevices[deviceIndex];
+            using (PacketCommunicator communicator = selectedDevice.Open(
+                65536, PacketDeviceOpenAttributes.Promiscuous, 1000))
             {
-                if (device.Description.Equals(_adapter))
+                bool b = true;
+                do
                 {
-                    foreach (var deviceAddress in device.Addresses)
+                    Packet packet;
+                    PacketCommunicatorReceiveResult result = communicator.ReceivePacket(out packet);
+                    switch (result)
                     {
-                        Console.WriteLine(deviceAddress.Address.ToString());
-                        address += deviceAddress.Address.ToString();
-                    }
-                }
-            }
+                        case PacketCommunicatorReceiveResult.Ok:
+                            if (packet.Ethernet.Destination.ToString().Equals("01:00:0c:cc:cc:cc"))
+                            {
+                                // do something.
 
-            return address;
+                                b = false;
+                            }
+                            break;
+                        case PacketCommunicatorReceiveResult.Timeout:
+                            continue;
+                        default:
+                            throw new InvalidOperationException();
+                    }
+                } while (b);
+
+                //communicator.ReceivePackets(0, PacketHandler) ;
+            }
         }
+
+        /*
+        private void PacketHandler(Packet packet)
+        {
+            if (packet.Ethernet.Destination.ToString().Equals("01:00:0c:cc:cc:cc"))
+            {
+                Console.WriteLine(packet.Ethernet.Payload.BytesSequenceToHexadecimalString());
+            }
+        }
+        */
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.Drawing;
 using System.Threading.Tasks;
-using NetWeaverClient.MQTT;
 using MQTTnet;
 using MQTTnet.Client;
-using PcapDotNet.Core;
 
 namespace NetWeaverClient.MQTT
 {
@@ -22,33 +19,37 @@ namespace NetWeaverClient.MQTT
             _client = new MqttFactory().CreateMqttClient();
         }
 
-        public async Task StartAsync()
-        {
-            //DeviceDiscovery extInfo = new DeviceDiscovery();
-
-            await ConnectAsync();
-            await SubscribeAsync("/cmd/" + intInfo.Name);
-            await PublishAsync("/conn", intInfo.Info);
-
-            //await PublishAsync("/conn", ExtInfo._adapter);
-
-            _client.ApplicationMessageReceived += OnMessageReceived;
-
-            while (true)
-            {
-                string c = Console.ReadLine();
-                await _client.PublishAsync("/reply/" + intInfo.Name, c);
-            }
-        }
-
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            Console.WriteLine(e.ClientId + ": " + e.ApplicationMessage.ConvertPayloadToString());
-        }
+            int exitCode = 0;
+            switch (e.ApplicationMessage.ConvertPayloadToString())
+            {
+                case "openshare":
+                    exitCode = Commands.OpenNetShare(); break;
+                case "seefile":
+                    exitCode = Commands.SeeFile("TELLMEWHICHFILE"); break;
+                //Filenamen Übertragungsnachricht mit Simon ausmachen!
+                case "closeshare":
+                    exitCode = Commands.CloseNetShare(); break;
+                case "execscript":
+                    exitCode = Commands.ExecuteScript("test.ps1"); break;
+                default:
+                    break;
+            }
 
-        public async Task StopAsync()
+            HandleExitCode(exitCode);
+        }
+        private void HandleExitCode(int exitCode)
         {
-            await _client.DisconnectAsync();
+            switch (exitCode)
+            {
+                case 0:
+                    Task.Run(() => PublishAsync("/reply/"+intInfo.Name, "ACK")); break;
+                case -1:
+                    Task.Run(() => PublishAsync("/reply/" + intInfo.Name, "NACK")); break;
+                default:
+                    break;
+            }
         }
 
         private async Task ConnectAsync()
@@ -66,7 +67,25 @@ namespace NetWeaverClient.MQTT
 
             await _client.ConnectAsync(options.Build());
         }
+        public async Task StartAsync()
+        {
+            Commands.RunPowershellScript(@"C:\Users\Gregor Brunner\OneDrive\Desktop\test.ps1");
+            await ConnectAsync();
+            //_client.ApplicationMessageReceived += OnMessageReceived;
 
+            await SubscribeAsync("/cmd/"+intInfo.Name);
+            await PublishAsync("/conn", intInfo.Info);
+
+            while (true)
+            {
+                string c = Console.ReadLine();
+                await _client.PublishAsync("/reply/"+intInfo.Name, c);
+          }
+        }
+        public async Task StopAsync()
+        {
+            await _client.DisconnectAsync();
+        }
         private async Task PublishAsync(string topic, string payload)
         {
             var message = new MqttApplicationMessageBuilder()
@@ -75,7 +94,6 @@ namespace NetWeaverClient.MQTT
 
             await _client.PublishAsync(message.Build());
         }
-
         private async Task SubscribeAsync(string topic)
         {
             await _client.SubscribeAsync(topic);
