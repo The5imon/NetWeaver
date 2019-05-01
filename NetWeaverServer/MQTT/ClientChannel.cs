@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using NetWeaverServer.Datastructure;
@@ -10,7 +11,7 @@ namespace NetWeaverServer.MQTT
         public Client Client { get; }
         private MqttMaster Channel { get; }
 
-        public event EventHandler ClientAckEvent;
+        public AutoResetEvent Reply = new AutoResetEvent(false);
 
         public ClientChannel(Client client, MqttMaster channel)
         {
@@ -19,17 +20,12 @@ namespace NetWeaverServer.MQTT
             Channel.MessageReceivedEvent += OnMessageReceived;
         }
 
-        public EventHandler GetClientAckEvent()
-        {
-            return ClientAckEvent;
-        }
-
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs args)
         {
             if (args.ApplicationMessage.Topic.Equals($"/reply/{Client.HostName}")
                 && args.ApplicationMessage.ConvertPayloadToString().Equals("ACK"))
             {
-                ClientAckEvent?.Invoke(this, EventArgs.Empty);
+                Reply.Set();
             }
         }
 

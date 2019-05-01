@@ -24,16 +24,16 @@ namespace NetWeaverClient.MQTT
 
         public async Task StartAsync()
         {
-            DeviceDiscovery extInfo = new DeviceDiscovery();
-            
-            //await ConnectAsync();
-            //await SubscribeAsync("/cmd/" + _information.Name);
-            //await PublishAsync("/conn", _information.Info);
+            //DeviceDiscovery extInfo = new DeviceDiscovery();
+
+            await ConnectAsync();
+            await SubscribeAsync("/cmd/" + intInfo.Name);
+            await PublishAsync("/conn", intInfo.Info);
 
             //await PublishAsync("/conn", ExtInfo._adapter);
 
             _client.ApplicationMessageReceived += OnMessageReceived;
-            
+
             while (true)
             {
                 string c = Console.ReadLine();

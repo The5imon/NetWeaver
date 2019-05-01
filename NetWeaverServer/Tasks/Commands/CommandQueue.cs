@@ -22,8 +22,6 @@ namespace NetWeaverServer.Tasks.Commands
         {
             Channel = channel;
             Commands = commands;
-
-            Channel.ClientAckEvent += AwaitReply;
         }
 
         public async Task Run()

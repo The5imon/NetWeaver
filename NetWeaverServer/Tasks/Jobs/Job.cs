@@ -28,8 +28,6 @@ namespace NetWeaverServer.Tasks.Jobs
         /// Communicate with the Client
         /// </summary>
         protected ClientChannel Channel { get; }
-        //To tell the Job when to wait/work
-        protected AutoResetEvent Reply = new AutoResetEvent(false);
 
         /// <summary>
         ///Used to Reply to the (Task) JobManager
@@ -42,18 +40,11 @@ namespace NetWeaverServer.Tasks.Jobs
             Args = args;
             Progress = progress;
             Channel = channel;
-
-            Channel.ClientAckEvent += AwaitReply;
         }
 
         /// <summary>
         /// Does the Work defined by the Job
         /// </summary>
         public abstract Task Work();
-
-        private void AwaitReply(object sender, EventArgs args)
-        {
-            Reply.Set();
-        }
     }
 }

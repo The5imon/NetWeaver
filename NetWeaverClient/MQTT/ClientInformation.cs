@@ -39,14 +39,14 @@ namespace NetWeaverClient.MQTT
             process.Start();
 
             string line;
-            while ((line = process.StandardOutput.ReadLine()) != null) 
+            while ((line = process.StandardOutput.ReadLine()) != null)
             {
-                if (!line.Contains("WLAN")) continue; //Enter correct definition of adapter.
+                if (!line.Contains("Network")) continue; //Enter correct definition of adapter.
                 name += line.Split(' ')[0];
                 process.Kill();
                 break;
             }
-            
+
             return name;
         }
 
@@ -77,7 +77,7 @@ namespace NetWeaverClient.MQTT
                     mac = nic.GetPhysicalAddress().ToString();
                 }
             }
-            
+
             return mac;
         }
     }

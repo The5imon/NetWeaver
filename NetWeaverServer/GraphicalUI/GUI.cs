@@ -19,7 +19,7 @@ namespace NetWeaverServer.GraphicalUI
         {
             EventInt = eventInt;
             new Thread(Run).Start();
-            clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
+            //clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
         }
 
         public void Run()

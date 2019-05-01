@@ -22,12 +22,14 @@ namespace NetWeaverServer.Tasks.Jobs
         {
             Job j = new CopyFileJob(Channel, Progress, Args);
             await j.Work();
-            
+            await j.Work();
+            await j.Work();
+
             foreach (ICommand cmd in Commands)
             {
                 Console.WriteLine("Telling {0} to {1}", Client.HostName, cmd);
                 await cmd.Execute(Channel);
-                Reply.WaitOne();
+                Channel.Reply.WaitOne();
                 Progress.NextCommandDone();
             }
         }

@@ -14,15 +14,14 @@ using static NetWeaverServer.Tasks.Operations.LoggingOperation;
 namespace NetWeaverServer.Tasks.Jobs
 {
     public class CopyFileJob : Job
-    {   
+    {
         public CopyFileJob(ClientChannel channel, JobProgress progress, string file)
             : base(channel, progress, file)
         {
             Commands.AddRange(new ICommand[]
             {
                 new ClientExecute("openshare"),
-                new CopyFile(Args),    //TODO: Own Copy does not need ACK
-                new ClientExecute("seefile"),
+                new CopyFile(Args),
                 new ClientExecute("closeshare"),
             });
             Progress.SetCommandCount(Commands.Count);
@@ -32,9 +31,9 @@ namespace NetWeaverServer.Tasks.Jobs
         {
             foreach (ICommand cmd in Commands)
             {
-                Console.WriteLine("Telling {0} to {1}", Client.HostName, cmd);
+                //Console.WriteLine("Telling {0} to {1}", Client.HostName, cmd);
                 await cmd.Execute(Channel);
-                Reply.WaitOne();
+                Channel.Reply.WaitOne();
                 Progress.NextCommandDone();
             }
         }
