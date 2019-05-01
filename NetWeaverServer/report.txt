@@ -1,0 +1,11 @@
+Post Test Report (d9245bf It actually works lamao ze dong):
+
+During this commit the following features where successful:
+    - Copying a file to the clients netshare
+
+Prerequisites:
+    - 2 HTL Rennweg windows VMs
+    - both logged in as junioradmin
+    - different hostnames
+
+Keep in mind that opening of the netshare was not tested to its fullest and might not result in proper execution
