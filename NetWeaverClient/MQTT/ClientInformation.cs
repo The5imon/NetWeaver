@@ -43,7 +43,7 @@ namespace NetWeaverClient.MQTT
             while ((line = process.StandardOutput.ReadLine()) != null)
             {
 
-                if (!line.Contains("WLAN")) continue; //Enter correct definition of adapter.
+                if (!line.Contains("Network")) continue; //Enter correct definition of adapter.
                 Console.WriteLine(line);
                 name += Regex.Split(line, "  +")[0];
                 process.Kill();
