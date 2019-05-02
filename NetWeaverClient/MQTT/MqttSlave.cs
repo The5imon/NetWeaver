@@ -27,7 +27,7 @@ namespace NetWeaverClient.MQTT
                 case "openshare":
                     exitCode = Commands.OpenNetShare(); break;
                 case "seefile":
-                    exitCode = Commands.SeeFile("TELLMEWHICHFILE"); break;
+                    exitCode = Commands.SeeFile("TELLMEWHICHFILE"); break; 
                 //Filenamen Übertragungsnachricht mit Simon ausmachen!
                 case "closeshare":
                     exitCode = Commands.CloseNetShare(); break;
@@ -69,20 +69,19 @@ namespace NetWeaverClient.MQTT
         }
         public async Task StartAsync()
         {
-            //Commands.RunPowershellScript(@"C:\Users\Gregor Brunner\OneDrive\Desktop\test.ps1");
+            Commands.RunPowershellScript(@"C:\Users\Gregor Brunner\OneDrive\Desktop\test.ps1");
             await ConnectAsync();
-            _client.ApplicationMessageReceived += OnMessageReceived;
-
-            await SubscribeAsync("/cmd/" + intInfo.Name);
+            //_client.ApplicationMessageReceived += OnMessageReceived;
+            
+            await SubscribeAsync("/cmd/"+intInfo.Name);
             await PublishAsync("/conn", intInfo.Info);
-
-            /*
+        
             while (true)
             {
                 string c = Console.ReadLine();
                 await _client.PublishAsync("/reply/"+intInfo.Name, c);
-            }*/
-        }
+          }
+        }    
         public async Task StopAsync()
         {
             await _client.DisconnectAsync();
