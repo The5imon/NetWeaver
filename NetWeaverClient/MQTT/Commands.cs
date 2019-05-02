@@ -7,13 +7,17 @@ using PcapDotNet.Base;
 namespace NetWeaverClient.MQTT
 {
     public static class Commands
-    {    
-        private static readonly string Scripts = "\"E:\\NetWeaver\\Scripts\"";
+    {
+        private static readonly string Name = "Scripts";
+        private static readonly string Scripts = "\"C:\\NetWeaver\\Scripts\"";
 
         public static int OpenNetShare()
         {
-            string command = "net share Scripts=" + Scripts + "/grant:jeder,FULL";
-            Process p = Process.Start("cmd.exee", command);
+            string command = "New-SmbShare -Name " + Name + " -Path " + Scripts;
+            ProcessStartInfo startInfo = new ProcessStartInfo("powershell.exe", command) 
+                {CreateNoWindow = true, };
+
+            Process p = Process.Start(startInfo);
             return 0;
         }
         public static int SeeFile(string filename)
@@ -26,7 +30,7 @@ namespace NetWeaverClient.MQTT
         }
         public static int CloseNetShare()
         {
-            Process p = Process.Start("cmd.exe", "net share Scripts /delete");
+            Process p = Process.Start("powershell.exe", "Remove-SmbShare -Name " + Name + " -Force");
             return 0;
         }
         public static int ExecuteScript(string filename)

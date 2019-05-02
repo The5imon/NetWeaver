@@ -22,6 +22,8 @@ namespace NetWeaverClient.MQTT
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
             int exitCode = 0;
+            // string filename = e.ApplicationMessage.ConvertPayloadToString().Split();
+            
             switch (e.ApplicationMessage.ConvertPayloadToString())
             {
                 case "openshare":
@@ -69,7 +71,7 @@ namespace NetWeaverClient.MQTT
         }
         public async Task StartAsync()
         {
-            Commands.RunPowershellScript(@"C:\Users\Gregor Brunner\OneDrive\Desktop\test.ps1");
+            Commands.CloseNetShare();
             await ConnectAsync();
             //_client.ApplicationMessageReceived += OnMessageReceived;
             
