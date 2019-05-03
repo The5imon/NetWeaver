@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using MQTTnet;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
@@ -9,6 +10,7 @@ namespace NetWeaverServer.Tasks.Operations
     public class ClientOperation
     {
         private static string connectionTopic = "/conn";
+        private static string disconnectionTopic = "/disconn";
         private MqttMaster Channel { get; }
 
         private GUI GUI { get; }
@@ -17,6 +19,7 @@ namespace NetWeaverServer.Tasks.Operations
             GUI = gui;
             Channel = communication;
             Channel.MessageReceivedEvent += OnClientConnect;
+            Channel.MessageReceivedEvent += OnClientDisconnect;
         }
 
         private void OnClientConnect(object sender, MqttApplicationMessageReceivedEventArgs e)
@@ -27,6 +30,16 @@ namespace NetWeaverServer.Tasks.Operations
                 string[] args = e.ApplicationMessage.ConvertPayloadToString().Split('&');
                 //Database entry + trigger update event
                 GUI.clients.Add(new Client(args[1], args[0], args[2]));
+            }
+        }
+
+        private void OnClientDisconnect(object sender, MqttApplicationMessageReceivedEventArgs e)
+        {
+            if (e.ApplicationMessage.Topic.Equals(disconnectionTopic))
+            {
+                Console.WriteLine("Client disconnected " + e.ClientId);
+                //Database entry + trigger update event
+                GUI.clients.RemoveAll(x => x.HostName.Equals("WIN10-CLIENT"));    //Works but need info
             }
         }
     }

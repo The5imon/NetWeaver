@@ -7,18 +7,19 @@ namespace NetWeaverServer.Tasks.Commands
 {
     public class CopyFile : ICommand
     {
-        private string Path { get; }
+        private string Filepath { get; }
 
-        public CopyFile(string path)
+        public CopyFile(string filepath)
         {
-            Path = path;
+            Filepath = filepath;
         }
 
         public async Task Execute(ClientChannel channel)
         {
-            //TODO: Only file name pathn
-            await Task.Run(() => File.Copy(Path, @"\\" + channel.Client.HostName + @"\\Scripts\" + Path, true));
-            await new ClientExecute("seefile").Execute(channel);
+            await Task.Run(() =>
+                File.Copy(Filepath,
+                    @"\\" + channel.Client.HostName + @"\\Scripts\" + Path.GetFileName(Filepath), true));
+            await new ClientExecute(Cmd.Seefile).Execute(channel);
         }
     }
 }

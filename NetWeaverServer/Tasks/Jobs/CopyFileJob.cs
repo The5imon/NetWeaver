@@ -20,9 +20,9 @@ namespace NetWeaverServer.Tasks.Jobs
         {
             Commands.AddRange(new ICommand[]
             {
-                new ClientExecute("openshare"),
+                new ClientExecute(Cmd.Openshare),
                 new CopyFile(Args),
-                new ClientExecute("closeshare"),
+                new ClientExecute(Cmd.Closeshare),
             });
             Progress.SetCommandCount(Commands.Count);
         }

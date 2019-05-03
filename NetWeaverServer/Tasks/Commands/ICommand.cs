@@ -8,9 +8,16 @@ using NetWeaverServer.MQTT;
 
 namespace NetWeaverServer.Tasks.Commands
 {
-    //TODO: Use Commands to actually do things --> Use Commands on Client to actually do things!!!
     public interface ICommand
     {
         Task Execute(ClientChannel channel);
+    }
+
+    public class Cmd
+    {
+        public const string Exescript = "exescript";
+        public const string Openshare = "openshare";
+        public const string Closeshare = "closeshare";
+        public const string Seefile = "seefile";
     }
 }

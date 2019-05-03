@@ -13,7 +13,6 @@ using NetWeaverServer.MQTT;
 namespace NetWeaverServer.Tasks.Jobs
 {
     public class JobManager
-    //TODO: IDEA Three Levels of Jobs (Need Commands)
     /**
      * Passive: Operation e.g. LoggingOperation
      * Active Job: Job that accomplishes one Action on one Client by executing smaller Commands

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.Tasks.Operations;
 using NetWeaverServer.MQTT;
-using static NetWeaverServer.Datastructure.DbConnect;
 
 namespace NetWeaverServer.Main
 {

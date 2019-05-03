@@ -19,17 +19,20 @@ namespace NetWeaverClient.MQTT
             _client = new MqttFactory().CreateMqttClient();
         }
 
+        //TODO: Gregor wir müssen uns doch irgendwie das disconnected ausmachen;
+        //    entweder am Server den hostname des clients in /disconn posten OnDisconnect oder als last will irgendwie
+
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
             int exitCode = 0;
             // string filename = e.ApplicationMessage.ConvertPayloadToString().Split();
-            
+
             switch (e.ApplicationMessage.ConvertPayloadToString())
             {
                 case "openshare":
                     exitCode = Commands.OpenNetShare(); break;
                 case "seefile":
-                    exitCode = Commands.SeeFile("TELLMEWHICHFILE"); break; 
+                    exitCode = Commands.SeeFile("TELLMEWHICHFILE"); break;
                 //Filenamen Übertragungsnachricht mit Simon ausmachen!
                 case "closeshare":
                     exitCode = Commands.CloseNetShare(); break;
@@ -74,16 +77,16 @@ namespace NetWeaverClient.MQTT
             Commands.CloseNetShare();
             await ConnectAsync();
             //_client.ApplicationMessageReceived += OnMessageReceived;
-            
+
             await SubscribeAsync("/cmd/"+intInfo.Name);
             await PublishAsync("/conn", intInfo.Info);
-        
+
             while (true)
             {
                 string c = Console.ReadLine();
                 await _client.PublishAsync("/reply/"+intInfo.Name, c);
           }
-        }    
+        }
         public async Task StopAsync()
         {
             await _client.DisconnectAsync();
