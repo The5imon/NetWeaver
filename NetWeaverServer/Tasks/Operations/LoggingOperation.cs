@@ -10,6 +10,7 @@ namespace NetWeaverServer.Tasks.Operations
 {
     public class LoggingOperation
     {
+        //TODO: Definitely not done (30%), needs improvement
         private const string LOG = "NetWeaver";
         private static string layout = "{0:dd-MM-yy HH:mm:ss} {1,-11} {2:S}";
         private const string Topic = "/log/";

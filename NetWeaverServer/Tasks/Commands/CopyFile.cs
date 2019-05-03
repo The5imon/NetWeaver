@@ -16,10 +16,12 @@ namespace NetWeaverServer.Tasks.Commands
 
         public async Task Execute(ClientChannel channel)
         {
+            string filename = Path.GetFileName(Filepath);
             await Task.Run(() =>
                 File.Copy(Filepath,
-                    @"\\" + channel.Client.HostName + @"\\Scripts\" + Path.GetFileName(Filepath), true));
-            await new ClientExecute(Cmd.Seefile).Execute(channel);
+                    @"\\" + channel.Client.HostName + @"\\Scripts\" + filename, true));
+            //TODO: Format commands for better structure
+            await new ClientExecute($"{Cmd.Seefile} {filename}").Execute(channel);
         }
     }
 }
