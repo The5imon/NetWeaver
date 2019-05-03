@@ -44,7 +44,7 @@ namespace NetWeaverServer.Datastructure
         /// <value>Returns a String to display a Client</value>
         public override string ToString()
         {
-            return $"Client: {HostName} MAC: {MAC} IP: {IPAddress} isOnline: {IsOnline} lastSeen: {LastSeen}";
+            return $"Client:[{HostName}, MAC: {MAC}, IP: {IPAddress}, isOnline: {IsOnline}, lastSeen: {LastSeen}]";
         }
 
         private int roomNumber(String ip)
