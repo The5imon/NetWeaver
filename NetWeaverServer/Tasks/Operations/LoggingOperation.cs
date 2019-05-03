@@ -2,38 +2,55 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using MQTTnet;
 using NetWeaverServer.Datastructure;
+using NetWeaverServer.MQTT;
 
 namespace NetWeaverServer.Tasks.Operations
 {
     public class LoggingOperation
     {
-        public static LoggingOperation Logger = new LoggingOperation();
-
         private const string LOG = "NetWeaver";
-        private string layout = "{0:dd-MM-yy HH:mm:ss} {1,-11} {2:S}";
+        private static string layout = "{0:dd-MM-yy HH:mm:ss} {1,-11} {2:S}";
+        private const string Topic = "/log/";
 
-        public async void Error(object caller, string message)
+        private MqttMaster Channel { get; }
+
+        public LoggingOperation(MqttMaster channel)
+        {
+            Channel = channel;
+            channel.MessageReceivedEvent += OnClientLog;
+        }
+
+        private async void OnClientLog(object sender, MqttApplicationMessageReceivedEventArgs e)
+        {
+            if (e.ApplicationMessage.ConvertPayloadToString().StartsWith(Topic))
+            {
+                await WriteLog(this, EventLogEntryType.Error, "naga");
+            }
+        }
+
+        public static async void Error(object caller, string message)
         {
             await WriteLog(caller, EventLogEntryType.Error, message);
         }
 
-        public async void Warning(object caller, string message)
+        public static async void Warning(object caller, string message)
         {
             await WriteLog(caller, EventLogEntryType.Warning, message);
         }
 
-        public async void Info(object caller, string message)
+        public static async void Info(object caller, string message)
         {
             await WriteLog(caller, EventLogEntryType.Information, message);
         }
 
-        public async void Debug(string message)
+        public static async void Debug(string message)
         {
             await Task.Run(() => Console.WriteLine(string.Format(layout, DateTime.Now, "[DEBUG]", message)));
         }
 
-        private async Task WriteLog(object caller, EventLogEntryType type, string message)
+        private static async Task WriteLog(object caller, EventLogEntryType type, string message)
         /**
          * Can Log Server System and Client Information (dependent on caller)
          */

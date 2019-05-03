@@ -20,13 +20,13 @@ namespace NetWeaverServer.Main
         //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         //TODO: Gustl fragen wie man am besten unmanaged resourcen handeln kann (aka. DB, MQTT, EventView)
         //Resources
-        private static EventInterface _eventInterface = new EventInterface();
+        private static EventInterface eventInterface = new EventInterface();
         private static DbConnect dbconnection;
         private static MqttBroker mqttbroker;
         private static MqttMaster mqttmaster;
 
         //Operations
-        //public static LoggingOperation Logger = new LoggingOperation();
+        public static LoggingOperation Logger;
         public static ClientOperation Registration;
 
         //Main Components
@@ -47,28 +47,27 @@ namespace NetWeaverServer.Main
             StartServer();
         }
 
-        public static void POCLogging()
-        {
-            LoggingOperation eventlog = new LoggingOperation();
-            Console.WriteLine(eventlog.GetType());
-
-            eventlog.Info(eventlog, "Program has been started");
-            Console.ReadKey();
-            EventLog.Delete("NetWeaver");
-        }
-
         public static void StartServer()
         {
+            //Setup MQTT Server/Broker; Acts like a hub, reposting every publish
             mqttbroker = new MqttBroker(6666);
             Task.Run(() => mqttbroker.StartAsync());
+            
+            //Setup MQTT Master; Special MQTT Client that listen to every publish and can respond
             mqttmaster = new MqttMaster("127.0.0.1", 6666);
             Task.Run(() => mqttmaster.StartAsync());
 
-            GUI = new GUI(_eventInterface); // + Database connection
-            Server = new Server(_eventInterface, mqttmaster); // + Database access
+            //Setup Main Components; GUI and Server
+            GUI = new GUI(eventInterface); // + Database connection
+            Server = new Server(eventInterface, mqttmaster); // + Database access
 
+            //Setup Passive Operations
             Registration = new ClientOperation(mqttmaster, GUI);
+            Logger = new LoggingOperation(mqttmaster);
+
+            Console.WriteLine("- - - - - - - - - -");
             Console.WriteLine("Start of Server");
+            Console.WriteLine("- - - - - - - - - -");
         }
 
         public static void ProoveOfWurzer()
