@@ -9,8 +9,9 @@ using NetWeaverServer.Datastructure;
 using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.GraphicalUI;
 using NetWeaverServer.MQTT;
+using NetWeaverServer.Tasks.Jobs;
 
-namespace NetWeaverServer.Tasks.Jobs
+namespace NetWeaverServer.Tasks
 {
     public class JobManager
     /**

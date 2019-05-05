@@ -7,7 +7,7 @@ using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.Main;
 using NetWeaverServer.MQTT;
 
-namespace NetWeaverServer.Tasks.Jobs
+namespace NetWeaverServer.Tasks
 {
     public class DeploymentManager
     {
