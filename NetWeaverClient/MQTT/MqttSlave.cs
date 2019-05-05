@@ -74,7 +74,7 @@ namespace NetWeaverClient.MQTT
         }
         public async Task StartAsync()
         {
-            Commands.CloseNetShare();
+            Commands.RunPowershellScript("test.ps1");
             await ConnectAsync();
             //_client.ApplicationMessageReceived += OnMessageReceived;
 

@@ -1,19 +1,17 @@
-using System;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Policy;
-using PcapDotNet.Base;
+using System;
 
 namespace NetWeaverClient.MQTT
 {
     public static class Commands
     {
         private static readonly string Name = "Scripts";
-        private static readonly string Scripts = "\"C:\\NetWeaver\\Scripts\"";
+        private static readonly string Scripts = "\"C:\\NetWeaver\\Scripts\\";
 
         public static int OpenNetShare()
         {
-            string command = "New-SmbShare -Name " + Name + " -Path " + Scripts;
+            string command = "New-SmbShare -Name " + Name + " -Path " + Scripts + "\"";
             ProcessStartInfo startInfo = new ProcessStartInfo("powershell.exe", command) 
                 {CreateNoWindow = true, };
 
@@ -41,17 +39,26 @@ namespace NetWeaverClient.MQTT
         
         public static int RunPowershellScript(string ps)
         {
-            var processInfo = new ProcessStartInfo("powershell.exe", "-File " + ps);
-            processInfo.CreateNoWindow = true;
-            processInfo.UseShellExecute = false;
+            var processInfo = new ProcessStartInfo("Powershell.exe")
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                Verb = "runas",
+                Arguments = "-Exec Bypass -File " + Scripts + ps + "\""
+            };
 
             var process = Process.Start(processInfo);
+            
+            /*
+            if (process == null) return 0;
             process.WaitForExit();
 
             var errorLevel = process.ExitCode;
             process.Close();
 
             return errorLevel;
+            */
+            return 0;
         }
     }
 }
