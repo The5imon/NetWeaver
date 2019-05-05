@@ -10,11 +10,17 @@ namespace NetWeaverServer.MQTT
     {
         private readonly int _port;
         private readonly IMqttServer _server;
-        
+
         public MqttBroker(int port)
         {
             this._port = port;
             _server = new MqttFactory().CreateMqttServer();
+            _server.ClientDisconnected += OnClientDisconnect;
+        }
+
+        private async void OnClientDisconnect(object sender, MqttClientDisconnectedEventArgs e)
+        {
+            await _server.PublishAsync(e.ClientId);
         }
 
         public async Task StartAsync()
@@ -30,8 +36,11 @@ namespace NetWeaverServer.MQTT
 
                 c.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
             });
-            
+
             await _server.StartAsync(options.Build());
         }
+
+
+
     }
 }

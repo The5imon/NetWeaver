@@ -37,9 +37,8 @@ namespace NetWeaverServer.Tasks.Operations
         {
             if (e.ApplicationMessage.Topic.Equals(disconnectionTopic))
             {
-                Console.WriteLine("Client disconnected " + e.ClientId);
                 //Database entry + trigger update event
-                GUI.clients.RemoveAll(x => x.HostName.Equals("WIN10-CLIENT"));    //Works but need info
+                GUI.clients.RemoveAll(x => x.HostName.Equals(e.ApplicationMessage.ConvertPayloadToString()));
             }
         }
     }
