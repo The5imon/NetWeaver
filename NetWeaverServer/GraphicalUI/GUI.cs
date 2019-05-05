@@ -19,7 +19,17 @@ namespace NetWeaverServer.GraphicalUI
         {
             EventInt = eventInt;
             new Thread(Run).Start();
-            //clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "GregorPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "WurzerPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "MaxPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "LukasPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "BrunnerPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "KalchiPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "SpiderPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "ManPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "DasPC", "127.0.0.1"));
+
         }
 
         public void Run()
@@ -42,6 +52,15 @@ namespace NetWeaverServer.GraphicalUI
                         }
                         TaskDetails taskDetails = new TaskDetails(clients, progress, args[1]);
                         EventInt.GetExecuteScriptEvent().Invoke(this, taskDetails);
+                        break;
+                    case "deploy":
+                        if (args.Length < 2)
+                        {
+                            Console.WriteLine("Missing a file");
+                            continue;
+                        }
+                        TaskDetails td = new TaskDetails(clients, progress, args[1]);
+                        EventInt.GetDeploymentEvent().Invoke(this, td);
                         break;
                     case "list":
                         PrintClients();

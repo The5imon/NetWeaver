@@ -34,7 +34,6 @@ namespace NetWeaverServer.Tasks.Jobs
         /// </summary>
         private Type Job { get; }
         private List<Client> Clients { get; }
-
         private string Args { get; }
 
         /// <summary>

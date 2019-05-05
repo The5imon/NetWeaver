@@ -5,13 +5,17 @@ using NetWeaverServer.MQTT;
 
 namespace NetWeaverServer.Tasks.Commands
 {
-    public class CopyFile : ICommand
+    public class CopyExecute : ICommand
     {
+        public static string SCRIPTS = @"Scripts\";
+        public static string INSTALL = @"Install\";
         private string Filepath { get; }
+        private string Destination { get; }
 
-        public CopyFile(string filepath)
+        public CopyExecute(string filepath, string destination)
         {
             Filepath = filepath;
+            Destination = destination;
         }
 
         public async Task Execute(ClientChannel channel)
@@ -19,7 +23,7 @@ namespace NetWeaverServer.Tasks.Commands
             string filename = Path.GetFileName(Filepath);
             await Task.Run(() =>
                 File.Copy(Filepath,
-                    @"\\" + channel.Client.HostName + @"\\Scripts\" + filename, true));
+                    @"\\" + channel.Client.HostName + @"\\" + Destination + filename, true));
             //TODO: Format commands for better structure
             await new ClientExecute($"{Cmd.Seefile} {filename}").Execute(channel);
         }

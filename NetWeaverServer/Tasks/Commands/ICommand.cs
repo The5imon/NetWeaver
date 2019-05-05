@@ -19,5 +19,6 @@ namespace NetWeaverServer.Tasks.Commands
         public const string Openshare = "openshare";
         public const string Closeshare = "closeshare";
         public const string Seefile = "seefile";
+        public const string Copy = "copy";
     }
 }

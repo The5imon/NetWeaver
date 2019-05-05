@@ -16,7 +16,9 @@ namespace NetWeaverServer.GraphicalUI
          */
         //GUI Events
         public event EventHandler<TaskDetails> ExecuteScriptEvent;
-        
+
+        public event EventHandler<TaskDetails> DeploymentEvent;
+
         //Server Events
         public event EventHandler<TaskDetails> UpdatedContentEvent;
 
@@ -24,9 +26,14 @@ namespace NetWeaverServer.GraphicalUI
             return ExecuteScriptEvent;
         }
 
+        public EventHandler<TaskDetails> GetDeploymentEvent()
+        {
+            return DeploymentEvent;
+        }
+
         public EventHandler<TaskDetails> GetUpdatedContentEvent()
         {
             return UpdatedContentEvent;
-        } 
+        }
     }
 }
