@@ -189,6 +189,11 @@ namespace NetWeaverServer.Datastructure
                 $"SET foreign_key_checks = 0; UPDATE client SET hostname = '{client.HostName}',ipaddress = '{client.IPAddress}'" +
                 $",fk_pk_roomnumber = '{client.RoomNumber}',last_seen = STR_TO_DATE('{client.LastSeen}', '%d-%m-%Y'),is_online = {client.IsOnline} WHERE pk_macaddr = '{client.MAC}'; SET foreign_key_checks = 1;");
         }
+        public void SetClientStatus(String hostname, Boolean status)
+        {
+            Update(
+                $"SET foreign_key_checks = 0; UPDATE client SET is_online = {status} WHERE hostname = '{hostname}'; SET foreign_key_checks = 1;");
+        }
 
         public void updateRoom(Room room)
         {
@@ -234,5 +239,6 @@ namespace NetWeaverServer.Datastructure
         {
             Delete($"DELETE FROM room WHERE pk_roomNumber = '{room.RoomNumber}';");
         }
+        
     }
 }

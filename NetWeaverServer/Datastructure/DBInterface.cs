@@ -21,13 +21,9 @@ namespace NetWeaverServer.Datastructure
         public DBInterface(DbConnect DB)
         {
             DataBase = DB;
-            Thread.Sleep(20);
             getAllRooms();
             getAllClients();
         }
-
-        //TODO: Nenn es lieber nicht getClientList sonder getAllRooms/getAllCLients oder so was (für alles)
-
 
         #region listParse
 
@@ -51,6 +47,15 @@ namespace NetWeaverServer.Datastructure
 
         #region DatabaseControl
 
+        public void setOffline(string hostname)
+        {
+            DataBase.SetClientStatus(hostname, false);
+         }
+        
+        public void setOnline(string hostname)
+        {
+            DataBase.SetClientStatus(hostname , true);
+        }
         public void updateClients(List<Client> clients)
         {
             DataBase.OpenConnection();
@@ -92,7 +97,6 @@ namespace NetWeaverServer.Datastructure
             getAllRooms();
         }
 
-        //AddClient
         public void insertClients(List<Client> clients)
         {
             DataBase.OpenConnection();
@@ -134,11 +138,9 @@ namespace NetWeaverServer.Datastructure
             foreach (var client in clients)
             {
                 DataBase.DeleteClient(client);
+                Clients.Remove(client);
             }
             DataBase.CloseConnection();
-            emptyLists();
-            getAllClients();
-            getAllRooms();
         }
         
         public void deleteClientByHostname(string hostname)
@@ -149,12 +151,10 @@ namespace NetWeaverServer.Datastructure
                 if (client.HostName.Equals(hostname))
                 {
                     DataBase.DeleteClient(client);
+                    Clients.Remove(client);
                 }
             }
             DataBase.CloseConnection();
-            emptyLists();
-            getAllClients();
-            getAllRooms();
         }
 
         public void deleteRoom(List<Room> rooms)
@@ -201,7 +201,7 @@ namespace NetWeaverServer.Datastructure
             }
         }
 
-
+        //todo Räume erstellen wenn nicht vorhanden auf basis von ip
         private Client createClient(String clientData)
         {
             string mac = clientData.Split('~')[0];
