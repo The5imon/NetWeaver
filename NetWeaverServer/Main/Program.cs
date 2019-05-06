@@ -81,9 +81,10 @@ namespace NetWeaverServer.Main
             var clients = dbi.getClientList();
             var rooms = dbi.getRoomList();
 
-            dbi.deleteClient(clients);
-
-            Console.WriteLine(clients.Count);
+            foreach (Client client in clients)
+            {
+                Console.WriteLine(client.ToString());
+            }
             
         }
     }
