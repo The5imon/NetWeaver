@@ -81,10 +81,7 @@ namespace NetWeaverServer.Main
             var clients = dbi.getClientList();
             var rooms = dbi.getRoomList();
 
-            foreach (Client client in clients)
-            {
-                Console.WriteLine(client.ToString());
-            }
+            dbi.setOffline("CLIENT_WURZER");
             
         }
     }
