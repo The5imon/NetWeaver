@@ -49,12 +49,22 @@ namespace NetWeaverServer.Datastructure
 
         public void setOffline(string hostname)
         {
+            DataBase.OpenConnection();
             DataBase.SetClientStatus(hostname, false);
+            DataBase.CloseConnection();
+            emptyLists();
+            getAllClients();
+            getAllRooms();
          }
         
         public void setOnline(string hostname)
         {
+            DataBase.OpenConnection();
             DataBase.SetClientStatus(hostname , true);
+            DataBase.CloseConnection();
+            emptyLists();
+            getAllClients();
+            getAllRooms();
         }
         public void updateClients(List<Client> clients)
         {
@@ -104,6 +114,7 @@ namespace NetWeaverServer.Datastructure
             {
                 if (isInClientList(client.MAC))
                 {
+                    setOnline(client.HostName);
                     updateSingleClient(client);
                 }
                 else
