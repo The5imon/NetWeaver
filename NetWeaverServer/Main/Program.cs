@@ -81,7 +81,7 @@ namespace NetWeaverServer.Main
             var clients = dbi.getClientList();
             var rooms = dbi.getRoomList();
 
-            dbi.setOffline("CLIENT_WURZER");
+           // dbi.setOffline("CLIENT_WURZER");
             
         }
     }
