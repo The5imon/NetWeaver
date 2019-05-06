@@ -35,7 +35,10 @@ namespace NetWeaverServer.Tasks.Operations
                 Console.WriteLine("New Client connected");
                 string[] args = e.ApplicationMessage.ConvertPayloadToString().Split('&');
                 //Database entry + trigger update event
-                DBInterface.insertClients(new List<Client>{new Client(args[1], args[0], args[2])});
+                DBInterface.insertClients(new List<Client>
+                {
+                    new Client(args[1], args[0], args[2], true, DateTime.Today.ToString("dd-MM-yyyy"))
+                });
                 //GUI.clients.Add(new Client(args[1], args[0], args[2]));
                 EventInterface.GetUpdatedContentEvent().Invoke(this, EventArgs.Empty);
             }
