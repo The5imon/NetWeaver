@@ -46,7 +46,7 @@ namespace NetWeaverServer.Tasks.Operations
             if (e.ApplicationMessage.Topic.Equals(disconnectionTopic))
             {
                 //Database entry + trigger update event
-                DBInterface.deleteClientByHostname(e.ApplicationMessage.ConvertPayloadToString());
+                DBInterface.setOffline(e.ApplicationMessage.ConvertPayloadToString());
                 //GUI.clients.RemoveAll(x => x.HostName.Equals(e.ApplicationMessage.ConvertPayloadToString()));
                 EventInterface.GetUpdatedContentEvent().Invoke(this, EventArgs.Empty);
             }
