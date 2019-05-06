@@ -10,6 +10,7 @@ namespace NetWeaverServer.Datastructure.Arguments
         public double Percentage { get; private set; } = 0;
         public bool Done { get; private set; } = false;
         private int CommandCount { get; set; }
+
         public JobProgress(Client client)
         {
             Client = client;

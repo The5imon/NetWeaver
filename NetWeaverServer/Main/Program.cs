@@ -17,11 +17,11 @@ namespace NetWeaverServer.Main
          * Command = Executes one small bit of Work (Client or Server)
          */
 
-        //TODO: Gustl fragen ob ich lieber diese einpaar Objekte statisch mache
         //TODO: Gustl fragen wie man am besten unmanaged resourcen handeln kann (aka. DB, MQTT, EventView)
         //Resources
         private static EventInterface eventInterface = new EventInterface();
         private static DbConnect dbconnection;
+        private static DBInterface dbInterface;
         private static MqttBroker mqttbroker;
         private static MqttMaster mqttmaster;
 
@@ -52,17 +52,21 @@ namespace NetWeaverServer.Main
             //Setup MQTT Server/Broker; Acts like a hub, reposting every publish
             mqttbroker = new MqttBroker(6666);
             Task.Run(() => mqttbroker.StartAsync());
-            
+
             //Setup MQTT Master; Special MQTT Client that listen to every publish and can respond
             mqttmaster = new MqttMaster("127.0.0.1", 6666);
             Task.Run(() => mqttmaster.StartAsync());
+            
+            //Setup Database Connection; Interface for specific queries
+            //dbconnection = new DbConnect();
+            //dbInterface = new DBInterface(dbconnection);
 
             //Setup Main Components; GUI and Server
             GUI = new GUI(eventInterface); // + Database connection
             Server = new Server(eventInterface, mqttmaster); // + Database access
 
             //Setup Passive Operations
-            Registration = new ClientOperation(mqttmaster, GUI);
+            Registration = new ClientOperation(mqttmaster, GUI, dbInterface, eventInterface);
             Logger = new LoggingOperation(mqttmaster);
 
             Console.WriteLine("- - - - - - - - - -");

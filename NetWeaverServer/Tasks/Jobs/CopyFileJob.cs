@@ -21,7 +21,7 @@ namespace NetWeaverServer.Tasks.Jobs
             Commands.AddRange(new ICommand[]
             {
                 new ClientExecute(Cmd.Openshare),
-                new CopyFile(Args),
+                new CopyExecute(Args, CopyExecute.SCRIPTS),
                 new ClientExecute(Cmd.Closeshare),
             });
             Progress.SetCommandCount(Commands.Count);

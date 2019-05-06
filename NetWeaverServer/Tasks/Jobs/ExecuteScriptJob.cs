@@ -29,6 +29,8 @@ namespace NetWeaverServer.Tasks.Jobs
                 Channel.Reply.WaitOne();
                 Progress.NextCommandDone();
             }
+
+            await new CopyFileJob(Channel, Progress, Args).Work();
         }
     }
 }
