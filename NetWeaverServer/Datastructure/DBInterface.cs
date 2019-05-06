@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace NetWeaverServer.Datastructure
 {
     public class DBInterface
     {
         private DbConnect DataBase;
-        public List<Client> Clients = new List<Client>();
-        public List<Room> Rooms = new List<Room>();
-        private List<int> roomNumbers = new List<int>();
+        private List<Client> Clients = new List<Client>();
+        private List<Room> Rooms = new List<Room>();
 
         //TODO: Konzentriere dich lieber auf logische Hintergründe der Datenbank
         /**
@@ -21,25 +21,34 @@ namespace NetWeaverServer.Datastructure
         public DBInterface(DbConnect DB)
         {
             DataBase = DB;
+            parseRoomList();
+            parseClientList();
         }
-        
+
         //TODO: Nenn es lieber nicht getClientList sonder getAllRooms/getAllCLients oder so was (für alles)
 
-        public List<Client> getClientList()
+
+        #region listParse
+
+        public void parseClientList()
         {
             DataBase.OpenConnection();
             var clientData = DataBase.GetAllClients();
             DataBase.CloseConnection();
-            return parseClientList(Parse(clientData));
+            parseClientList(Parse(clientData));
         }
 
-        public List<Room> getRoomList()
+        public void parseRoomList()
         {
             DataBase.OpenConnection();
             var roomData = DataBase.GetAllRooms();
             DataBase.CloseConnection();
-            return parseRoomList(Parse(roomData));
+            parseRoomList(Parse(roomData));
         }
+
+        #endregion
+
+        #region DatabaseControl
 
         public void updateClient(List<Client> clients)
         {
@@ -48,9 +57,25 @@ namespace NetWeaverServer.Datastructure
             {
                 DataBase.updateClient(client);
             }
-
+            
             DataBase.CloseConnection();
+            emptyLists();
+            parseClientList();
+            parseRoomList();
         }
+
+        public void updateSingleClient(Client client)
+        {
+            DataBase.OpenConnection();
+
+            DataBase.updateClient(client);
+            
+            DataBase.CloseConnection();
+            emptyLists();
+            parseClientList();
+            parseRoomList();
+        }
+
         //TODO: Einen Room werde ich nie Updaten
         public void updateRoom(List<Room> rooms)
         {
@@ -59,21 +84,36 @@ namespace NetWeaverServer.Datastructure
             {
                 DataBase.updateRoom(room);
             }
-
+            
+            
             DataBase.CloseConnection();
+            emptyLists();
+            parseClientList();
+            parseRoomList();
         }
+
         //AddClient
         public void insertClient(List<Client> clients)
         {
             DataBase.OpenConnection();
             foreach (var client in clients)
             {
-                DataBase.InsertClient(client);
+                if (isInClientList(client.MAC))
+                {
+                    updateSingleClient(client);
+                }
+                else
+                {
+                    DataBase.InsertClient(client);
+                }
             }
-
+            
             DataBase.CloseConnection();
+            emptyLists();
+            parseClientList();
+            parseRoomList();
         }
-        
+
         public void insertRoom(List<Room> rooms)
         {
             DataBase.OpenConnection();
@@ -81,8 +121,11 @@ namespace NetWeaverServer.Datastructure
             {
                 DataBase.InsertRoom(room);
             }
-
+           
             DataBase.CloseConnection();
+            emptyLists();
+            parseClientList();
+            parseRoomList();
         }
 
         public void deleteClient(List<Client> clients)
@@ -92,8 +135,10 @@ namespace NetWeaverServer.Datastructure
             {
                 DataBase.DeleteClient(client);
             }
-
             DataBase.CloseConnection();
+            emptyLists();
+            parseClientList();
+            parseRoomList();
         }
 
         public void deleteRoom(List<Room> rooms)
@@ -103,9 +148,14 @@ namespace NetWeaverServer.Datastructure
             {
                 DataBase.DeleteRoom(room);
             }
-
+            emptyLists();
+            parseClientList();
+            parseRoomList();
             DataBase.CloseConnection();
         }
+
+        #endregion
+
 
         public static List<String> Parse(List<List<String>> dataList)
         {
@@ -119,28 +169,20 @@ namespace NetWeaverServer.Datastructure
             return values;
         }
 
-        public List<Client> parseClientList(List<String> dataString)
+        public void parseClientList(List<String> dataString)
         {
-            List<Client> clients = new List<Client>();
-
             foreach (var clientData in dataString)
             {
-                clients.Add(createClient(clientData));
+                Clients.Add(createClient(clientData));
             }
-
-            return clients;
         }
 
-        public List<Room> parseRoomList(List<String> dataString)
+        public void parseRoomList(List<String> dataString)
         {
-            List<Room> rooms = new List<Room>();
-
             foreach (var roomData in dataString)
             {
-                rooms.Add(createRoom(roomData));
+                Rooms.Add(createRoom(roomData));
             }
-
-            return rooms;
         }
 
 
@@ -153,12 +195,22 @@ namespace NetWeaverServer.Datastructure
             string lastSeen = clientData.Split('~')[4];
             bool isOnline = bool.Parse(clientData.Split('~')[5]);
 
-            if (!roomNumbers.Contains(roomNumber))
+            if (isInRoomList(roomNumber) == false)
             {
                 Rooms.Add(new Room(roomNumber));
             }
 
-            return new Client(mac, hostName, ipAddress, isOnline, lastSeen);
+            return new Client(mac, roomNumber, hostName, ipAddress, isOnline, lastSeen);
+        }
+
+        public List<Client> getClientList()
+        {
+            return Clients;
+        }
+
+        public List<Room> getRoomList()
+        {
+            return Rooms;
         }
 
         private Room createRoom(String roomData)
@@ -169,6 +221,38 @@ namespace NetWeaverServer.Datastructure
             string Subnetmask = roomData.Split('~')[3];
 
             return new Room(RoomNumber, Roomname, Netmask, Subnetmask);
+        }
+
+        private bool isInClientList(string mac)
+        {
+            foreach (Client client in Clients)
+            {
+                if (client.RoomNumber.Equals(mac))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool isInRoomList(int roomNumber)
+        {
+            foreach (Room room in Rooms)
+            {
+                if (room.RoomNumber == roomNumber)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void emptyLists()
+        {
+         Rooms.Clear();
+         Clients.Clear();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace NetWeaverServer.Datastructure
 {
     public class DbConnect
     {
-        //TODO:Vereinfachung, automatisches Backup?, json oder csv
+        //TODO:json or csv
 
         //The MySQL connection
         private MySqlConnection _connection;
@@ -42,7 +42,7 @@ namespace NetWeaverServer.Datastructure
             _port = port;
             string connectionString;
             connectionString = $"SERVER={_server};Port={_port};Database={_database};Uid={_uid};Pwd={_password};";
-            _connection = new MySqlConnection(connectionString); //TODO: Testen
+            _connection = new MySqlConnection(connectionString);
         }
 
 
@@ -183,7 +183,7 @@ namespace NetWeaverServer.Datastructure
 
         public void updateClient(Client client)
         {
-            //TODO: testen
+            
 
             Update(
                 $"SET foreign_key_checks = 0; UPDATE client SET hostname = '{client.HostName}',ipaddress = '{client.IPAddress}'" +
@@ -192,8 +192,6 @@ namespace NetWeaverServer.Datastructure
 
         public void updateRoom(Room room)
         {
-            //TODO: testen
-
             Update(
                 $"SET foreign_key_checks = 0; UPDATE room SET roomdescription = '{room.Roomname}',netmask = '{room.Netmask}'" +
                 $",subnetmask = '{room.Subnetmask}' WHERE pk_roomNumber = '{room.RoomNumber}'; SET foreign_key_checks = 1;");
@@ -202,7 +200,7 @@ namespace NetWeaverServer.Datastructure
         //--------------------------------------------------
         //INSERTMETHODS
         //--------------------------------------------------
-        //TODO: Testen, was passiert wenn ich doppelt inserte
+        //TODO: insert twice ?
         public void InsertClient(Client client)
         {
             Insert(
@@ -222,7 +220,7 @@ namespace NetWeaverServer.Datastructure
         //--------------------------------------------------
         //DELETEMETHODS
         //--------------------------------------------------
-        //TODO: Für Client Objects neu machen
+        
         /// <summary>Deletes the given client</summary>
         /// <param name='mac'>The mac from the client</param>
         public void DeleteClient(Client client)

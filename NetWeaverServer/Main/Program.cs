@@ -42,9 +42,9 @@ namespace NetWeaverServer.Main
             Task.Run(() => broker.StartAsync());
             Task.Run(() => master.StartAsync());*/
 
-            //ProoveOfWurzer();
+            ProoveOfWurzer();
             //POCServer();
-            StartServer();
+           // StartServer();
         }
 
         public static void StartServer()
@@ -75,11 +75,12 @@ namespace NetWeaverServer.Main
             DbConnect con = new DbConnect("localhost", "mcondb", "root","htl3r", "3333");
             DBInterface dbi = new DBInterface(con);
             var clients = dbi.getClientList();
+            var rooms = dbi.getRoomList();
 
-            foreach (var client in clients)
-            {
-                Console.WriteLine(client.ToString());
-            }
+            dbi.deleteClient(clients);
+
+            Console.WriteLine(clients.Count);
+            
         }
     }
 }

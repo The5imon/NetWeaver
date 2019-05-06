@@ -3,7 +3,7 @@ using System;
 namespace NetWeaverServer.Datastructure
 {
     public class Client
-    { //TODO:Bug fixing/testen verinfachen? features für 5mion
+    {
         public string MAC { get; }
         public int RoomNumber { get; }
         public string HostName { get; }
