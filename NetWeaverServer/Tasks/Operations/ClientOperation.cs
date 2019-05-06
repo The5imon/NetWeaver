@@ -12,12 +12,17 @@ namespace NetWeaverServer.Tasks.Operations
         private static string connectionTopic = "/conn";
         private static string disconnectionTopic = "/disconn";
         private MqttMaster Channel { get; }
+        private DBInterface DBInterface { get; }
+        private EventInterface EventInterface { get; }
 
         private GUI GUI { get; }
-        public ClientOperation(MqttMaster communication, GUI gui)
+        public ClientOperation(MqttMaster communication, GUI gui, DBInterface dbInterface, EventInterface eventInterface)
         {
             GUI = gui;
             Channel = communication;
+            DBInterface = dbInterface;
+            EventInterface = eventInterface;
+
             Channel.MessageReceivedEvent += OnClientConnect;
             Channel.MessageReceivedEvent += OnClientDisconnect;
         }
@@ -30,6 +35,7 @@ namespace NetWeaverServer.Tasks.Operations
                 string[] args = e.ApplicationMessage.ConvertPayloadToString().Split('&');
                 //Database entry + trigger update event
                 GUI.clients.Add(new Client(args[1], args[0], args[2]));
+                EventInterface.GetUpdatedContentEvent().Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -39,6 +45,7 @@ namespace NetWeaverServer.Tasks.Operations
             {
                 //Database entry + trigger update event
                 GUI.clients.RemoveAll(x => x.HostName.Equals(e.ApplicationMessage.ConvertPayloadToString()));
+                EventInterface.GetUpdatedContentEvent().Invoke(this, EventArgs.Empty);
             }
         }
     }
