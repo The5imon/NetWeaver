@@ -35,7 +35,7 @@ namespace NetWeaverServer.Tasks.Operations
                 Console.WriteLine("New Client connected");
                 string[] args = e.ApplicationMessage.ConvertPayloadToString().Split('&');
                 //Database entry + trigger update event
-                DBInterface.insertClient(new List<Client>{new Client(args[1], args[0], args[2])});
+                DBInterface.insertClients(new List<Client>{new Client(args[1], args[0], args[2])});
                 //GUI.clients.Add(new Client(args[1], args[0], args[2]));
                 EventInterface.GetUpdatedContentEvent().Invoke(this, EventArgs.Empty);
             }
@@ -46,7 +46,8 @@ namespace NetWeaverServer.Tasks.Operations
             if (e.ApplicationMessage.Topic.Equals(disconnectionTopic))
             {
                 //Database entry + trigger update event
-                GUI.clients.RemoveAll(x => x.HostName.Equals(e.ApplicationMessage.ConvertPayloadToString()));
+                DBInterface.deleteClientByHostname(e.ApplicationMessage.ConvertPayloadToString());
+                //GUI.clients.RemoveAll(x => x.HostName.Equals(e.ApplicationMessage.ConvertPayloadToString()));
                 EventInterface.GetUpdatedContentEvent().Invoke(this, EventArgs.Empty);
             }
         }

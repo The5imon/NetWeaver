@@ -12,7 +12,7 @@ namespace NetWeaverServer.GraphicalUI
 {
     public class GUI
     {
-        public List<Client> clients = new List<Client>();
+        public List<Client> clients;
         private EventInterface EventInt { get; }
         private DBInterface DbInterface { get; }
 
@@ -20,6 +20,7 @@ namespace NetWeaverServer.GraphicalUI
         {
             EventInt = eventInt;
             DbInterface = dbInterface;
+            clients = dbInterface.getClientList();
             eventInt.UpdatedContentEvent += UpdateContent;
             new Thread(Run).Start();
             
