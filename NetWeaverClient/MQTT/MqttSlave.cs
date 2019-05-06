@@ -76,16 +76,17 @@ namespace NetWeaverClient.MQTT
         {
             Commands.RunPowershellScript("test.ps1");
             await ConnectAsync();
-            //_client.ApplicationMessageReceived += OnMessageReceived;
+            _client.ApplicationMessageReceived += OnMessageReceived;
 
             await SubscribeAsync("/cmd/"+intInfo.Name);
             await PublishAsync("/conn", intInfo.Info);
 
+            /*
             while (true)
             {
                 string c = Console.ReadLine();
                 await _client.PublishAsync("/reply/"+intInfo.Name, c);
-          }
+          }*/
         }
         public async Task StopAsync()
         {
