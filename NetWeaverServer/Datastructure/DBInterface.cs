@@ -256,7 +256,7 @@ namespace NetWeaverServer.Datastructure
         {
             foreach (Client client in Clients)
             {
-                if (client.RoomNumber.Equals(mac))
+                if (client.MAC.Equals(mac))
                 {
                     return true;
                 }
