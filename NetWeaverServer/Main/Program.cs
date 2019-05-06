@@ -58,11 +58,11 @@ namespace NetWeaverServer.Main
             Task.Run(() => mqttmaster.StartAsync());
             
             //Setup Database Connection; Interface for specific queries
-            //dbconnection = new DbConnect();
-            //dbInterface = new DBInterface(dbconnection);
+            dbconnection = new DbConnect("localhost", "mcondb", "root","htl3r", "3333");
+            dbInterface = new DBInterface(dbconnection);
 
             //Setup Main Components; GUI and Server
-            GUI = new GUI(eventInterface); // + Database connection
+            GUI = new GUI(eventInterface, dbInterface); // + Database connection
             Server = new Server(eventInterface, mqttmaster); // + Database access
 
             //Setup Passive Operations
