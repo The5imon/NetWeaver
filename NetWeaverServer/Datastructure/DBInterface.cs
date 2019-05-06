@@ -109,13 +109,13 @@ namespace NetWeaverServer.Datastructure
 
         public void insertClients(List<Client> clients)
         {
+            List<Client> f = new List<Client>();
             DataBase.OpenConnection();
             foreach (var client in clients)
             {
                 if (isInClientList(client.MAC))
                 {
-                    setOnline(client.HostName);
-                    updateSingleClient(client);
+                   f.Add(client);
                 }
                 else
                 {
@@ -124,9 +124,11 @@ namespace NetWeaverServer.Datastructure
             }
             
             DataBase.CloseConnection();
-            emptyLists();
-            getAllClients();
-            getAllRooms();
+            foreach (Client client in f)
+            {
+                client.IsOnline = true;
+            }
+            updateClients(f);
         }
 
         public void insertRooms(List<Room> rooms)
