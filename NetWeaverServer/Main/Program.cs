@@ -42,9 +42,9 @@ namespace NetWeaverServer.Main
             Task.Run(() => broker.StartAsync());
             Task.Run(() => master.StartAsync());*/
 
-            ProoveOfWurzer();
+            //ProoveOfWurzer();
             //POCServer();
-           // StartServer();
+            StartServer();
         }
 
         public static void StartServer()
@@ -58,12 +58,12 @@ namespace NetWeaverServer.Main
             Task.Run(() => mqttmaster.StartAsync());
             
             //Setup Database Connection; Interface for specific queries
-            //dbconnection = new DbConnect();
-            //dbInterface = new DBInterface(dbconnection);
+            dbconnection = new DbConnect("192.168.88.254", "mcondb", "root","htl3r", "3333");
+            dbInterface = new DBInterface(dbconnection);
 
             //Setup Main Components; GUI and Server
-            GUI = new GUI(eventInterface); // + Database connection
-            Server = new Server(eventInterface, mqttmaster); // + Database access
+            GUI = new GUI(eventInterface, dbInterface); // + Database connection
+            Server = new Server(eventInterface, mqttmaster);
 
             //Setup Passive Operations
             Registration = new ClientOperation(mqttmaster, GUI, dbInterface, eventInterface);
