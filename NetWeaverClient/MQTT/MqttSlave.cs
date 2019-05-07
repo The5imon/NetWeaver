@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+using System;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
@@ -19,25 +18,21 @@ namespace NetWeaverClient.MQTT
             _client = new MqttFactory().CreateMqttClient();
         }
 
-        //TODO: Gregor wir müssen uns doch irgendwie das disconnected ausmachen;
-        //    entweder am Server den hostname des clients in /disconn posten OnDisconnect oder als last will irgendwie
-
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
             int exitCode = 0;
-            // string filename = e.ApplicationMessage.ConvertPayloadToString().Split();
+            string file = e.ApplicationMessage.ConvertPayloadToString().Split( )[1];
 
             switch (e.ApplicationMessage.ConvertPayloadToString())
             {
                 case "openshare":
                     exitCode = Commands.OpenNetShare(); break;
                 case "seefile":
-                    exitCode = Commands.SeeFile("TELLMEWHICHFILE"); break;
-                //Filenamen Übertragungsnachricht mit Simon ausmachen!
+                    exitCode = Commands.SeeFile(file); break;
                 case "closeshare":
                     exitCode = Commands.CloseNetShare(); break;
                 case "execscript":
-                    exitCode = Commands.ExecuteScript("test.ps1"); break;
+                    exitCode = Commands.RunPowershellScript(file); break;
                 default:
                     break;
             }
@@ -69,28 +64,26 @@ namespace NetWeaverClient.MQTT
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ipaddress, _port);
 
-
             await _client.ConnectAsync(options.Build());
         }
+        
         public async Task StartAsync()
         {
-            Commands.RunPowershellScript("test.ps1");
+            await Task.Run(() => new DeviceDiscovery());
             await ConnectAsync();
-            //_client.ApplicationMessageReceived += OnMessageReceived;
-
             await SubscribeAsync("/cmd/"+intInfo.Name);
             await PublishAsync("/conn", intInfo.Info);
 
-            while (true)
-            {
-                string c = Console.ReadLine();
-                await _client.PublishAsync("/reply/"+intInfo.Name, c);
-          }
+            _client.ApplicationMessageReceived += OnMessageReceived;
+
+            Console.Read();
         }
+        
         public async Task StopAsync()
         {
             await _client.DisconnectAsync();
         }
+        
         private async Task PublishAsync(string topic, string payload)
         {
             var message = new MqttApplicationMessageBuilder()
@@ -99,6 +92,7 @@ namespace NetWeaverClient.MQTT
 
             await _client.PublishAsync(message.Build());
         }
+        
         private async Task SubscribeAsync(string topic)
         {
             await _client.SubscribeAsync(topic);

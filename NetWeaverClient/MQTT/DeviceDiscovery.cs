@@ -1,17 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Policy;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.SqlServer.Server;
-using PcapDotNet.Core;
-using PcapDotNet.Packets;
 using PcapDotNet.Base;
+using PcapDotNet.Core;
+using PcapDotNet.Core.Extensions;
+using PcapDotNet.Packets;
 using PcapDotNet.Packets.Ethernet;
 
 namespace NetWeaverClient.MQTT
@@ -30,8 +22,9 @@ namespace NetWeaverClient.MQTT
             
             for (int i = 0; i < allDevices.Count; i++)
             {
-                if (!allDevices[i].Description.Equals("Microsoft")) continue;
+                if (!allDevices[i].GetNetworkInterface().Description.Contains("Network")) continue;
                 deviceIndex = i;
+                Console.WriteLine(allDevices[i].Description);
                 break;
             }
 
@@ -47,32 +40,18 @@ namespace NetWeaverClient.MQTT
                     switch (result)
                     {
                         case PacketCommunicatorReceiveResult.Ok:
-                            if (packet.Ethernet.Destination.ToString().Equals("01:00:0c:cc:cc:cc"))
+                            if (b) // Condition für CDP finden 
                             {
-                                // do something.
-
-                                b = false;
+                                //packet decoden hehe :)
+                                Console.WriteLine(packet.BytesSequenceToHexadecimalString());
+                                
                             }
                             break;
-                        case PacketCommunicatorReceiveResult.Timeout:
-                            continue;
                         default:
                             throw new InvalidOperationException();
                     }
                 } while (b);
-
-                //communicator.ReceivePackets(0, PacketHandler) ;
             }
         }
-
-        /*
-        private void PacketHandler(Packet packet)
-        {
-            if (packet.Ethernet.Destination.ToString().Equals("01:00:0c:cc:cc:cc"))
-            {
-                Console.WriteLine(packet.Ethernet.Payload.BytesSequenceToHexadecimalString());
-            }
-        }
-        */
     }
 }
