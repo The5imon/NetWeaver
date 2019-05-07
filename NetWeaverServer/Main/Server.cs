@@ -28,6 +28,12 @@ namespace NetWeaverServer.Main
         {
             EventInt.ExecuteScriptEvent += HandleExecuteScriptEvent;
             EventInt.DeploymentEvent += HandleDeploymentEvent;
+            EventInt.CopyEvent += HandleCopyEvent;
+        }
+
+        private async void HandleCopyEvent(object sender, TaskDetails e)
+        {
+            await StartJob(typeof(CopyFileJob), e);
         }
 
         private async void HandleDeploymentEvent(object sender, TaskDetails e)

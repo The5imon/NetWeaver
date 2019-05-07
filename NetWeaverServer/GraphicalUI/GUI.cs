@@ -12,14 +12,19 @@ namespace NetWeaverServer.GraphicalUI
 {
     public class GUI
     {
-        public List<Client> clients = new List<Client>();
+        public List<Client> clients;
         private EventInterface EventInt { get; }
+        private DBInterface DbInterface { get; }
 
-        public GUI(EventInterface eventInt)
+        public GUI(EventInterface eventInt, DBInterface dbInterface)
         {
             EventInt = eventInt;
+            DbInterface = dbInterface;
+            clients = dbInterface.getClientList();
+            eventInt.UpdatedContentEvent += UpdateContent;
             new Thread(Run).Start();
-            clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
+            
+            /*clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "GregorPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "WurzerPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "MaxPC", "127.0.0.1"));
@@ -28,8 +33,14 @@ namespace NetWeaverServer.GraphicalUI
             clients.Add(new Client("abcd", "KalchiPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "SpiderPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "ManPC", "127.0.0.1"));
-            clients.Add(new Client("abcd", "DasPC", "127.0.0.1"));
+            clients.Add(new Client("abcd", "DasPC", "127.0.0.1"));*/
 
+        }
+
+        private void UpdateContent(object sender, EventArgs e)
+        {
+            clients = DbInterface.getClientList();
+            PrintClients();
         }
 
         public void Run()
@@ -51,7 +62,16 @@ namespace NetWeaverServer.GraphicalUI
                             continue;
                         }
                         TaskDetails taskDetails = new TaskDetails(clients, progress, args[1]);
-                        EventInt.GetExecuteScriptEvent().Invoke(this, taskDetails);
+                        EventInt.GetCopyEvent().Invoke(this, taskDetails);
+                        break;
+                    case "exec":
+                        if (args.Length < 2)
+                        {
+                            Console.WriteLine("Missing a file");
+                            continue;
+                        }
+                        TaskDetails ttdd = new TaskDetails(clients, progress, args[1]);
+                        EventInt.GetCopyEvent().Invoke(this, ttdd);
                         break;
                     case "deploy":
                         if (args.Length < 2)

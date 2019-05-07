@@ -8,7 +8,7 @@ namespace NetWeaverServer.Datastructure
         public int RoomNumber { get; }
         public string HostName { get; }
         public string IPAddress { get; }
-        public bool IsOnline { get; }
+        public bool IsOnline { get; set; }
         public string LastSeen { get; }
 
         public Client(string mac, string hostName, string ip, bool isOnline, string lastSeen)
@@ -51,7 +51,6 @@ namespace NetWeaverServer.Datastructure
         {
           return Int32.Parse(ip.Split('.')[2]);
         }
-
 
     }
 }
