@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using PcapDotNet.Base;
 using PcapDotNet.Core;
 using PcapDotNet.Core.Extensions;
@@ -32,25 +33,21 @@ namespace NetWeaverClient.MQTT
             using (PacketCommunicator communicator = selectedDevice.Open(
                 65536, PacketDeviceOpenAttributes.Promiscuous, 1000))
             {
-                bool b = true;
+                using (BerkeleyPacketFilter filter = communicator.CreateFilter("ether[0] & 1 != 0"))
+                {
+                   communicator.SetFilter(filter);
+                }
+                
                 do
                 {
+                    Console.WriteLine("new packet");
                     Packet packet;
                     PacketCommunicatorReceiveResult result = communicator.ReceivePacket(out packet);
-                    switch (result)
-                    {
-                        case PacketCommunicatorReceiveResult.Ok:
-                            if (b) // Condition für CDP finden 
-                            {
-                                //packet decoden hehe :)
-                                Console.WriteLine(packet.BytesSequenceToHexadecimalString());
-                                
-                            }
-                            break;
-                        default:
-                            throw new InvalidOperationException();
-                    }
-                } while (b);
+
+                    if (result != PacketCommunicatorReceiveResult.Ok) continue;
+                    Console.WriteLine(packet.BytesSequenceToHexadecimalString());
+                    break;
+                } while (true);
             }
         }
     }
