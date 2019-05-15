@@ -20,11 +20,13 @@ namespace NetWeaverServer.GraphicalUI
         {
             EventInt = eventInt;
             DbInterface = dbInterface;
-            clients = dbInterface.getClientList();
+            //clients = dbInterface.getClientList();
+            clients = new List<Client>();
             eventInt.UpdatedContentEvent += UpdateContent;
             new Thread(Run).Start();
             
-            /*clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
+            /*
+            clients.Add(new Client("abcd", "SimonPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "GregorPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "WurzerPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "MaxPC", "127.0.0.1"));
@@ -33,8 +35,8 @@ namespace NetWeaverServer.GraphicalUI
             clients.Add(new Client("abcd", "KalchiPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "SpiderPC", "127.0.0.1"));
             clients.Add(new Client("abcd", "ManPC", "127.0.0.1"));
-            clients.Add(new Client("abcd", "DasPC", "127.0.0.1"));*/
-
+            clients.Add(new Client("abcd", "DasPC", "127.0.0.1"));
+            */
         }
 
         private void UpdateContent(object sender, EventArgs e)

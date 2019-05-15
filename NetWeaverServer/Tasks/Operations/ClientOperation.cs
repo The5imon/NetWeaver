@@ -15,11 +15,8 @@ namespace NetWeaverServer.Tasks.Operations
         private MqttMaster Channel { get; }
         private DBInterface DBInterface { get; }
         private EventInterface EventInterface { get; }
-
-        private GUI GUI { get; }
-        public ClientOperation(MqttMaster communication, GUI gui, DBInterface dbInterface, EventInterface eventInterface)
+        public ClientOperation(MqttMaster communication, DBInterface dbInterface, EventInterface eventInterface)
         {
-            GUI = gui;
             Channel = communication;
             DBInterface = dbInterface;
             EventInterface = eventInterface;
