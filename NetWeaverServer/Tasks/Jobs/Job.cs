@@ -1,16 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using MQTTnet;
-using MQTTnet.Client;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.Datastructure.Arguments;
-using NetWeaverServer.GraphicalUI;
-using NetWeaverServer.Main;
 using NetWeaverServer.MQTT;
-using NetWeaverServer.Tasks.Commands;
-using static NetWeaverServer.Tasks.Operations.LoggingOperation;
 
 namespace NetWeaverServer.Tasks.Jobs
 {
@@ -22,7 +15,7 @@ namespace NetWeaverServer.Tasks.Jobs
         public Client Client { get; }
         protected string Args { get; }
 
-        protected List<ICommand> Commands = new List<ICommand>();
+        protected List<Job> Commands = new List<Job>();
 
         /// <summary>
         /// Communicate with the Client

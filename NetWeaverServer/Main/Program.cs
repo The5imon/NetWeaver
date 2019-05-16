@@ -12,9 +12,9 @@ namespace NetWeaverServer.Main
     {
         /**
          *                  - - - - Legende - - - - -
-         * Task    = User Interaction; handles one Job on many Clients [= JobManager]
-         * Job     = (Queue of Commands) Does one Job on ONE Client
-         * Command = Executes one small bit of Work (Client or Server)
+         * Task     = User Interaction; handles one Job on many Clients [= JobManager]
+         * Job      = (Queue of Commands) Does one Job on ONE Client
+         * Job(Cmd) = Executes one small bit of Work (Client or Server); Works on the lowest level
          */
 
         //TODO: Gustl fragen wie man am besten unmanaged resourcen handeln kann (aka. DB, MQTT, EventView)
@@ -66,7 +66,7 @@ namespace NetWeaverServer.Main
             Server = new Server(eventInterface, mqttmaster);
 
             //Setup Passive Operations
-            Registration = new ClientOperation(mqttmaster, GUI, dbInterface, eventInterface);
+            Registration = new ClientOperation(mqttmaster, dbInterface, eventInterface);
             Logger = new LoggingOperation(mqttmaster);
 
             Console.WriteLine("- - - - - - - - - -");
