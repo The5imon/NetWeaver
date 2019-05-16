@@ -10,7 +10,7 @@ namespace NetWeaverClient.MQTT
         private readonly int _port;
         private readonly string _ipaddress;
         private readonly IMqttClient _client;
-        private readonly ClientInformation intInfo = new ClientInformation();
+        private readonly ClientInformation clientInformation = new ClientInformation();
         public MqttSlave(string ipaddress, int port)
         {
             this._ipaddress = ipaddress;
@@ -36,17 +36,17 @@ namespace NetWeaverClient.MQTT
                 default:
                     break;
             }
-
             HandleExitCode(exitCode);
         }
+        
         private void HandleExitCode(int exitCode)
         {
             switch (exitCode)
             {
                 case 0:
-                    Task.Run(() => PublishAsync("/reply/"+intInfo.Name, "ACK")); break;
+                    Task.Run(() => PublishAsync("/reply/" + clientInformation.Name, "ACK")); break;
                 case -1:
-                    Task.Run(() => PublishAsync("/reply/" + intInfo.Name, "NACK")); break;
+                    Task.Run(() => PublishAsync("/reply/" + clientInformation.Name, "NACK")); break;
                 default:
                     break;
             }
@@ -55,12 +55,12 @@ namespace NetWeaverClient.MQTT
         private async Task ConnectAsync()
         {
             var message = new MqttApplicationMessageBuilder()
-                .WithTopic("/disconn").WithPayload(intInfo.Name)
+                .WithTopic("/disconn").WithPayload(clientInformation.Name)
                 .WithExactlyOnceQoS();
 
 
             var options = new MqttClientOptionsBuilder()
-                .WithClientId(intInfo.Name).WithWillMessage(message.Build())
+                .WithClientId(clientInformation.Name).WithWillMessage(message.Build())
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ipaddress, _port);
 
@@ -69,10 +69,11 @@ namespace NetWeaverClient.MQTT
         
         public async Task StartAsync()
         {
-            await Task.Run(() => new DeviceDiscovery());
+            Console.WriteLine( clientInformation.Info);
+            Console.WriteLine("next");
             await ConnectAsync();
-            await SubscribeAsync("/cmd/"+intInfo.Name);
-            await PublishAsync("/conn", intInfo.Info);
+            await SubscribeAsync("/cmd/"+clientInformation.Name);
+            await PublishAsync("/conn", clientInformation.Info);
 
             _client.ApplicationMessageReceived += OnMessageReceived;
 

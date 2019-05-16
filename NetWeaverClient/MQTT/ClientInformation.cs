@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace NetWeaverClient.MQTT
@@ -12,11 +13,14 @@ namespace NetWeaverClient.MQTT
         private readonly string _mac;
         private readonly string _ip;
         private readonly string _adapter;
+        private readonly string _interface;
+        
         public string Name { get; }
-        public string Info => $"{Name}&{_mac}&{_ip}";
+        public string Info => $"{Name}&{_mac}&{_ip}&{_interface}";
 
         public ClientInformation()
         {
+            this._interface = DeviceDiscovery.StartSniffing();
             this._adapter = GetAdapterName();
             this._mac = GetMacAddress();
             this._ip = GetIpAddress();
