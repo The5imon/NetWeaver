@@ -37,7 +37,7 @@ namespace NetWeaverGUI
         private static GUI GUI;
         private static Server Server;
 
-        public static void StartServer()
+        public void StartServer(object sender, StartupEventArgs e)
         {
             //Setup MQTT Server/Broker; Acts like a hub, reposting every publish
             mqttbroker = new MqttBroker(6666);
@@ -54,6 +54,8 @@ namespace NetWeaverGUI
             //Setup Main Components; GUI and Server
             GUI = new GUI(eventInterface, dbInterface); // + Database connection*/
             Server = new Server(eventInterface, mqttmaster);
+            MainWindow mw = new MainWindow(eventInterface, dbInterface);
+            mw.Show();
 
             //Setup Passive Operations
             //Registration = new ClientOperation(mqttmaster, dbInterface, eventInterface);
@@ -64,18 +66,13 @@ namespace NetWeaverGUI
 
         public static void ProoveOfWurzer()
         {
-            DbConnect con = new DbConnect("localhost", "mcondb", "root","htl3r", "3333");
+            DbConnect con = new DbConnect("localhost", "mcondb", "root", "htl3r", "3333");
             DBInterface dbi = new DBInterface(con);
             var clients = dbi.getClientList();
             var rooms = dbi.getRoomList();
 
-           // dbi.setOffline("CLIENT_WURZER");
-            
-        }
-        
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            StartServer();
+            // dbi.setOffline("CLIENT_WURZER");
+
         }
     }
 }

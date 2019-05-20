@@ -19,12 +19,10 @@ namespace NetWeaverGUI
         private List<Client> clients;
 
         
-        public MainWindow()
+        public MainWindow(EventInterface face, DBInterface dBInterface)
         {
             InitializeComponent();
-            rooms = ReadRomms.getAllRooms();
-            clients = ReadClients.getAllClients();
-            
+
             TextBlock funktionen = new TextBlock();
             funktionen.Text = "Funktionen";
             funktionen.FontSize = 20;
@@ -41,7 +39,7 @@ namespace NetWeaverGUI
             Navbar.Children.Add(funktionen);
             Navbar.Children.Add(scripts);
             Navbar.Children.Add(raume);
-            foreach (Room room in rooms)
+            /*foreach (Room room in rooms)
             {
                 Button button = new Button();
                 button.Content = room.Roomname.ToUpper();
@@ -50,7 +48,7 @@ namespace NetWeaverGUI
                 button.Click += button_click;
                 button.Background = Brushes.White;
                 Navbar.Children.Add(button);
-            }
+            }*/
         }
 
         void button_click(object sender, EventArgs e)
