@@ -18,7 +18,7 @@ namespace NetWeaverClient.MQTT
 
         public ClientInformation()
         {
-            this._interface = DeviceDiscovery.StartSniffing();
+            //this._interface = DeviceDiscovery.StartSniffing();
             this._adapter = GetAdapterName();
             this._mac = GetMacAddress();
             this._ip = GetIpAddress();
@@ -48,7 +48,6 @@ namespace NetWeaverClient.MQTT
                 process.Kill();
                 break;
             }
-
             return name;
         }
 
@@ -65,7 +64,6 @@ namespace NetWeaverClient.MQTT
                         .ToString();
                 }
             }
-
             return ip;
         }
 
@@ -79,7 +77,6 @@ namespace NetWeaverClient.MQTT
                     mac = nic.GetPhysicalAddress().ToString();
                 }
             }
-
             return mac;
         }
     }

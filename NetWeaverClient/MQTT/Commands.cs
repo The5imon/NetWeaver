@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Policy;
@@ -43,7 +44,7 @@ namespace NetWeaverClient.MQTT
             return 0;
         }
         
-        public static int RunPowershellScript(string ps)
+        public static string RunPowershellScript(string ps)
         {
             var processInfo = new ProcessStartInfo("powershell.exe")
             {
@@ -56,9 +57,8 @@ namespace NetWeaverClient.MQTT
             
             var process = Process.Start(processInfo);
             string error = process?.StandardError.ReadToEnd();
-            
-            if (error != null) return -1;
-            return 0;
+            Console.WriteLine("Error: " + error);
+            return error;
         }
     }
 }
