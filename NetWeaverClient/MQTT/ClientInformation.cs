@@ -1,9 +1,7 @@
 using System;
 using System.Diagnostics;
-using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace NetWeaverClient.MQTT
@@ -20,7 +18,7 @@ namespace NetWeaverClient.MQTT
 
         public ClientInformation()
         {
-            this._interface = DeviceDiscovery.StartSniffing();
+            //this._interface = DeviceDiscovery.StartSniffing();
             this._adapter = GetAdapterName();
             this._mac = GetMacAddress();
             this._ip = GetIpAddress();
@@ -45,13 +43,11 @@ namespace NetWeaverClient.MQTT
             string line;
             while ((line = process.StandardOutput.ReadLine()) != null)
             {
-                if (!line.Contains("Ethernet")) continue; //Enter correct definition of adapter.
-                Console.WriteLine(line);
+                if (!line.Contains("Realtek")) continue; // "Realtek" is local port.
                 name += Regex.Split(line, "  +")[0];
                 process.Kill();
                 break;
             }
-
             return name;
         }
 
@@ -68,7 +64,6 @@ namespace NetWeaverClient.MQTT
                         .ToString();
                 }
             }
-
             return ip;
         }
 
@@ -82,7 +77,6 @@ namespace NetWeaverClient.MQTT
                     mac = nic.GetPhysicalAddress().ToString();
                 }
             }
-
             return mac;
         }
     }
