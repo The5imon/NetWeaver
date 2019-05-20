@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
@@ -69,9 +70,13 @@ namespace NetWeaverClient.MQTT
         
         public async Task StartAsync()
         {
-            Console.WriteLine( clientInformation.Info);
-            Console.WriteLine("next");
-            await ConnectAsync();
+            while (!_client.IsConnected)
+            {
+                await ConnectAsync();
+                Thread.Sleep(5000);
+            }
+            
+            Console.WriteLine("Connected: " + _client.IsConnected);
             await SubscribeAsync("/cmd/"+clientInformation.Name);
             await PublishAsync("/conn", clientInformation.Info);
 

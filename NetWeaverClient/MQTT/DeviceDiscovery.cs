@@ -16,12 +16,13 @@ namespace NetWeaverClient.MQTT
             
             for (int i = 0; i < allDevices.Count; i++)
             {
-                if (!allDevices[i].GetNetworkInterface().Description.Contains("Realtek")) continue;
+                if (!allDevices[i].GetNetworkInterface().Description.Contains("Realtek")) continue; 
+                // "Realtek" is local interface!
                 deviceIndex = i;
-                Console.WriteLine(allDevices[i].Description);
                 break;
             }
 
+            Console.WriteLine("Start capturing CDP packets...");
             PacketDevice selectedDevice = allDevices[deviceIndex];
             using (PacketCommunicator communicator = selectedDevice.Open(
                 65536, PacketDeviceOpenAttributes.Promiscuous, 1000))
@@ -34,6 +35,7 @@ namespace NetWeaverClient.MQTT
                 
                 do
                 {
+                    Console.WriteLine("new packet");
                     PacketCommunicatorReceiveResult result = communicator.ReceivePacket(out var packet);
                     if (result != PacketCommunicatorReceiveResult.Ok) continue;
                     
@@ -43,11 +45,11 @@ namespace NetWeaverClient.MQTT
                     {
                         interfaceId[i - 363] += bytes[i];
                     }
-
                     returnIntId = Encoding.ASCII.GetString(interfaceId);
                     break;
                 } while (true);
             }
+            
             return returnIntId;
         }
     }

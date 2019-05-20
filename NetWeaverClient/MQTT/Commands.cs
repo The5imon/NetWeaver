@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.IO;
-using System;
-using System.Runtime.ConstrainedExecution;
+using System.Security.Policy;
 
 namespace NetWeaverClient.MQTT
 {
@@ -34,8 +33,13 @@ namespace NetWeaverClient.MQTT
             ProcessStartInfo startInfo = new ProcessStartInfo(
                 "powershell.exe", "Remove-SmbShare -Name " + Name + " -Force")
             {
-                CreateNoWindow = true, UseShellExecute = false
+                CreateNoWindow = true, UseShellExecute = false, RedirectStandardError = true
             };
+            
+            var process = Process.Start(startInfo);
+            string error = process?.StandardError.ReadToEnd();
+
+            if (error != null) return -1;
             return 0;
         }
         
@@ -45,21 +49,15 @@ namespace NetWeaverClient.MQTT
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
+                RedirectStandardError = true,
                 Verb = "runas",
                 Arguments = "-Exec Bypass -File " + Scripts + "\\" + ps + "\""
             };
-
-            var process = Process.Start(processInfo);
             
-            /*
-            if (process == null) return 0;
-            process.WaitForExit();
-
-            var errorLevel = process.ExitCode;
-            process.Close();
-
-            return errorLevel;
-            */
+            var process = Process.Start(processInfo);
+            string error = process?.StandardError.ReadToEnd();
+            
+            if (error != null) return -1;
             return 0;
         }
     }
