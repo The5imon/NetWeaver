@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using NetWeaverServer.Datastructure;
 using NetWeaverServer.GraphicalUI;
@@ -39,16 +40,16 @@ namespace NetWeaverGUI
             Navbar.Children.Add(funktionen);
             Navbar.Children.Add(scripts);
             Navbar.Children.Add(raume);
-            /*foreach (Room room in rooms)
-            {
-                Button button = new Button();
-                button.Content = room.Roomname.ToUpper();
-                button.FontSize = 20;
-                button.Tag = room;
-                button.Click += button_click;
-                button.Background = Brushes.White;
-                Navbar.Children.Add(button);
-            }*/
+//            foreach (Room room in rooms)
+//            {
+//                Button button = new Button();
+//                button.Content = room.Roomname.ToUpper();
+//                button.FontSize = 20;
+//                button.Tag = room;
+//                button.Click += button_click;
+//                button.Background = Brushes.White;
+//                Navbar.Children.Add(button);
+//            }
         }
 
         void button_click(object sender, EventArgs e)
@@ -184,6 +185,12 @@ namespace NetWeaverGUI
             Workground.Children.Add(selectFileButton);
 //            Workground.Children.Add(textBox);
             Workground.Children.Add(start);
+        }
+        
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
         }
         
         

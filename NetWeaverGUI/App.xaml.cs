@@ -60,8 +60,6 @@ namespace NetWeaverGUI
             //Setup Passive Operations
             //Registration = new ClientOperation(mqttmaster, dbInterface, eventInterface);
             Logger = new LoggingOperation(mqttmaster);
-
-            MessageBox.Show("Start of Server");
         }
 
         public static void ProoveOfWurzer()
