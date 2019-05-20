@@ -6,6 +6,8 @@
 !/NetWeaverServer/**
 !/NetWeaverClient
 !/NetWeaverClient/**
+!/NetWeaverGUI
+!/NetWeaverGUI/**
 
 #Ignore Runtime Build
 /*/bin/**/*
