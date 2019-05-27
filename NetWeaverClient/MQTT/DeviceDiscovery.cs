@@ -18,6 +18,7 @@ namespace NetWeaverClient.MQTT
 
         private void StartSniffing()
         {
+            return;
             IList<LivePacketDevice> allDevices = LivePacketDevice.AllLocalMachine;
             int deviceIndex = 0;
             

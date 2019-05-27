@@ -58,7 +58,7 @@ namespace NetWeaverServer.Main
             Task.Run(() => mqttmaster.StartAsync());
             
             //Setup Database Connection; Interface for specific queries
-            dbconnection = new DbConnect("192.168.88.254", "mcondb", "root","htl3r", "3333");
+            dbconnection = new DbConnect("10.2.61.9", "mcondb", "root","htl3r", "3306");
             dbInterface = new DBInterface(dbconnection);
 
             //Setup Main Components; GUI and Server
@@ -76,13 +76,12 @@ namespace NetWeaverServer.Main
 
         public static void ProoveOfWurzer()
         {
-            DbConnect con = new DbConnect("localhost", "mcondb", "root","htl3r", "3333");
+            DbConnect con = new DbConnect("10.2.61.9", "mcondb", "root","htl3r", "3306");
             DBInterface dbi = new DBInterface(con);
             var clients = dbi.getClientList();
             var rooms = dbi.getRoomList();
 
            // dbi.setOffline("CLIENT_WURZER");
-            
         }
     }
 }
