@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using NetWeaverServer.Datastructure;
 using NetWeaverServer.Datastructure.Arguments;
 using NetWeaverServer.MQTT;
+using NetWeaverServer.Tasks.Commands;
 
 namespace NetWeaverServer.Tasks.Jobs
 {
@@ -11,21 +14,23 @@ namespace NetWeaverServer.Tasks.Jobs
         public ExecuteScriptJob(ClientChannel channel, JobProgress progress, string script)
             : base(channel, progress, script)
         {
-            Commands.AddRange(new Job[]
-            {
-                new ClientJob(Channel, Progress, Cmd.Openshare),
-                new CopyFileJob(Channel, Progress, Args),
-                new ClientJob(Channel, Progress, Cmd.Closeshare),
-                new ClientJob(Channel, Progress, Cmd.Exescript + " " + Args),
-            });
+            Commands.Add(new ClientExecute(Cmd.Exescript));
+            Progress.SetCommandCount(Commands.Count);
         }
 
         public override async Task Work()
         {
-            foreach (Job cmd in Commands)
+            await new CopyFileJob(Channel, Progress, Args).Work();
+
+            foreach (ICommand cmd in Commands)
             {
-                await cmd.Work();
+                //Console.WriteLine("Telling {0} to {1}", Client.HostName, cmd);
+                await cmd.Execute(Channel);
+                Channel.Reply.WaitOne();
+                Progress.NextCommandDone();
             }
+
+            await new CopyFileJob(Channel, Progress, Args).Work();
         }
     }
 }
