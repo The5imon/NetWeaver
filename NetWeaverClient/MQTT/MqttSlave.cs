@@ -1,7 +1,9 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
+using PcapDotNet.Base;
 
 namespace NetWeaverClient.MQTT
 {
@@ -10,7 +12,7 @@ namespace NetWeaverClient.MQTT
         private readonly int _port;
         private readonly string _ipaddress;
         private readonly IMqttClient _client;
-        private readonly ClientInformation intInfo = new ClientInformation();
+        private readonly ClientInformation clientInformation = new ClientInformation();
         public MqttSlave(string ipaddress, int port)
         {
             this._ipaddress = ipaddress;
@@ -21,6 +23,7 @@ namespace NetWeaverClient.MQTT
         private void OnMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
             int exitCode = 0;
+            string exitMsg = string.Empty;
             string file = e.ApplicationMessage.ConvertPayloadToString().Split( )[1];
 
             switch (e.ApplicationMessage.ConvertPayloadToString())
@@ -32,35 +35,41 @@ namespace NetWeaverClient.MQTT
                 case "closeshare":
                     exitCode = Commands.CloseNetShare(); break;
                 case "execscript":
-                    exitCode = Commands.RunPowershellScript(file); break;
-                default:
-                    break;
+                    exitMsg = Commands.RunPowershellScript(file);
+                    exitCode = 2; break;
             }
-
-            HandleExitCode(exitCode);
+            HandleExitCode(exitCode, exitMsg);
         }
-        private void HandleExitCode(int exitCode)
+        
+        private void HandleExitCode(int exitCode, string exitMsg)
         {
-            switch (exitCode)
+            if (!exitMsg.IsNullOrEmpty())
             {
-                case 0:
-                    Task.Run(() => PublishAsync("/reply/"+intInfo.Name, "ACK")); break;
-                case -1:
-                    Task.Run(() => PublishAsync("/reply/" + intInfo.Name, "NACK")); break;
-                default:
-                    break;
+                Task.Run(() => PublishAsync("/log/" + clientInformation.Name, exitMsg));
+            }
+            else
+            {
+                switch (exitCode)
+                {
+                    case 0:
+                        Task.Run(() => PublishAsync("/reply/" + clientInformation.Name, "ACK"));
+                        break;
+                    case -1:
+                        Task.Run(() => PublishAsync("/reply/" + clientInformation.Name, "NACK"));
+                        break;
+                }
             }
         }
 
         private async Task ConnectAsync()
         {
             var message = new MqttApplicationMessageBuilder()
-                .WithTopic("/disconn").WithPayload(intInfo.Name)
+                .WithTopic("/disconn").WithPayload(clientInformation.Name)
                 .WithExactlyOnceQoS();
 
 
             var options = new MqttClientOptionsBuilder()
-                .WithClientId(intInfo.Name).WithWillMessage(message.Build())
+                .WithClientId(clientInformation.Name).WithWillMessage(message.Build())
                 .WithCredentials("netweaver", "woswofürdaspasswort")
                 .WithCleanSession().WithTcpServer(_ipaddress, _port);
 
@@ -69,15 +78,19 @@ namespace NetWeaverClient.MQTT
         
         public async Task StartAsync()
         {
-            //await Task.Run(() => new DeviceDiscovery());
-            await ConnectAsync();
-            await SubscribeAsync("/cmd/" + intInfo.Name);
-            await PublishAsync("/conn", intInfo.Info);
-
+            Commands.RunPowershellScript(@"C:\Users\Gregor Brunner\OneDrive\Desktop\test.ps1");
+            while (!_client.IsConnected)
+            {
+                await ConnectAsync();
+                Thread.Sleep(5000);
+            }
+            
+            Console.WriteLine("Connected: " + _client.IsConnected);
+            await SubscribeAsync("/cmd/" + clientInformation.Name);
+            await SubscribeAsync("/log/" + clientInformation.Name);
+            
+            await PublishAsync("/conn", clientInformation.Info);
             _client.ApplicationMessageReceived += OnMessageReceived;
-
-            Console.WriteLine("Started Client");
-            Console.Read();
         }
         
         public async Task StopAsync()

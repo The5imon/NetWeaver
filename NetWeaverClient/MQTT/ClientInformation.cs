@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
@@ -12,11 +11,14 @@ namespace NetWeaverClient.MQTT
         private readonly string _mac;
         private readonly string _ip;
         private readonly string _adapter;
+        private readonly string _interface;
+        
         public string Name { get; }
-        public string Info => $"{Name}&{_mac}&{_ip}";
+        public string Info => $"{Name}&{_mac}&{_ip}&{_interface}";
 
         public ClientInformation()
         {
+            //this._interface = DeviceDiscovery.StartSniffing();
             this._adapter = GetAdapterName();
             this._mac = GetMacAddress();
             this._ip = GetIpAddress();
@@ -41,13 +43,11 @@ namespace NetWeaverClient.MQTT
             string line;
             while ((line = process.StandardOutput.ReadLine()) != null)
             {
-                if (!line.Contains("WLAN")) continue; //Enter correct definition of adapter.
-                Console.WriteLine(line);
+                if (!line.Contains("Realtek")) continue; // "Realtek" is local port.
                 name += Regex.Split(line, "  +")[0];
                 process.Kill();
                 break;
             }
-
             return name;
         }
 
@@ -64,7 +64,6 @@ namespace NetWeaverClient.MQTT
                         .ToString();
                 }
             }
-
             return ip;
         }
 
@@ -78,7 +77,6 @@ namespace NetWeaverClient.MQTT
                     mac = nic.GetPhysicalAddress().ToString();
                 }
             }
-
             return mac;
         }
     }

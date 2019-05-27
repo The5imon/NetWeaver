@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>net48</TargetFrameworks>
+        <ApplicationIcon>logo_ohneschrift.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
