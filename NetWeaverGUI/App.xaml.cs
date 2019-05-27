@@ -47,19 +47,20 @@ namespace NetWeaverGUI
             mqttmaster = new MqttMaster("127.0.0.1", 6666);
             Task.Run(() => mqttmaster.StartAsync());
             
-            /*//Setup Database Connection; Interface for specific queries
-            dbconnection = new DbConnect("192.168.88.254", "mcondb", "root","htl3r", "3333");
+            //Setup Database Connection; Interface for specific queries
+            dbconnection = new DbConnect("10.2.61.1", "mcondb", "root","htl3r", "3333");
             dbInterface = new DBInterface(dbconnection);
 
             //Setup Main Components; GUI and Server
-            GUI = new GUI(eventInterface, dbInterface); // + Database connection*/
+            //GUI = new GUI(eventInterface, dbInterface); // + Database connection*/
             Server = new Server(eventInterface, mqttmaster);
             MainWindow mw = new MainWindow(eventInterface, dbInterface);
             mw.Show();
 
             //Setup Passive Operations
-            //Registration = new ClientOperation(mqttmaster, dbInterface, eventInterface);
+            Registration = new ClientOperation(mqttmaster, dbInterface, eventInterface);
             Logger = new LoggingOperation(mqttmaster);
+            
         }
 
         public static void ProoveOfWurzer()

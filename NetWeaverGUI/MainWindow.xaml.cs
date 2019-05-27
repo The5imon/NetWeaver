@@ -19,10 +19,22 @@ namespace NetWeaverGUI
         private List<Room> rooms;
         private List<Client> clients;
 
+        private EventInterface EventInt;
+        private DBInterface db;
+
         
         public MainWindow(EventInterface face, DBInterface dBInterface)
         {
+            EventInt = face;
+            db = dBInterface;
+            
             InitializeComponent();
+            face.UpdatedContentEvent += (sender, args) =>
+            {
+                rooms = dBInterface.getRoomList();
+                clients = dBInterface.getClientList();
+                ShowRooms();
+            };
 
             TextBlock funktionen = new TextBlock();
             funktionen.Text = "Funktionen";
@@ -40,16 +52,24 @@ namespace NetWeaverGUI
             Navbar.Children.Add(funktionen);
             Navbar.Children.Add(scripts);
             Navbar.Children.Add(raume);
-//            foreach (Room room in rooms)
-//            {
-//                Button button = new Button();
-//                button.Content = room.Roomname.ToUpper();
-//                button.FontSize = 20;
-//                button.Tag = room;
-//                button.Click += button_click;
-//                button.Background = Brushes.White;
-//                Navbar.Children.Add(button);
-//            }
+
+            rooms = dBInterface.getRoomList();
+            clients = dBInterface.getClientList();
+            ShowRooms();
+        }
+
+        private void ShowRooms()
+        {
+            foreach (Room room in rooms)
+            {
+                Button button = new Button();
+                button.Content = room.Roomname.ToUpper();
+                button.FontSize = 20;
+                button.Tag = room;
+                button.Click += button_click;
+                button.Background = Brushes.White;
+                Navbar.Children.Add(button);
+            }
         }
 
         void button_click(object sender, EventArgs e)
@@ -186,13 +206,5 @@ namespace NetWeaverGUI
 //            Workground.Children.Add(textBox);
             Workground.Children.Add(start);
         }
-        
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            e.Cancel = true;
-            this.Hide();
-        }
-        
-        
     }
 }
