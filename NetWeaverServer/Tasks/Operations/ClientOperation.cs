@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using MQTTnet;
 using NetWeaverServer.Datastructure;
@@ -29,7 +30,7 @@ namespace NetWeaverServer.Tasks.Operations
         {
             if (e.ApplicationMessage.Topic.Equals(connectionTopic))
             {
-                Console.WriteLine("New Client connected");
+                Debug.WriteLine("New Client connected");
                 string[] args = e.ApplicationMessage.ConvertPayloadToString().Split('&');
                 //Database entry + trigger update event
                 DBInterface.insertClients(new List<Client>
@@ -38,6 +39,7 @@ namespace NetWeaverServer.Tasks.Operations
                 });
                 //GUI.clients.Add(new Client(args[1], args[0], args[2]));
                 EventInterface.GetUpdatedContentEvent().Invoke(this, EventArgs.Empty);
+                Debug.WriteLine("Updated");
             }
         }
 

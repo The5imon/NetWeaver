@@ -10,10 +10,7 @@ namespace NetWeaverServer.GraphicalUI
 {
     public class EventInterface
     {
-        /**
-         *guiServerInterface.getClientReplyEvent().Invoke(guiServerInterface,
-         * new MessageDetails(new List<Client>(), new Progress<ProgressDetails>()));
-         */
+        
         //GUI Events
         public event EventHandler<TaskDetails> ExecuteScriptEvent;
         public event EventHandler<TaskDetails> DeploymentEvent;
