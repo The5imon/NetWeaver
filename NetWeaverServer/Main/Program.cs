@@ -58,7 +58,7 @@ namespace NetWeaverServer.Main
             Task.Run(() => mqttmaster.StartAsync());
             
             //Setup Database Connection; Interface for specific queries
-            dbconnection = new DbConnect("10.2.61.9", "mcondb", "root","htl3r", "3306");
+            dbconnection = new DbConnect("10.0.76.240", "mcondb", "root","htl3r", "3333");
             dbInterface = new DBInterface(dbconnection);
 
             //Setup Main Components; GUI and Server
@@ -66,7 +66,7 @@ namespace NetWeaverServer.Main
             Server = new Server(eventInterface, mqttmaster);
 
             //Setup Passive Operations
-            Registration = new ClientOperation(mqttmaster, GUI, dbInterface, eventInterface);
+            Registration = new ClientOperation(mqttmaster, dbInterface, eventInterface);
             Logger = new LoggingOperation(mqttmaster);
 
             Console.WriteLine("- - - - - - - - - -");

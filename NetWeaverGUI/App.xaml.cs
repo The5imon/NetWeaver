@@ -46,9 +46,9 @@ namespace NetWeaverGUI
             //Setup MQTT Master; Special MQTT Client that listen to every publish and can respond
             mqttmaster = new MqttMaster("127.0.0.1", 6666);
             Task.Run(() => mqttmaster.StartAsync());
-            
+
             //Setup Database Connection; Interface for specific queries
-            dbconnection = new DbConnect("10.2.61.1", "mcondb", "root","htl3r", "3333");
+            dbconnection = new DbConnect("10.0.76.240", "mcondb", "root", "htl3r", "3333");
             dbInterface = new DBInterface(dbconnection);
 
             //Setup Main Components; GUI and Server
@@ -60,18 +60,6 @@ namespace NetWeaverGUI
             //Setup Passive Operations
             Registration = new ClientOperation(mqttmaster, dbInterface, eventInterface);
             Logger = new LoggingOperation(mqttmaster);
-            
-        }
-
-        public static void ProoveOfWurzer()
-        {
-            DbConnect con = new DbConnect("localhost", "mcondb", "root", "htl3r", "3333");
-            DBInterface dbi = new DBInterface(con);
-            var clients = dbi.getClientList();
-            var rooms = dbi.getRoomList();
-
-            // dbi.setOffline("CLIENT_WURZER");
-
         }
     }
 }
