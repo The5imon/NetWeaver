@@ -20,3 +20,4 @@
 !NetWeaver.sln
 !*.csproj
 !.gitignore
+!*.vsdx
